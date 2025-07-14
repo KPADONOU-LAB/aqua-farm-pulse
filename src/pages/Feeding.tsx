@@ -163,7 +163,7 @@ const Feeding = () => {
             <div className="p-4 bg-green-50/10 rounded-lg border border-green-200/20">
               <h4 className="text-white font-medium mb-2">💡 Optimisation FCR</h4>
               <p className="text-white/80 text-sm">
-                Réduire la quantité de 5% pour les cages avec FCR > 2.0
+                Réduire la quantité de 5% pour les cages avec FCR &gt; 2.0
               </p>
             </div>
             
