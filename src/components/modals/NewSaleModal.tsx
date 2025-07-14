@@ -38,7 +38,7 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
   const loadCages = async () => {
     const { data } = await supabase
       .from('cages')
-      .select('id, nom')
+      .select('id, nom, nombre_poissons, poids_moyen')
       .eq('user_id', user?.id)
       .eq('statut', 'actif');
     setCages(data || []);
@@ -55,7 +55,25 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
       const prix = parseFloat(formData.prixParKg);
       const total = quantite * prix;
 
-      const { error } = await supabase.from('sales').insert({
+      // Trouver la cage sélectionnée pour calculer la réduction du stock
+      const selectedCage = cages.find(cage => cage.id === formData.cage);
+      if (!selectedCage) {
+        throw new Error("Cage introuvable");
+      }
+
+      // Calculer le nombre de poissons vendus basé sur le poids moyen
+      let poissonsVendus = 0;
+      if (selectedCage.poids_moyen && selectedCage.poids_moyen > 0) {
+        poissonsVendus = Math.round((quantite * 1000) / selectedCage.poids_moyen); // convertir kg en g
+      }
+
+      // Vérifier si assez de poissons disponibles
+      if (poissonsVendus > selectedCage.nombre_poissons) {
+        throw new Error(`Stock insuffisant. Il ne reste que ${selectedCage.nombre_poissons} poissons dans cette cage.`);
+      }
+
+      // Enregistrer la vente
+      const { error: saleError } = await supabase.from('sales').insert({
         user_id: user.id,
         cage_id: formData.cage,
         quantite_kg: quantite,
@@ -66,11 +84,22 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
         notes: formData.notes || null
       });
 
-      if (error) throw error;
+      if (saleError) throw saleError;
+
+      // Mettre à jour le stock de poissons dans la cage
+      if (poissonsVendus > 0) {
+        const nouveauStock = selectedCage.nombre_poissons - poissonsVendus;
+        const { error: updateError } = await supabase
+          .from('cages')
+          .update({ nombre_poissons: nouveauStock })
+          .eq('id', formData.cage);
+
+        if (updateError) throw updateError;
+      }
 
       toast({
         title: "Vente enregistrée !",
-        description: `${formData.quantiteKg}kg vendus pour €${total.toFixed(2)}`,
+        description: `${formData.quantiteKg}kg vendus pour €${total.toFixed(2)}${poissonsVendus > 0 ? ` - ${poissonsVendus} poissons retirés du stock` : ''}`,
       });
       
       setFormData({
@@ -87,7 +116,7 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
     } catch (error) {
       toast({
         title: "Erreur",
-        description: "Impossible d'enregistrer la vente.",
+        description: error instanceof Error ? error.message : "Impossible d'enregistrer la vente.",
         variant: "destructive",
       });
     } finally {
