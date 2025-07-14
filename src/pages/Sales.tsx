@@ -242,77 +242,49 @@ const Sales = () => {
           </div>
         </TabsContent>
 
-        {/* History Tab */}
+        {/* History Tab - Ventes du jour */}
         <TabsContent value="history" className="space-y-6">
           <Card className="glass-effect">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <History className="h-5 w-5" />
-                Historique des ventes
+                Historique des ventes du jour
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {mockSales.map((sale) => (
-                  <div key={sale.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="p-2 bg-ocean-gradient rounded-lg">
-                          <ShoppingCart className="h-5 w-5 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="text-white font-medium">{sale.client}</h4>
-                          <p className="text-white/70 text-sm">{sale.cage} • {sale.espece}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-4">
-                        <Badge className={getStatutColor(sale.statut)}>
-                          {sale.statut}
-                        </Badge>
-                        <div className="text-right">
-                          <div className="text-white font-semibold text-lg">€{sale.montantTotal.toLocaleString()}</div>
-                          <div className="text-white/70 text-sm">
-                            {new Date(sale.date).toLocaleDateString('fr-FR')}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <span className="text-white/70">Quantité:</span>
-                        <div className="text-white font-medium">{sale.quantite}kg</div>
-                      </div>
-                      <div>
-                        <span className="text-white/70">Poissons:</span>
-                        <div className="text-white font-medium">{sale.nombrePoissons}</div>
-                      </div>
-                      <div>
-                        <span className="text-white/70">Prix/kg:</span>
-                        <div className="text-white font-medium">€{sale.prixUnitaire}</div>
-                      </div>
-                      <div>
-                        <span className="text-white/70">Poids moyen:</span>
-                        <div className="text-white font-medium">
-                          {(sale.quantite / sale.nombrePoissons).toFixed(2)}kg
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-white/20 hover:bg-white/5">
+                    <TableHead className="text-white/80">Client</TableHead>
+                    <TableHead className="text-white/80">Quantité</TableHead>
+                    <TableHead className="text-white/80">Cage</TableHead>
+                    <TableHead className="text-white/80">Heure</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {mockSales
+                    .filter(sale => sale.date === "2024-01-20")
+                    .map((sale) => (
+                    <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
+                      <TableCell className="text-white font-medium">{sale.client}</TableCell>
+                      <TableCell className="text-white/80">{sale.quantite}kg</TableCell>
+                      <TableCell className="text-white/80">{sale.cage}</TableCell>
+                      <TableCell className="text-white/80">14:30</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Details Tab */}
+        {/* Details Tab - Détails des factures */}
         <TabsContent value="details" className="space-y-6">
           <Card className="glass-effect">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Détails des ventes
+                Détails des ventes - Factures
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -322,35 +294,29 @@ const Sales = () => {
                     <TableHead className="text-white/80">Date</TableHead>
                     <TableHead className="text-white/80">Client</TableHead>
                     <TableHead className="text-white/80">Cage</TableHead>
-                    <TableHead className="text-white/80">Espèce</TableHead>
                     <TableHead className="text-white/80">Quantité</TableHead>
                     <TableHead className="text-white/80">Prix/kg</TableHead>
-                    <TableHead className="text-white/80">Total</TableHead>
+                    <TableHead className="text-white/80">Montant total payé</TableHead>
                     <TableHead className="text-white/80">Statut</TableHead>
-                    <TableHead className="text-white/80">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockSales.map((sale) => (
+                  {mockSales
+                    .filter(sale => sale.date === "2024-01-20")
+                    .map((sale) => (
                     <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
                       <TableCell className="text-white">
                         {new Date(sale.date).toLocaleDateString('fr-FR')}
                       </TableCell>
                       <TableCell className="text-white font-medium">{sale.client}</TableCell>
                       <TableCell className="text-white/80">{sale.cage}</TableCell>
-                      <TableCell className="text-white/80">{sale.espece}</TableCell>
                       <TableCell className="text-white/80">{sale.quantite}kg</TableCell>
                       <TableCell className="text-white/80">€{sale.prixUnitaire}</TableCell>
-                      <TableCell className="text-white font-semibold">€{sale.montantTotal.toLocaleString()}</TableCell>
+                      <TableCell className="text-white font-semibold text-lg">€{sale.montantTotal.toLocaleString()}</TableCell>
                       <TableCell>
                         <Badge className={getStatutColor(sale.statut)}>
                           {sale.statut}
                         </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button size="sm" variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10">
-                          <Eye className="h-4 w-4" />
-                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
