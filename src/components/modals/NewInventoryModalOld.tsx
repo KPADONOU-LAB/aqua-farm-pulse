@@ -6,8 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
 import { Plus, Package } from "lucide-react";
 
 interface NewInventoryModalProps {
@@ -16,7 +14,6 @@ interface NewInventoryModalProps {
 
 const NewInventoryModal = ({ trigger }: NewInventoryModalProps) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nom: "",
     categorie: "",
@@ -29,65 +26,27 @@ const NewInventoryModal = ({ trigger }: NewInventoryModalProps) => {
     notes: ""
   });
   const { toast } = useToast();
-  const { user } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) return;
+    toast({
+      title: "Article ajouté au stock !",
+      description: `${formData.nom}: ${formData.quantite} ${formData.unite} ajoutés`,
+    });
     
-    setLoading(true);
-    try {
-      const stockActuel = parseFloat(formData.quantite);
-      const stockMin = parseFloat(formData.stockMin);
-      
-      let statut = "normal";
-      if (stockActuel <= stockMin) statut = "faible";
-      if (stockActuel <= stockMin * 0.5) statut = "critique";
-
-      const { error } = await supabase.from('inventory').insert({
-        user_id: user.id,
-        nom: formData.nom,
-        categorie: formData.categorie,
-        stock_actuel: stockActuel,
-        unite: formData.unite,
-        stock_min: stockMin,
-        prix_unitaire: parseFloat(formData.prixUnitaire),
-        fournisseur: formData.fournisseur || null,
-        date_expiration: formData.dateExpiration || null,
-        statut,
-        notes: formData.notes || null
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Article ajouté au stock !",
-        description: `${formData.nom}: ${formData.quantite} ${formData.unite} ajoutés`,
-      });
-      
-      setFormData({
-        nom: "",
-        categorie: "",
-        quantite: "",
-        unite: "",
-        stockMin: "",
-        prixUnitaire: "",
-        fournisseur: "",
-        dateExpiration: "",
-        notes: ""
-      });
-      setOpen(false);
-      window.location.reload();
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible d'ajouter l'article. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    setFormData({
+      nom: "",
+      categorie: "",
+      quantite: "",
+      unite: "",
+      stockMin: "",
+      prixUnitaire: "",
+      fournisseur: "",
+      dateExpiration: "",
+      notes: ""
+    });
+    setOpen(false);
   };
 
   return (
@@ -134,6 +93,8 @@ const NewInventoryModal = ({ trigger }: NewInventoryModalProps) => {
                   <SelectItem value="aliment">Aliment</SelectItem>
                   <SelectItem value="veterinaire">Produit vétérinaire</SelectItem>
                   <SelectItem value="materiel">Matériel</SelectItem>
+                  <SelectItem value="equipement">Équipement</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -239,8 +200,8 @@ const NewInventoryModal = ({ trigger }: NewInventoryModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
-              {loading ? "Ajout..." : "Ajouter au stock"}
+            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
+              Ajouter au stock
             </Button>
           </div>
         </form>

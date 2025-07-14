@@ -14,6 +14,205 @@ export type Database = {
   }
   public: {
     Tables: {
+      cages: {
+        Row: {
+          created_at: string
+          croissance: string | null
+          date_introduction: string | null
+          espece: string
+          fcr: number | null
+          id: string
+          nom: string
+          nombre_poissons: number
+          notes: string | null
+          poids_moyen: number | null
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          croissance?: string | null
+          date_introduction?: string | null
+          espece: string
+          fcr?: number | null
+          id?: string
+          nom: string
+          nombre_poissons?: number
+          notes?: string | null
+          poids_moyen?: number | null
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          croissance?: string | null
+          date_introduction?: string | null
+          espece?: string
+          fcr?: number | null
+          id?: string
+          nom?: string
+          nombre_poissons?: number
+          notes?: string | null
+          poids_moyen?: number | null
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      feeding_sessions: {
+        Row: {
+          appetit: string
+          cage_id: string
+          created_at: string
+          date_alimentation: string
+          heure: string
+          id: string
+          observations: string | null
+          quantite: number
+          type_aliment: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appetit: string
+          cage_id: string
+          created_at?: string
+          date_alimentation?: string
+          heure: string
+          id?: string
+          observations?: string | null
+          quantite: number
+          type_aliment: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appetit?: string
+          cage_id?: string
+          created_at?: string
+          date_alimentation?: string
+          heure?: string
+          id?: string
+          observations?: string | null
+          quantite?: number
+          type_aliment?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feeding_sessions_cage_id_fkey"
+            columns: ["cage_id"]
+            isOneToOne: false
+            referencedRelation: "cages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      health_observations: {
+        Row: {
+          cage_id: string
+          cause_presumee: string | null
+          created_at: string
+          date_observation: string
+          id: string
+          mortalite: number
+          observations: string
+          statut: string
+          traitements: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          cause_presumee?: string | null
+          created_at?: string
+          date_observation?: string
+          id?: string
+          mortalite?: number
+          observations: string
+          statut?: string
+          traitements?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          cause_presumee?: string | null
+          created_at?: string
+          date_observation?: string
+          id?: string
+          mortalite?: number
+          observations?: string
+          statut?: string
+          traitements?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_observations_cage_id_fkey"
+            columns: ["cage_id"]
+            isOneToOne: false
+            referencedRelation: "cages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory: {
+        Row: {
+          categorie: string
+          created_at: string
+          date_expiration: string | null
+          fournisseur: string | null
+          id: string
+          nom: string
+          notes: string | null
+          prix_unitaire: number
+          statut: string
+          stock_actuel: number
+          stock_min: number
+          unite: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          categorie: string
+          created_at?: string
+          date_expiration?: string | null
+          fournisseur?: string | null
+          id?: string
+          nom: string
+          notes?: string | null
+          prix_unitaire: number
+          statut?: string
+          stock_actuel?: number
+          stock_min: number
+          unite: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          categorie?: string
+          created_at?: string
+          date_expiration?: string | null
+          fournisseur?: string | null
+          id?: string
+          nom?: string
+          notes?: string | null
+          prix_unitaire?: number
+          statut?: string
+          stock_actuel?: number
+          stock_min?: number
+          unite?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -37,6 +236,115 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sales: {
+        Row: {
+          cage_id: string
+          client: string
+          created_at: string
+          date_vente: string
+          id: string
+          notes: string | null
+          prix_par_kg: number
+          prix_total: number
+          quantite_kg: number
+          type_vente: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          client: string
+          created_at?: string
+          date_vente?: string
+          id?: string
+          notes?: string | null
+          prix_par_kg: number
+          prix_total: number
+          quantite_kg: number
+          type_vente: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          client?: string
+          created_at?: string
+          date_vente?: string
+          id?: string
+          notes?: string | null
+          prix_par_kg?: number
+          prix_total?: number
+          quantite_kg?: number
+          type_vente?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_cage_id_fkey"
+            columns: ["cage_id"]
+            isOneToOne: false
+            referencedRelation: "cages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      water_quality: {
+        Row: {
+          cage_id: string
+          created_at: string
+          date_mesure: string
+          heure: string
+          id: string
+          observations: string | null
+          oxygene_dissous: number
+          ph: number
+          statut: string
+          temperature: number
+          turbidite: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          created_at?: string
+          date_mesure?: string
+          heure: string
+          id?: string
+          observations?: string | null
+          oxygene_dissous: number
+          ph: number
+          statut?: string
+          temperature: number
+          turbidite?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          created_at?: string
+          date_mesure?: string
+          heure?: string
+          id?: string
+          observations?: string | null
+          oxygene_dissous?: number
+          ph?: number
+          statut?: string
+          temperature?: number
+          turbidite?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "water_quality_cage_id_fkey"
+            columns: ["cage_id"]
+            isOneToOne: false
+            referencedRelation: "cages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Plus, Coffee } from "lucide-react";
 
 interface NewFeedingModalProps {
@@ -14,6 +16,8 @@ interface NewFeedingModalProps {
 
 const NewFeedingModal = ({ trigger }: NewFeedingModalProps) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cages, setCages] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     cage: "",
     quantite: "",
@@ -23,24 +27,66 @@ const NewFeedingModal = ({ trigger }: NewFeedingModalProps) => {
     observations: ""
   });
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user) {
+      loadCages();
+    }
+  }, [user]);
+
+  const loadCages = async () => {
+    const { data } = await supabase
+      .from('cages')
+      .select('id, nom')
+      .eq('user_id', user?.id)
+      .eq('statut', 'actif');
+    setCages(data || []);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    toast({
-      title: "Session d'alimentation enregistrée !",
-      description: `${formData.quantite}kg distribués à ${formData.cage}`,
-    });
+    if (!user) return;
     
-    setFormData({
-      cage: "",
-      quantite: "",
-      typeAliment: "",
-      heure: "",
-      appetit: "",
-      observations: ""
-    });
-    setOpen(false);
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('feeding_sessions').insert({
+        user_id: user.id,
+        cage_id: formData.cage,
+        heure: formData.heure,
+        quantite: parseFloat(formData.quantite),
+        type_aliment: formData.typeAliment,
+        appetit: formData.appetit,
+        observations: formData.observations || null
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Session d'alimentation enregistrée !",
+        description: `${formData.quantite}kg distribués`,
+      });
+      
+      setFormData({
+        cage: "",
+        quantite: "",
+        typeAliment: "",
+        heure: "",
+        appetit: "",
+        observations: ""
+      });
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'enregistrer la session. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,10 +119,11 @@ const NewFeedingModal = ({ trigger }: NewFeedingModalProps) => {
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cage001">Cage #001</SelectItem>
-                  <SelectItem value="cage002">Cage #002</SelectItem>
-                  <SelectItem value="cage003">Cage #003</SelectItem>
-                  <SelectItem value="cage004">Cage #004</SelectItem>
+                  {cages.map((cage) => (
+                    <SelectItem key={cage.id} value={cage.id}>
+                      {cage.nom}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -159,8 +206,8 @@ const NewFeedingModal = ({ trigger }: NewFeedingModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
-              Enregistrer la session
+            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
+              {loading ? "Enregistrement..." : "Enregistrer la session"}
             </Button>
           </div>
         </form>

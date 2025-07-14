@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
 import { Plus, Heart } from "lucide-react";
 
 interface NewHealthObservationModalProps {
@@ -17,8 +15,6 @@ interface NewHealthObservationModalProps {
 
 const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [cages, setCages] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     cage: "",
     mortalite: "",
@@ -28,7 +24,6 @@ const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) 
     veterinaire: false
   });
   const { toast } = useToast();
-  const { user } = useAuth();
 
   const traitementOptions = [
     "Probiotiques",
@@ -38,20 +33,6 @@ const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) 
     "Désinfectant",
     "Autre"
   ];
-
-  useEffect(() => {
-    if (user) {
-      loadCages();
-    }
-  }, [user]);
-
-  const loadCages = async () => {
-    const { data } = await supabase
-      .from('cages')
-      .select('id, nom')
-      .eq('user_id', user?.id);
-    setCages(data || []);
-  };
 
   const handleTraitementChange = (traitement: string, checked: boolean) => {
     if (checked) {
@@ -67,55 +48,29 @@ const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) 
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) return;
+    const mortalite = parseInt(formData.mortalite);
+    let statut = "normal";
+    if (mortalite > 0 && mortalite <= 5) statut = "surveillance";
+    if (mortalite > 5) statut = "alerte";
     
-    setLoading(true);
-    try {
-      const mortalite = parseInt(formData.mortalite);
-      let statut = "normal";
-      if (mortalite > 0 && mortalite <= 5) statut = "surveillance";
-      if (mortalite > 5) statut = "alerte";
-
-      const { error } = await supabase.from('health_observations').insert({
-        user_id: user.id,
-        cage_id: formData.cage,
-        mortalite,
-        cause_presumee: formData.causePresumee || null,
-        traitements: formData.traitements,
-        statut,
-        observations: formData.observations
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Observation sanitaire enregistrée !",
-        description: `${mortalite} décès - Statut: ${statut}`,
-        variant: statut === "alerte" ? "destructive" : "default"
-      });
-      
-      setFormData({
-        cage: "",
-        mortalite: "",
-        causePresumee: "",
-        observations: "",
-        traitements: [],
-        veterinaire: false
-      });
-      setOpen(false);
-      window.location.reload();
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible d'enregistrer l'observation. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    toast({
+      title: "Observation sanitaire enregistrée !",
+      description: `${formData.cage}: ${mortalite} décès - Statut: ${statut}`,
+      variant: statut === "alerte" ? "destructive" : "default"
+    });
+    
+    setFormData({
+      cage: "",
+      mortalite: "",
+      causePresumee: "",
+      observations: "",
+      traitements: [],
+      veterinaire: false
+    });
+    setOpen(false);
   };
 
   return (
@@ -148,11 +103,10 @@ const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) 
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  {cages.map((cage) => (
-                    <SelectItem key={cage.id} value={cage.id}>
-                      {cage.nom}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="cage001">Cage #001</SelectItem>
+                  <SelectItem value="cage002">Cage #002</SelectItem>
+                  <SelectItem value="cage003">Cage #003</SelectItem>
+                  <SelectItem value="cage004">Cage #004</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -241,8 +195,8 @@ const NewHealthObservationModal = ({ trigger }: NewHealthObservationModalProps) 
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
-              {loading ? "Enregistrement..." : "Enregistrer l'observation"}
+            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
+              Enregistrer l'observation
             </Button>
           </div>
         </form>

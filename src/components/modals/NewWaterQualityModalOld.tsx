@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
 import { Plus, Droplets } from "lucide-react";
 
 interface NewWaterQualityModalProps {
@@ -16,8 +14,6 @@ interface NewWaterQualityModalProps {
 
 const NewWaterQualityModal = ({ trigger }: NewWaterQualityModalProps) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [cages, setCages] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     cage: "",
     temperature: "",
@@ -28,82 +24,39 @@ const NewWaterQualityModal = ({ trigger }: NewWaterQualityModalProps) => {
     observations: ""
   });
   const { toast } = useToast();
-  const { user } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      loadCages();
-    }
-  }, [user]);
-
-  const loadCages = async () => {
-    const { data } = await supabase
-      .from('cages')
-      .select('id, nom')
-      .eq('user_id', user?.id);
-    setCages(data || []);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) return;
+    // Évaluation automatique du statut
+    const temp = parseFloat(formData.temperature);
+    const ph = parseFloat(formData.ph);
+    const o2 = parseFloat(formData.oxygeneDissous);
     
-    setLoading(true);
-    try {
-      // Évaluation automatique du statut
-      const temp = parseFloat(formData.temperature);
-      const ph = parseFloat(formData.ph);
-      const o2 = parseFloat(formData.oxygeneDissous);
-      
-      let statut = "optimal";
-      if (temp < 22 || temp > 28 || ph < 6.5 || ph > 8.0 || o2 < 5.0) {
-        statut = "attention";
-      }
-      if (temp < 20 || temp > 30 || ph < 6.0 || ph > 8.5 || o2 < 4.0) {
-        statut = "critique";
-      }
-
-      const { error } = await supabase.from('water_quality').insert({
-        user_id: user.id,
-        cage_id: formData.cage,
-        heure: formData.heure,
-        temperature: parseFloat(formData.temperature),
-        ph: parseFloat(formData.ph),
-        oxygene_dissous: parseFloat(formData.oxygeneDissous),
-        turbidite: formData.turbidite ? parseInt(formData.turbidite) : null,
-        statut,
-        observations: formData.observations || null
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Mesure enregistrée !",
-        description: `Qualité de l'eau: ${statut}`,
-        variant: statut === "critique" ? "destructive" : "default"
-      });
-      
-      setFormData({
-        cage: "",
-        temperature: "",
-        ph: "",
-        oxygeneDissous: "",
-        turbidite: "",
-        heure: "",
-        observations: ""
-      });
-      setOpen(false);
-      window.location.reload();
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible d'enregistrer la mesure. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+    let statut = "optimal";
+    if (temp < 22 || temp > 28 || ph < 6.5 || ph > 8.0 || o2 < 5.0) {
+      statut = "attention";
     }
+    if (temp < 20 || temp > 30 || ph < 6.0 || ph > 8.5 || o2 < 4.0) {
+      statut = "critique";
+    }
+    
+    toast({
+      title: "Mesure enregistrée !",
+      description: `Qualité de l'eau ${formData.cage}: ${statut}`,
+      variant: statut === "critique" ? "destructive" : "default"
+    });
+    
+    setFormData({
+      cage: "",
+      temperature: "",
+      ph: "",
+      oxygeneDissous: "",
+      turbidite: "",
+      heure: "",
+      observations: ""
+    });
+    setOpen(false);
   };
 
   return (
@@ -136,11 +89,10 @@ const NewWaterQualityModal = ({ trigger }: NewWaterQualityModalProps) => {
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  {cages.map((cage) => (
-                    <SelectItem key={cage.id} value={cage.id}>
-                      {cage.nom}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="cage001">Cage #001</SelectItem>
+                  <SelectItem value="cage002">Cage #002</SelectItem>
+                  <SelectItem value="cage003">Cage #003</SelectItem>
+                  <SelectItem value="cage004">Cage #004</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -231,8 +183,8 @@ const NewWaterQualityModal = ({ trigger }: NewWaterQualityModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
-              {loading ? "Enregistrement..." : "Enregistrer la mesure"}
+            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
+              Enregistrer la mesure
             </Button>
           </div>
         </form>

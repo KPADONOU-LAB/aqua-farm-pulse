@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Plus, Fish } from "lucide-react";
 
 interface NewCageModalProps {
@@ -14,6 +16,7 @@ interface NewCageModalProps {
 
 const NewCageModal = ({ trigger }: NewCageModalProps) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nom: "",
     espece: "",
@@ -22,24 +25,50 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
     notes: ""
   });
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulation de la création
-    toast({
-      title: "Cage créée avec succès !",
-      description: `${formData.nom} avec ${formData.nombrePoissons} ${formData.espece} a été ajoutée.`,
-    });
+    if (!user) return;
     
-    setFormData({
-      nom: "",
-      espece: "",
-      nombrePoissons: "",
-      dateIntroduction: "",
-      notes: ""
-    });
-    setOpen(false);
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('cages').insert({
+        user_id: user.id,
+        nom: formData.nom,
+        espece: formData.espece,
+        nombre_poissons: parseInt(formData.nombrePoissons) || 0,
+        date_introduction: formData.dateIntroduction || null,
+        statut: parseInt(formData.nombrePoissons) > 0 ? 'actif' : 'vide',
+        notes: formData.notes || null
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Cage créée avec succès !",
+        description: `${formData.nom} avec ${formData.nombrePoissons} ${formData.espece} a été ajoutée.`,
+      });
+      
+      setFormData({
+        nom: "",
+        espece: "",
+        nombrePoissons: "",
+        dateIntroduction: "",
+        notes: ""
+      });
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de créer la cage. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -133,8 +162,8 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
-              Créer la cage
+            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
+              {loading ? "Création..." : "Créer la cage"}
             </Button>
           </div>
         </form>

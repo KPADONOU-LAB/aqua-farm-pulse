@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Plus, ShoppingCart } from "lucide-react";
 
 interface NewSaleModalProps {
@@ -14,40 +16,83 @@ interface NewSaleModalProps {
 
 const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cages, setCages] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     cage: "",
+    quantiteKg: "",
+    prixParKg: "",
     client: "",
-    espece: "",
-    quantite: "",
-    nombrePoissons: "",
-    prixUnitaire: "",
+    typeVente: "",
     notes: ""
   });
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const montantTotal = parseFloat(formData.quantite) * parseFloat(formData.prixUnitaire);
-    
-    toast({
-      title: "Vente enregistrée !",
-      description: `${formData.quantite}kg vendus à ${formData.client} pour €${montantTotal.toFixed(2)}`,
-    });
-    
-    setFormData({
-      cage: "",
-      client: "",
-      espece: "",
-      quantite: "",
-      nombrePoissons: "",
-      prixUnitaire: "",
-      notes: ""
-    });
-    setOpen(false);
+  useEffect(() => {
+    if (user) {
+      loadCages();
+    }
+  }, [user]);
+
+  const loadCages = async () => {
+    const { data } = await supabase
+      .from('cages')
+      .select('id, nom')
+      .eq('user_id', user?.id)
+      .eq('statut', 'actif');
+    setCages(data || []);
   };
 
-  const montantTotal = parseFloat(formData.quantite || "0") * parseFloat(formData.prixUnitaire || "0");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      const quantite = parseFloat(formData.quantiteKg);
+      const prix = parseFloat(formData.prixParKg);
+      const total = quantite * prix;
+
+      const { error } = await supabase.from('sales').insert({
+        user_id: user.id,
+        cage_id: formData.cage,
+        quantite_kg: quantite,
+        prix_par_kg: prix,
+        prix_total: total,
+        client: formData.client,
+        type_vente: formData.typeVente,
+        notes: formData.notes || null
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Vente enregistrée !",
+        description: `${formData.quantiteKg}kg vendus pour €${total.toFixed(2)}`,
+      });
+      
+      setFormData({
+        cage: "",
+        quantiteKg: "",
+        prixParKg: "",
+        client: "",
+        typeVente: "",
+        notes: ""
+      });
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'enregistrer la vente.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,7 +104,7 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] bg-white/95 backdrop-blur-sm">
+      <DialogContent className="sm:max-w-[500px] bg-white/95 backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-gray-800">
             <ShoppingCart className="h-5 w-5" />
@@ -70,7 +115,7 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="cage">Cage d'origine</Label>
+              <Label htmlFor="cage">Cage</Label>
               <Select 
                 value={formData.cage} 
                 onValueChange={(value) => setFormData({ ...formData, cage: value })}
@@ -79,28 +124,29 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cage001">Cage #001 (Tilapia)</SelectItem>
-                  <SelectItem value="cage002">Cage #002 (Bar)</SelectItem>
-                  <SelectItem value="cage003">Cage #003 (Dorade)</SelectItem>
+                  {cages.map((cage) => (
+                    <SelectItem key={cage.id} value={cage.id}>
+                      {cage.nom}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             
             <div>
-              <Label htmlFor="espece">Espèce</Label>
+              <Label htmlFor="typeVente">Type de vente</Label>
               <Select 
-                value={formData.espece} 
-                onValueChange={(value) => setFormData({ ...formData, espece: value })}
+                value={formData.typeVente} 
+                onValueChange={(value) => setFormData({ ...formData, typeVente: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="tilapia">Tilapia</SelectItem>
-                  <SelectItem value="bar">Bar</SelectItem>
-                  <SelectItem value="dorade">Dorade</SelectItem>
-                  <SelectItem value="saumon">Saumon</SelectItem>
-                  <SelectItem value="truite">Truite</SelectItem>
+                  <SelectItem value="gros">Gros</SelectItem>
+                  <SelectItem value="detail">Détail</SelectItem>
+                  <SelectItem value="restaurant">Restaurant</SelectItem>
+                  <SelectItem value="marche">Marché</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -112,73 +158,47 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
               id="client"
               value={formData.client}
               onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-              placeholder="Restaurant Le Neptune"
+              placeholder="Nom du client"
               required
             />
           </div>
           
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="quantite">Quantité (kg)</Label>
+              <Label htmlFor="quantiteKg">Quantité (kg)</Label>
               <Input
-                id="quantite"
+                id="quantiteKg"
                 type="number"
                 step="0.1"
-                value={formData.quantite}
-                onChange={(e) => setFormData({ ...formData, quantite: e.target.value })}
-                placeholder="85.5"
+                value={formData.quantiteKg}
+                onChange={(e) => setFormData({ ...formData, quantiteKg: e.target.value })}
+                placeholder="150.5"
                 required
               />
             </div>
             
             <div>
-              <Label htmlFor="nombrePoissons">Nombre de poissons</Label>
+              <Label htmlFor="prixParKg">Prix/kg (€)</Label>
               <Input
-                id="nombrePoissons"
-                type="number"
-                value={formData.nombrePoissons}
-                onChange={(e) => setFormData({ ...formData, nombrePoissons: e.target.value })}
-                placeholder="95"
-                required
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="prixUnitaire">Prix/kg (€)</Label>
-              <Input
-                id="prixUnitaire"
+                id="prixParKg"
                 type="number"
                 step="0.01"
-                value={formData.prixUnitaire}
-                onChange={(e) => setFormData({ ...formData, prixUnitaire: e.target.value })}
+                value={formData.prixParKg}
+                onChange={(e) => setFormData({ ...formData, prixParKg: e.target.value })}
                 placeholder="8.50"
                 required
               />
             </div>
           </div>
           
-          {montantTotal > 0 && (
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-green-800">Montant total:</span>
-                <span className="text-xl font-bold text-green-900">€{montantTotal.toFixed(2)}</span>
-              </div>
-              {formData.quantite && formData.nombrePoissons && (
-                <div className="text-sm text-green-700 mt-1">
-                  Poids moyen: {(parseFloat(formData.quantite) / parseFloat(formData.nombrePoissons)).toFixed(2)}kg/poisson
-                </div>
-              )}
-            </div>
-          )}
-          
           <div>
-            <Label htmlFor="notes">Notes (optionnel)</Label>
+            <Label htmlFor="notes">Notes</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Conditions de livraison, remarques..."
-              rows={3}
+              placeholder="Informations complémentaires..."
+              rows={2}
             />
           </div>
           
@@ -186,8 +206,8 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Annuler
             </Button>
-            <Button type="submit" className="bg-aqua-gradient hover:bg-aqua-600">
-              Enregistrer la vente
+            <Button type="submit" disabled={loading} className="bg-aqua-gradient hover:bg-aqua-600">
+              {loading ? "Enregistrement..." : "Enregistrer"}
             </Button>
           </div>
         </form>

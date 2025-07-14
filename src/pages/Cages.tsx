@@ -1,56 +1,13 @@
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Fish, Plus, TrendingUp, Calendar, Weight, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import NewCageModal from "@/components/modals/NewCageModal";
 
-const mockCages = [
-  {
-    id: 1,
-    nom: "Cage #001",
-    espece: "Tilapia",
-    nombrePoissons: 2500,
-    poidsMoyen: 0.8,
-    dateIntroduction: "2024-01-15",
-    statut: "actif",
-    fcr: 1.8,
-    croissance: "+12%"
-  },
-  {
-    id: 2,
-    nom: "Cage #002",
-    espece: "Bar",
-    nombrePoissons: 1800,
-    poidsMoyen: 1.2,
-    dateIntroduction: "2023-12-10",
-    statut: "actif",
-    fcr: 2.1,
-    croissance: "+8%"
-  },
-  {
-    id: 3,
-    nom: "Cage #003",
-    espece: "Dorade",
-    nombrePoissons: 2200,
-    poidsMoyen: 0.95,
-    dateIntroduction: "2024-02-01",
-    statut: "actif",
-    fcr: 1.9,
-    croissance: "+15%"
-  },
-  {
-    id: 4,
-    nom: "Cage #004",
-    espece: "Tilapia",
-    nombrePoissons: 0,
-    poidsMoyen: 0,
-    dateIntroduction: null,
-    statut: "vide",
-    fcr: 0,
-    croissance: "0%"
-  }
-];
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -62,6 +19,41 @@ const getStatutColor = (statut: string) => {
 };
 
 const Cages = () => {
+  const [cages, setCages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      loadCages();
+    }
+  }, [user]);
+
+  const loadCages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cages')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCages(data || []);
+    } catch (error) {
+      console.error('Error loading cages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-6 animate-fade-in flex items-center justify-center">
+        <div className="text-white text-lg">Chargement des cages...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
@@ -86,7 +78,7 @@ const Cages = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-ocean-800">
-              {mockCages.filter(c => c.statut === 'actif').length}
+              {cages.filter(c => c.statut === 'actif').length}
             </div>
           </CardContent>
         </Card>
@@ -98,7 +90,7 @@ const Cages = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-aqua-800">
-              {mockCages.reduce((acc, cage) => acc + cage.nombrePoissons, 0).toLocaleString()}
+              {cages.reduce((acc, cage) => acc + cage.nombre_poissons, 0).toLocaleString()}
             </div>
           </CardContent>
         </Card>
@@ -110,11 +102,13 @@ const Cages = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">
-              {(mockCages
-                .filter(c => c.statut === 'actif')
-                .reduce((acc, cage) => acc + cage.poidsMoyen, 0) / 
-                mockCages.filter(c => c.statut === 'actif').length
-              ).toFixed(1)}kg
+              {cages.filter(c => c.statut === 'actif').length > 0 ? (
+                (cages
+                  .filter(c => c.statut === 'actif')
+                  .reduce((acc, cage) => acc + Number(cage.poids_moyen), 0) / 
+                  cages.filter(c => c.statut === 'actif').length
+                ).toFixed(1)
+              ) : '0'}kg
             </div>
           </CardContent>
         </Card>
@@ -126,11 +120,13 @@ const Cages = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">
-              {(mockCages
-                .filter(c => c.statut === 'actif')
-                .reduce((acc, cage) => acc + cage.fcr, 0) / 
-                mockCages.filter(c => c.statut === 'actif').length
-              ).toFixed(1)}
+              {cages.filter(c => c.statut === 'actif').length > 0 ? (
+                (cages
+                  .filter(c => c.statut === 'actif')
+                  .reduce((acc, cage) => acc + Number(cage.fcr), 0) / 
+                  cages.filter(c => c.statut === 'actif').length
+                ).toFixed(1)
+              ) : '0'}
             </div>
           </CardContent>
         </Card>
@@ -138,7 +134,14 @@ const Cages = () => {
 
       {/* Liste des cages */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockCages.map((cage) => (
+        {cages.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <Fish className="h-16 w-16 text-white/30 mx-auto mb-4" />
+            <p className="text-white/70 text-lg mb-4">Aucune cage créée</p>
+            <NewCageModal />
+          </div>
+        ) : (
+          cages.map((cage) => (
           <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300 cursor-pointer">
             <CardHeader>
               <div className="flex justify-between items-start">
@@ -159,12 +162,12 @@ const Cages = () => {
                 <>
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">Poissons:</span>
-                    <span className="text-white font-semibold">{cage.nombrePoissons.toLocaleString()}</span>
+                    <span className="text-white font-semibold">{cage.nombre_poissons.toLocaleString()}</span>
                   </div>
                   
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">Poids moyen:</span>
-                    <span className="text-white font-semibold">{cage.poidsMoyen}kg</span>
+                    <span className="text-white font-semibold">{cage.poids_moyen}kg</span>
                   </div>
                   
                   <div className="flex justify-between items-center">
@@ -183,7 +186,7 @@ const Cages = () => {
                       Introduit:
                     </span>
                     <span className="text-white/80">
-                      {cage.dateIntroduction ? new Date(cage.dateIntroduction).toLocaleDateString('fr-FR') : 'N/A'}
+                      {cage.date_introduction ? new Date(cage.date_introduction).toLocaleDateString('fr-FR') : 'N/A'}
                     </span>
                   </div>
                 </>
@@ -198,7 +201,8 @@ const Cages = () => {
               )}
             </CardContent>
           </Card>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
