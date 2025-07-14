@@ -79,12 +79,11 @@ const EditCageModal = ({ cage, onCageUpdated }: EditCageModalProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant="default" 
+          variant="ghost" 
           size="sm" 
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-xs"
+          className="text-white/50 hover:text-white/80 hover:bg-white/5 px-2 py-1 text-xs"
         >
-          <Edit className="h-3 w-3 mr-1" />
-          Modifier
+          <Edit className="h-3 w-3" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

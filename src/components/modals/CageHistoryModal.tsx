@@ -106,12 +106,11 @@ const CageHistoryModal = ({ cage }: CageHistoryModalProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant="outline" 
+          variant="ghost" 
           size="sm" 
-          className="bg-white/10 border-white/30 text-white hover:bg-white/20 px-3 py-1 text-xs"
+          className="text-white/50 hover:text-white/80 hover:bg-white/5 px-2 py-1 text-xs"
         >
-          <History className="h-3 w-3 mr-1" />
-          Historique
+          <History className="h-3 w-3" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
