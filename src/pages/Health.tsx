@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Plus, AlertTriangle, TrendingDown, Activity, Pill } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import NewHealthObservationModal from "@/components/modals/NewHealthObservationModal";
+import { HomeButton } from "@/components/HomeButton";
 
 const mockHealthRecords = [
   {
@@ -85,7 +86,10 @@ const Health = () => {
             Surveillance sanitaire et interventions vétérinaires
           </p>
         </div>
-        <NewHealthObservationModal />
+        <div className="flex gap-3 items-center">
+          <HomeButton />
+          <NewHealthObservationModal />
+        </div>
       </div>
 
       {/* Indicateurs de santé */}

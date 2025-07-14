@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import NewWaterQualityModal from "@/components/modals/NewWaterQualityModal";
 import { useWaterQualityData } from "@/hooks/useWaterQualityData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HomeButton } from "@/components/HomeButton";
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -51,7 +52,10 @@ const WaterQuality = () => {
             Surveillance des paramètres environnementaux
           </p>
         </div>
-        <NewWaterQualityModal />
+        <div className="flex gap-3 items-center">
+          <HomeButton />
+          <NewWaterQualityModal />
+        </div>
       </div>
 
       {/* Paramètres moyens */}

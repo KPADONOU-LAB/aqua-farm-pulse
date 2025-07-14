@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, Download, Calendar, TrendingUp, Fish, Euro, Droplets } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { HomeButton } from "@/components/HomeButton";
 
 const performanceData = [
   { cage: 'Cage #001', fcr: 1.8, survie: 96.5, croissance: 2.3, revenus: 12450 },
@@ -50,6 +51,7 @@ const Reports = () => {
           </p>
         </div>
         <div className="flex gap-3">
+          <HomeButton />
           <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
             <Calendar className="mr-2 h-4 w-4" />
             Période

@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewFeedingModal from "@/components/modals/NewFeedingModal";
 import { useFeedingData } from "@/hooks/useFeedingData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HomeButton } from "@/components/HomeButton";
 
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
@@ -52,7 +53,10 @@ const Feeding = () => {
             Gestion et suivi des sessions d'alimentation
           </p>
         </div>
-        <NewFeedingModal />
+        <div className="flex gap-3 items-center">
+          <HomeButton />
+          <NewFeedingModal />
+        </div>
       </div>
 
       {/* Stats du jour */}
