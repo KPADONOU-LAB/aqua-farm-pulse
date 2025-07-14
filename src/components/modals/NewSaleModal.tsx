@@ -82,6 +82,7 @@ const NewSaleModal = ({ trigger }: NewSaleModalProps) => {
         notes: ""
       });
       setOpen(false);
+      // Recharger la page pour actualiser les données
       window.location.reload();
     } catch (error) {
       toast({

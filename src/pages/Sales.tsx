@@ -4,48 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ShoppingCart, Plus, TrendingUp, Users, Euro, Fish, History, BarChart3, FileText, Eye } from "lucide-react";
+import { ShoppingCart, Plus, TrendingUp, Users, Euro, Fish, History, BarChart3, FileText, Printer } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import NewSaleModal from "@/components/modals/NewSaleModal";
-
-const mockSales = [
-  {
-    id: 1,
-    date: "2024-01-20",
-    cage: "Cage #001",
-    client: "Restaurant Le Neptune",
-    espece: "Tilapia",
-    quantite: 85.5,
-    nombrePoissons: 95,
-    prixUnitaire: 8.50,
-    montantTotal: 726.75,
-    statut: "livré"
-  },
-  {
-    id: 2,
-    date: "2024-01-19",
-    cage: "Cage #002",
-    client: "Marché Central",
-    espece: "Bar",
-    quantite: 42.3,
-    nombrePoissons: 38,
-    prixUnitaire: 12.00,
-    montantTotal: 507.60,
-    statut: "livré"
-  },
-  {
-    id: 3,
-    date: "2024-01-20",
-    cage: "Cage #003",
-    client: "Grossiste AquaFrais",
-    espece: "Dorade",
-    quantite: 125.0,
-    nombrePoissons: 142,
-    prixUnitaire: 9.75,
-    montantTotal: 1218.75,
-    statut: "confirmé"
-  }
-];
+import { useSalesData } from "@/hooks/useSalesData";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 const monthlyRevenue = [
   { mois: 'Jan', revenus: 25400 },
@@ -77,21 +41,16 @@ const getStatutColor = (statut: string) => {
 };
 
 const Sales = () => {
-  const revenusJour = mockSales
-    .filter(sale => sale.date === "2024-01-20")
-    .reduce((acc, sale) => acc + sale.montantTotal, 0);
+  const { sales, loading, generateInvoice } = useSalesData();
   
-  const quantiteJour = mockSales
-    .filter(sale => sale.date === "2024-01-20")
-    .reduce((acc, sale) => acc + sale.quantite, 0);
+  // Calculer les données du jour
+  const today = new Date().toISOString().split('T')[0];
+  const todaySales = sales.filter(sale => sale.date_vente === today);
   
-  const nombreClientsJour = new Set(
-    mockSales
-      .filter(sale => sale.date === "2024-01-20")
-      .map(sale => sale.client)
-  ).size;
-
-  const prixMoyenKg = revenusJour / quantiteJour;
+  const revenusJour = todaySales.reduce((acc, sale) => acc + sale.prix_total, 0);
+  const quantiteJour = todaySales.reduce((acc, sale) => acc + sale.quantite_kg, 0);
+  const nombreClientsJour = new Set(todaySales.map(sale => sale.client)).size;
+  const prixMoyenKg = quantiteJour > 0 ? revenusJour / quantiteJour : 0;
 
   return (
     <div className="min-h-screen p-6 animate-fade-in">
@@ -262,16 +221,30 @@ const Sales = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockSales
-                    .filter(sale => sale.date === "2024-01-20")
-                    .map((sale) => (
-                    <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
-                      <TableCell className="text-white font-medium">{sale.client}</TableCell>
-                      <TableCell className="text-white/80">{sale.quantite}kg</TableCell>
-                      <TableCell className="text-white/80">{sale.cage}</TableCell>
-                      <TableCell className="text-white/80">14:30</TableCell>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-white/80 text-center py-8">
+                        Chargement des ventes...
+                      </TableCell>
                     </TableRow>
-                  ))}
+                  ) : todaySales.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-white/80 text-center py-8">
+                        Aucune vente aujourd'hui
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    todaySales.map((sale) => (
+                      <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
+                        <TableCell className="text-white font-medium">{sale.client}</TableCell>
+                        <TableCell className="text-white/80">{sale.quantite_kg}kg</TableCell>
+                        <TableCell className="text-white/80">{sale.cage?.nom || 'N/A'}</TableCell>
+                        <TableCell className="text-white/80">
+                          {format(new Date(sale.date_vente), 'HH:mm', { locale: fr })}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -297,29 +270,47 @@ const Sales = () => {
                     <TableHead className="text-white/80">Quantité</TableHead>
                     <TableHead className="text-white/80">Prix/kg</TableHead>
                     <TableHead className="text-white/80">Montant total payé</TableHead>
-                    <TableHead className="text-white/80">Statut</TableHead>
+                    <TableHead className="text-white/80">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockSales
-                    .filter(sale => sale.date === "2024-01-20")
-                    .map((sale) => (
-                    <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
-                      <TableCell className="text-white">
-                        {new Date(sale.date).toLocaleDateString('fr-FR')}
-                      </TableCell>
-                      <TableCell className="text-white font-medium">{sale.client}</TableCell>
-                      <TableCell className="text-white/80">{sale.cage}</TableCell>
-                      <TableCell className="text-white/80">{sale.quantite}kg</TableCell>
-                      <TableCell className="text-white/80">€{sale.prixUnitaire}</TableCell>
-                      <TableCell className="text-white font-semibold text-lg">€{sale.montantTotal.toLocaleString()}</TableCell>
-                      <TableCell>
-                        <Badge className={getStatutColor(sale.statut)}>
-                          {sale.statut}
-                        </Badge>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-white/80 text-center py-8">
+                        Chargement des ventes...
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : todaySales.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-white/80 text-center py-8">
+                        Aucune vente aujourd'hui
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    todaySales.map((sale) => (
+                      <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
+                        <TableCell className="text-white">
+                          {format(new Date(sale.date_vente), 'dd/MM/yyyy', { locale: fr })}
+                        </TableCell>
+                        <TableCell className="text-white font-medium">{sale.client}</TableCell>
+                        <TableCell className="text-white/80">{sale.cage?.nom || 'N/A'}</TableCell>
+                        <TableCell className="text-white/80">{sale.quantite_kg}kg</TableCell>
+                        <TableCell className="text-white/80">€{sale.prix_par_kg.toFixed(2)}</TableCell>
+                        <TableCell className="text-white font-semibold text-lg">€{sale.prix_total.toFixed(2)}</TableCell>
+                        <TableCell>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="text-white/80 hover:text-white hover:bg-white/10"
+                            onClick={() => generateInvoice(sale)}
+                          >
+                            <Printer className="h-4 w-4 mr-1" />
+                            Facture
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
