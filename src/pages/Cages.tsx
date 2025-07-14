@@ -227,7 +227,7 @@ const Cages = () => {
           </div>
         ) : (
           cages.map((cage) => (
-          <Card key={cage.id} className="glass-effect hover:scale-[1.02] transition-all duration-300 opacity-90">
+          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
