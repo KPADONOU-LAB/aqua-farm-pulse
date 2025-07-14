@@ -203,43 +203,43 @@ const Sales = () => {
 
         {/* History Tab - Ventes du jour */}
         <TabsContent value="history" className="space-y-6">
-          <Card className="glass-effect">
-            <CardHeader>
+          <Card className="bg-white/95 backdrop-blur-sm border border-white/20">
+            <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700">
               <CardTitle className="text-white flex items-center gap-2">
                 <History className="h-5 w-5" />
                 Historique des ventes du jour
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-white">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/20 hover:bg-white/5">
-                    <TableHead className="text-white/80">Client</TableHead>
-                    <TableHead className="text-white/80">Quantité</TableHead>
-                    <TableHead className="text-white/80">Cage</TableHead>
-                    <TableHead className="text-white/80">Heure</TableHead>
+                  <TableRow className="border-gray-200 hover:bg-gray-50">
+                    <TableHead className="text-gray-700 font-semibold">Client</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Quantité</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Cage</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Heure</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-white/80 text-center py-8">
+                      <TableCell colSpan={4} className="text-gray-600 text-center py-8">
                         Chargement des ventes...
                       </TableCell>
                     </TableRow>
                   ) : todaySales.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-white/80 text-center py-8">
+                      <TableCell colSpan={4} className="text-gray-600 text-center py-8">
                         Aucune vente aujourd'hui
                       </TableCell>
                     </TableRow>
                   ) : (
                     todaySales.map((sale) => (
-                      <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
-                        <TableCell className="text-white font-medium">{sale.client}</TableCell>
-                        <TableCell className="text-white/80">{sale.quantite_kg}kg</TableCell>
-                        <TableCell className="text-white/80">{sale.cage?.nom || 'N/A'}</TableCell>
-                        <TableCell className="text-white/80">
+                      <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
+                        <TableCell className="text-gray-900 font-medium">{sale.client}</TableCell>
+                        <TableCell className="text-gray-700">{sale.quantite_kg}kg</TableCell>
+                        <TableCell className="text-gray-700">{sale.cage?.nom || 'N/A'}</TableCell>
+                        <TableCell className="text-gray-700">
                           {format(new Date(sale.date_vente), 'HH:mm', { locale: fr })}
                         </TableCell>
                       </TableRow>
@@ -253,55 +253,55 @@ const Sales = () => {
 
         {/* Details Tab - Détails des factures */}
         <TabsContent value="details" className="space-y-6">
-          <Card className="glass-effect">
-            <CardHeader>
+          <Card className="bg-white/95 backdrop-blur-sm border border-white/20">
+            <CardHeader className="bg-gradient-to-r from-green-600 to-green-700">
               <CardTitle className="text-white flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 Détails des ventes - Factures
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-white">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/20 hover:bg-white/5">
-                    <TableHead className="text-white/80">Date</TableHead>
-                    <TableHead className="text-white/80">Client</TableHead>
-                    <TableHead className="text-white/80">Cage</TableHead>
-                    <TableHead className="text-white/80">Quantité</TableHead>
-                    <TableHead className="text-white/80">Prix/kg</TableHead>
-                    <TableHead className="text-white/80">Montant total payé</TableHead>
-                    <TableHead className="text-white/80">Actions</TableHead>
+                  <TableRow className="border-gray-200 hover:bg-gray-50">
+                    <TableHead className="text-gray-700 font-semibold">Date</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Client</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Cage</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Quantité</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Prix/kg</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Montant total payé</TableHead>
+                    <TableHead className="text-gray-700 font-semibold">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-white/80 text-center py-8">
+                      <TableCell colSpan={7} className="text-gray-600 text-center py-8">
                         Chargement des ventes...
                       </TableCell>
                     </TableRow>
                   ) : todaySales.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-white/80 text-center py-8">
+                      <TableCell colSpan={7} className="text-gray-600 text-center py-8">
                         Aucune vente aujourd'hui
                       </TableCell>
                     </TableRow>
                   ) : (
                     todaySales.map((sale) => (
-                      <TableRow key={sale.id} className="border-white/10 hover:bg-white/5">
-                        <TableCell className="text-white">
+                      <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
+                        <TableCell className="text-gray-900">
                           {format(new Date(sale.date_vente), 'dd/MM/yyyy', { locale: fr })}
                         </TableCell>
-                        <TableCell className="text-white font-medium">{sale.client}</TableCell>
-                        <TableCell className="text-white/80">{sale.cage?.nom || 'N/A'}</TableCell>
-                        <TableCell className="text-white/80">{sale.quantite_kg}kg</TableCell>
-                        <TableCell className="text-white/80">€{sale.prix_par_kg.toFixed(2)}</TableCell>
-                        <TableCell className="text-white font-semibold text-lg">€{sale.prix_total.toFixed(2)}</TableCell>
+                        <TableCell className="text-gray-900 font-medium">{sale.client}</TableCell>
+                        <TableCell className="text-gray-700">{sale.cage?.nom || 'N/A'}</TableCell>
+                        <TableCell className="text-gray-700">{sale.quantite_kg}kg</TableCell>
+                        <TableCell className="text-gray-700">€{sale.prix_par_kg.toFixed(2)}</TableCell>
+                        <TableCell className="text-green-700 font-bold text-lg">€{sale.prix_total.toFixed(2)}</TableCell>
                         <TableCell>
                           <Button 
                             size="sm" 
-                            variant="ghost" 
-                            className="text-white/80 hover:text-white hover:bg-white/10"
+                            variant="default" 
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
                             onClick={() => generateInvoice(sale)}
                           >
                             <Printer className="h-4 w-4 mr-1" />
