@@ -237,11 +237,11 @@ const Cages = () => {
                   </CardTitle>
                   <p className="text-white/70 mt-1">{cage.espece}</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-end gap-2">
                   <Badge className={getStatutColor(cage.statut)}>
                     {cage.statut}
                   </Badge>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     <EditCageModal cage={cage} onCageUpdated={loadCages} />
                     <CageHistoryModal cage={cage} />
                   </div>
