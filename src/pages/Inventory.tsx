@@ -5,84 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Package, Plus, AlertTriangle, TrendingUp, Coffee, Pill, Wrench } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import NewInventoryModal from "@/components/modals/NewInventoryModal";
-
-const mockInventory = [
-  {
-    id: 1,
-    nom: "Granulés croissance premium",
-    categorie: "aliment",
-    stockActuel: 2.5,
-    unite: "tonnes",
-    stockMin: 1.0,
-    prixUnitaire: 1200,
-    fournisseur: "AquaFeed Pro",
-    dateExpiration: "2024-06-15",
-    statut: "normal"
-  },
-  {
-    id: 2,
-    nom: "Granulés standard",
-    categorie: "aliment", 
-    stockActuel: 4.2,
-    unite: "tonnes",
-    stockMin: 2.0,
-    prixUnitaire: 980,
-    fournisseur: "AquaFeed Pro",
-    dateExpiration: "2024-05-20",
-    statut: "normal"
-  },
-  {
-    id: 3,
-    nom: "Probiotiques aqua",
-    categorie: "veterinaire",
-    stockActuel: 0.5,
-    unite: "kg",
-    stockMin: 2.0,
-    prixUnitaire: 85,
-    fournisseur: "VetAqua",
-    dateExpiration: "2024-08-30",
-    statut: "critique"
-  },
-  {
-    id: 4,
-    nom: "Antibiotique large spectre",
-    categorie: "veterinaire",
-    stockActuel: 12,
-    unite: "flacons",
-    stockMin: 5,
-    prixUnitaire: 45,
-    fournisseur: "VetAqua", 
-    dateExpiration: "2025-01-15",
-    statut: "normal"
-  },
-  {
-    id: 5,
-    nom: "Filets de rechange",
-    categorie: "materiel",
-    stockActuel: 3,
-    unite: "unités",
-    stockMin: 5,
-    prixUnitaire: 250,
-    fournisseur: "AquaEquip",
-    dateExpiration: null,
-    statut: "faible"
-  }
-];
-
-const consumptionData = [
-  { mois: 'Jan', aliment: 8.5, veterinaire: 0.8, materiel: 1.2 },
-  { mois: 'Fév', aliment: 9.2, veterinaire: 1.1, materiel: 0.9 },
-  { mois: 'Mar', aliment: 8.8, veterinaire: 0.6, materiel: 2.1 },
-  { mois: 'Avr', aliment: 9.5, veterinaire: 1.3, materiel: 0.7 },
-  { mois: 'Mai', aliment: 10.1, veterinaire: 0.9, materiel: 1.8 },
-  { mois: 'Jun', aliment: 9.7, veterinaire: 0.7, materiel: 1.1 },
-];
-
-const categoryData = [
-  { name: 'Aliments', value: 6.7, color: '#10b981' },
-  { name: 'Vétérinaire', value: 12.5, color: '#0ea5e9' },
-  { name: 'Matériel', value: 3, color: '#f59e0b' },
-];
+import { useInventoryData } from "@/hooks/useInventoryData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -103,9 +27,26 @@ const getCategoryIcon = (categorie: string) => {
 };
 
 const Inventory = () => {
-  const stocksCritiques = mockInventory.filter(item => item.statut === 'critique').length;
-  const stocksFaibles = mockInventory.filter(item => item.statut === 'faible').length;
-  const valeurTotale = mockInventory.reduce((acc, item) => acc + (item.stockActuel * item.prixUnitaire), 0);
+  const { inventory, consumptionData, categoryData, stats, loading } = useInventoryData();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-6 animate-fade-in">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <Skeleton className="h-10 w-64 mb-2" />
+            <Skeleton className="h-6 w-96" />
+          </div>
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-32" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-6 animate-fade-in">
@@ -130,7 +71,7 @@ const Inventory = () => {
             <AlertTriangle className="h-5 w-5 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stocksCritiques}</div>
+            <div className="text-3xl font-bold text-gray-800">{stats.stocksCritiques}</div>
             <p className="text-xs text-red-600">Réappro urgent</p>
           </CardContent>
         </Card>
@@ -141,7 +82,7 @@ const Inventory = () => {
             <TrendingUp className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-ocean-800">{stocksFaibles}</div>
+            <div className="text-3xl font-bold text-ocean-800">{stats.stocksFaibles}</div>
             <p className="text-xs text-ocean-600">À surveiller</p>
           </CardContent>
         </Card>
@@ -152,7 +93,7 @@ const Inventory = () => {
             <Package className="h-5 w-5 text-aqua-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-aqua-800">{mockInventory.length}</div>
+            <div className="text-3xl font-bold text-aqua-800">{stats.articlesTotal}</div>
             <p className="text-xs text-aqua-600">En gestion</p>
           </CardContent>
         </Card>
@@ -163,7 +104,7 @@ const Inventory = () => {
             <TrendingUp className="h-5 w-5 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">€{(valeurTotale / 1000).toFixed(1)}k</div>
+            <div className="text-3xl font-bold text-gray-800">€{(stats.valeurTotale / 1000).toFixed(1)}k</div>
             <p className="text-xs text-blue-600">Stock en valeur</p>
           </CardContent>
         </Card>
@@ -245,64 +186,71 @@ const Inventory = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockInventory.map((item) => {
-              const IconComponent = getCategoryIcon(item.categorie);
-              return (
-                <div key={item.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 bg-ocean-gradient rounded-lg">
-                        <IconComponent className="h-5 w-5 text-white" />
+            {inventory.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-white/70">Aucun article en stock</p>
+                <p className="text-white/50 text-sm mt-2">Ajoutez des articles à votre inventaire</p>
+              </div>
+            ) : (
+              inventory.map((item) => {
+                const IconComponent = getCategoryIcon(item.categorie);
+                return (
+                  <div key={item.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-ocean-gradient rounded-lg">
+                          <IconComponent className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="text-white font-medium">{item.nom}</h4>
+                          <p className="text-white/70 text-sm">{item.fournisseur}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-white font-medium">{item.nom}</h4>
-                        <p className="text-white/70 text-sm">{item.fournisseur}</p>
+                      
+                      <div className="flex items-center gap-4">
+                        <Badge className={getStatutColor(item.statut)}>
+                          {item.statut}
+                        </Badge>
+                        <div className="text-right">
+                          <div className="text-white font-semibold">
+                            {item.stock_actuel} {item.unite}
+                          </div>
+                          <div className="text-white/70 text-sm">
+                            Min: {item.stock_min} {item.unite}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-4">
-                      <Badge className={getStatutColor(item.statut)}>
-                        {item.statut}
-                      </Badge>
-                      <div className="text-right">
-                        <div className="text-white font-semibold">
-                          {item.stockActuel} {item.unite}
+                    <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="text-white/70">Prix unitaire:</span>
+                        <div className="text-white font-medium">€{item.prix_unitaire}</div>
+                      </div>
+                      <div>
+                        <span className="text-white/70">Valeur stock:</span>
+                        <div className="text-white font-medium">
+                          €{(item.stock_actuel * item.prix_unitaire).toLocaleString()}
                         </div>
-                        <div className="text-white/70 text-sm">
-                          Min: {item.stockMin} {item.unite}
+                      </div>
+                      <div>
+                        <span className="text-white/70">Catégorie:</span>
+                        <div className="text-white font-medium capitalize">{item.categorie}</div>
+                      </div>
+                      <div>
+                        <span className="text-white/70">Expiration:</span>
+                        <div className="text-white font-medium">
+                          {item.date_expiration 
+                            ? new Date(item.date_expiration).toLocaleDateString('fr-FR')
+                            : 'N/A'
+                          }
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-white/70">Prix unitaire:</span>
-                      <div className="text-white font-medium">€{item.prixUnitaire}</div>
-                    </div>
-                    <div>
-                      <span className="text-white/70">Valeur stock:</span>
-                      <div className="text-white font-medium">
-                        €{(item.stockActuel * item.prixUnitaire).toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-white/70">Catégorie:</span>
-                      <div className="text-white font-medium capitalize">{item.categorie}</div>
-                    </div>
-                    <div>
-                      <span className="text-white/70">Expiration:</span>
-                      <div className="text-white font-medium">
-                        {item.dateExpiration 
-                          ? new Date(item.dateExpiration).toLocaleDateString('fr-FR')
-                          : 'N/A'
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </CardContent>
       </Card>

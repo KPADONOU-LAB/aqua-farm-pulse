@@ -5,49 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Coffee, Plus, Clock, TrendingUp, Fish, AlertCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import NewFeedingModal from "@/components/modals/NewFeedingModal";
-
-const mockFeedings = [
-  {
-    id: 1,
-    cage: "Cage #001",
-    heure: "08:30",
-    quantite: 45.5,
-    typeAliment: "Granulés croissance",
-    appetit: "excellent",
-    observations: "Poissons très actifs",
-    date: "2024-01-20"
-  },
-  {
-    id: 2,
-    cage: "Cage #002",
-    heure: "09:15",
-    quantite: 38.2,
-    typeAliment: "Granulés standard",
-    appetit: "bon",
-    observations: "Consommation normale",
-    date: "2024-01-20"
-  },
-  {
-    id: 3,
-    cage: "Cage #003",
-    heure: "08:45",
-    quantite: 42.1,
-    typeAliment: "Granulés croissance",
-    appetit: "moyen",
-    observations: "Quelques poissons inactifs",
-    date: "2024-01-20"
-  }
-];
-
-const weeklyData = [
-  { jour: 'Lun', quantite: 180 },
-  { jour: 'Mar', quantite: 195 },
-  { jour: 'Mer', quantite: 175 },
-  { jour: 'Jeu', quantite: 188 },
-  { jour: 'Ven', quantite: 205 },
-  { jour: 'Sam', quantite: 170 },
-  { jour: 'Dim', quantite: 165 },
-];
+import { useFeedingData } from "@/hooks/useFeedingData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
@@ -60,7 +19,26 @@ const getAppetitColor = (appetit: string) => {
 };
 
 const Feeding = () => {
-  const totalQuantiteJour = mockFeedings.reduce((acc, feeding) => acc + feeding.quantite, 0);
+  const { feedingSessions, weeklyData, stats, loading } = useFeedingData();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-6 animate-fade-in">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <Skeleton className="h-10 w-64 mb-2" />
+            <Skeleton className="h-6 w-96" />
+          </div>
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-32" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-6 animate-fade-in">
@@ -85,7 +63,7 @@ const Feeding = () => {
             <Coffee className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-ocean-800">{mockFeedings.length}</div>
+            <div className="text-3xl font-bold text-ocean-800">{stats.sessionsToday}</div>
           </CardContent>
         </Card>
 
@@ -95,7 +73,7 @@ const Feeding = () => {
             <TrendingUp className="h-5 w-5 text-aqua-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-aqua-800">{totalQuantiteJour.toFixed(1)}kg</div>
+            <div className="text-3xl font-bold text-aqua-800">{stats.quantiteTotal.toFixed(1)}kg</div>
           </CardContent>
         </Card>
 
@@ -105,7 +83,7 @@ const Feeding = () => {
             <Clock className="h-5 w-5 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">14:30</div>
+            <div className="text-3xl font-bold text-gray-800">{stats.prochainSession}</div>
             <p className="text-xs text-gray-600">Cage #004</p>
           </CardContent>
         </Card>
@@ -116,7 +94,7 @@ const Feeding = () => {
             <AlertCircle className="h-5 w-5 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">1</div>
+            <div className="text-3xl font-bold text-gray-800">{stats.alertes}</div>
             <p className="text-xs text-red-600">Appétit faible</p>
           </CardContent>
         </Card>
@@ -192,44 +170,51 @@ const Feeding = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockFeedings.map((feeding) => (
-              <div key={feeding.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-2 bg-ocean-gradient rounded-lg">
-                      <Fish className="h-5 w-5 text-white" />
+            {feedingSessions.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-white/70">Aucune session d'alimentation aujourd'hui</p>
+                <p className="text-white/50 text-sm mt-2">Ajoutez une nouvelle session pour commencer</p>
+              </div>
+            ) : (
+              feedingSessions.map((feeding) => (
+                <div key={feeding.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 bg-ocean-gradient rounded-lg">
+                        <Fish className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-white font-medium">{feeding.cage?.nom}</h4>
+                        <p className="text-white/70 text-sm">{feeding.type_aliment}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-white font-medium">{feeding.cage}</h4>
-                      <p className="text-white/70 text-sm">{feeding.typeAliment}</p>
+                    
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <div className="flex items-center gap-1 text-white/80">
+                        <Clock className="h-4 w-4" />
+                        {feeding.heure}
+                      </div>
+                      
+                      <div className="text-white font-medium">
+                        {feeding.quantite}kg
+                      </div>
+                      
+                      <Badge className={getAppetitColor(feeding.appetit)}>
+                        {feeding.appetit}
+                      </Badge>
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1 text-white/80">
-                      <Clock className="h-4 w-4" />
-                      {feeding.heure}
+                  {feeding.observations && (
+                    <div className="mt-3 pt-3 border-t border-white/10">
+                      <p className="text-white/70 text-sm">
+                        <strong>Observations:</strong> {feeding.observations}
+                      </p>
                     </div>
-                    
-                    <div className="text-white font-medium">
-                      {feeding.quantite}kg
-                    </div>
-                    
-                    <Badge className={getAppetitColor(feeding.appetit)}>
-                      {feeding.appetit}
-                    </Badge>
-                  </div>
+                  )}
                 </div>
-                
-                {feeding.observations && (
-                  <div className="mt-3 pt-3 border-t border-white/10">
-                    <p className="text-white/70 text-sm">
-                      <strong>Observations:</strong> {feeding.observations}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
