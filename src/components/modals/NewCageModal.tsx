@@ -21,6 +21,8 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
     nom: "",
     espece: "",
     nombrePoissons: "",
+    poidsMoyen: "",
+    statut: "vide",
     dateIntroduction: "",
     notes: ""
   });
@@ -39,8 +41,9 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
         nom: formData.nom,
         espece: formData.espece,
         nombre_poissons: parseInt(formData.nombrePoissons) || 0,
+        poids_moyen: parseFloat(formData.poidsMoyen) || 0,
         date_introduction: formData.dateIntroduction || null,
-        statut: parseInt(formData.nombrePoissons) > 0 ? 'actif' : 'vide',
+        statut: formData.statut,
         notes: formData.notes || null
       });
 
@@ -55,6 +58,8 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
         nom: "",
         espece: "",
         nombrePoissons: "",
+        poidsMoyen: "",
+        statut: "vide",
         dateIntroduction: "",
         notes: ""
       });
@@ -136,13 +141,45 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
             </div>
             
             <div>
+              <Label htmlFor="poidsMoyen">Poids moyen (kg)</Label>
+              <Input
+                id="poidsMoyen"
+                type="number"
+                step="0.1"
+                value={formData.poidsMoyen}
+                onChange={(e) => setFormData({ ...formData, poidsMoyen: e.target.value })}
+                placeholder="1.2"
+                required
+              />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="statut">Statut de la cage</Label>
+              <Select 
+                value={formData.statut} 
+                onValueChange={(value) => setFormData({ ...formData, statut: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner le statut" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="vide">Vide</SelectItem>
+                  <SelectItem value="actif">Actif</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
               <Label htmlFor="dateIntroduction">Date d'introduction</Label>
               <Input
                 id="dateIntroduction"
                 type="date"
                 value={formData.dateIntroduction}
                 onChange={(e) => setFormData({ ...formData, dateIntroduction: e.target.value })}
-                required
+                required={formData.statut === 'actif'}
               />
             </div>
           </div>
