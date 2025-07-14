@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      cage_history: {
+        Row: {
+          cage_id: string
+          change_type: string
+          created_at: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          change_type?: string
+          created_at?: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          change_type?: string
+          created_at?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cage_history_cage_id_fkey"
+            columns: ["cage_id"]
+            isOneToOne: false
+            referencedRelation: "cages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cages: {
         Row: {
           created_at: string

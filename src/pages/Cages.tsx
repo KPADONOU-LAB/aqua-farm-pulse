@@ -3,10 +3,14 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Fish, Plus, TrendingUp, Calendar, Weight, Users } from "lucide-react";
+import { Fish, Plus, TrendingUp, Calendar, Weight, Users, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import NewCageModal from "@/components/modals/NewCageModal";
+import EditCageModal from "@/components/modals/EditCageModal";
+import CageHistoryModal from "@/components/modals/CageHistoryModal";
+import * as XLSX from 'xlsx';
 
 
 const getStatutColor = (statut: string) => {
@@ -22,6 +26,7 @@ const Cages = () => {
   const [cages, setCages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user) {
@@ -46,6 +51,76 @@ const Cages = () => {
     }
   };
 
+  const exportAllHistory = async () => {
+    if (!user) return;
+
+    try {
+      // Récupérer l'historique de toutes les cages
+      const { data: allHistory, error } = await supabase
+        .from('cage_history')
+        .select(`
+          *,
+          cages!inner(nom, espece)
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const fieldLabels: { [key: string]: string } = {
+        nom: "Nom",
+        espece: "Espèce",
+        nombre_poissons: "Nombre de poissons",
+        poids_moyen: "Poids moyen (kg)",
+        statut: "Statut",
+        date_introduction: "Date d'introduction",
+        fcr: "FCR",
+        croissance: "Croissance",
+        creation: "Création"
+      };
+
+      const exportData = allHistory.map(record => ({
+        'Date': new Date(record.created_at).toLocaleString('fr-FR'),
+        'Cage': record.cages.nom,
+        'Espèce': record.cages.espece,
+        'Champ modifié': fieldLabels[record.field_name] || record.field_name,
+        'Ancienne valeur': record.old_value || 'N/A',
+        'Nouvelle valeur': record.new_value || 'N/A',
+        'Type': record.change_type === 'create' ? 'Création' : 'Modification'
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Historique_Complet');
+      
+      // Ajuster la largeur des colonnes
+      const colWidths = [
+        { wch: 20 }, // Date
+        { wch: 15 }, // Cage
+        { wch: 15 }, // Espèce
+        { wch: 20 }, // Champ modifié
+        { wch: 15 }, // Ancienne valeur
+        { wch: 15 }, // Nouvelle valeur
+        { wch: 18 }  // Type
+      ];
+      ws['!cols'] = colWidths;
+
+      XLSX.writeFile(wb, `Historique_Toutes_Cages_${new Date().toISOString().split('T')[0]}.xlsx`);
+      
+      toast({
+        title: "Export réussi",
+        description: "L'historique complet a été exporté en Excel."
+      });
+    } catch (error) {
+      console.error('Error exporting history:', error);
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de l'export de l'historique.",
+        variant: "destructive"
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen p-6 animate-fade-in flex items-center justify-center">
@@ -66,7 +141,17 @@ const Cages = () => {
             Suivi et gestion de vos installations piscicoles
           </p>
         </div>
-        <NewCageModal />
+        <div className="flex gap-3">
+          <Button
+            onClick={exportAllHistory}
+            variant="outline"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Exporter historique
+          </Button>
+          <NewCageModal />
+        </div>
       </div>
 
       {/* Stats rapides */}
@@ -142,7 +227,7 @@ const Cages = () => {
           </div>
         ) : (
           cages.map((cage) => (
-          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300 cursor-pointer">
+          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
@@ -152,9 +237,15 @@ const Cages = () => {
                   </CardTitle>
                   <p className="text-white/70 mt-1">{cage.espece}</p>
                 </div>
-                <Badge className={getStatutColor(cage.statut)}>
-                  {cage.statut}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge className={getStatutColor(cage.statut)}>
+                    {cage.statut}
+                  </Badge>
+                  <div className="flex gap-1">
+                    <EditCageModal cage={cage} onCageUpdated={loadCages} />
+                    <CageHistoryModal cage={cage} />
+                  </div>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
