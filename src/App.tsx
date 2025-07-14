@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { AuthProvider } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Cages from "./pages/Cages";
 import Feeding from "./pages/Feeding";
@@ -14,6 +16,7 @@ import Health from "./pages/Health";
 import Inventory from "./pages/Inventory";
 import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,24 +27,33 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <SidebarProvider>
-          <div className="min-h-screen flex w-full bg-underwater-gradient">
-            <AppSidebar />
-            <main className="flex-1 overflow-auto">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/cages" element={<Cages />} />
-                <Route path="/feeding" element={<Feeding />} />
-                <Route path="/water-quality" element={<WaterQuality />} />
-                <Route path="/health" element={<Health />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/sales" element={<Sales />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
-        </SidebarProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/*" element={
+              <ProtectedRoute>
+                <SidebarProvider>
+                  <div className="min-h-screen flex w-full bg-underwater-gradient">
+                    <AppSidebar />
+                    <main className="flex-1 overflow-auto">
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/cages" element={<Cages />} />
+                        <Route path="/feeding" element={<Feeding />} />
+                        <Route path="/water-quality" element={<WaterQuality />} />
+                        <Route path="/health" element={<Health />} />
+                        <Route path="/inventory" element={<Inventory />} />
+                        <Route path="/sales" element={<Sales />} />
+                        <Route path="/reports" element={<Reports />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </main>
+                  </div>
+                </SidebarProvider>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -8,9 +8,12 @@ import {
   Package, 
   ShoppingCart, 
   BarChart3,
-  Menu
+  Menu,
+  LogOut
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +43,7 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
+  const { signOut, user } = useAuth();
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = (path: string) =>
@@ -97,10 +101,27 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <div className="p-4 border-t border-white/20 mt-auto">
-        <SidebarTrigger className="w-full flex items-center justify-center p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
-          <Menu className="h-5 w-5 text-white" />
-        </SidebarTrigger>
+      <div className="p-4 border-t border-white/20 mt-auto space-y-2">
+        {!collapsed && user && (
+          <div className="text-xs text-white/70 px-2 truncate">
+            {user.email}
+          </div>
+        )}
+        <div className="flex gap-2">
+          <SidebarTrigger className="flex-1 flex items-center justify-center p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+            <Menu className="h-4 w-4 text-white" />
+          </SidebarTrigger>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={signOut}
+            className={`${collapsed ? "w-full" : "flex-1"} p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-white`}
+            title="Déconnexion"
+          >
+            <LogOut className="h-4 w-4" />
+            {!collapsed && <span className="ml-1 text-xs">Déconnexion</span>}
+          </Button>
+        </div>
       </div>
     </Sidebar>
   );
