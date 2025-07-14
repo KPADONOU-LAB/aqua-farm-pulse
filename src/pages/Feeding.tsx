@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Coffee, Plus, Clock, TrendingUp, Fish, AlertCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import NewFeedingModal from "@/components/modals/NewFeedingModal";
 
 const mockFeedings = [
   {
@@ -73,10 +74,7 @@ const Feeding = () => {
             Gestion et suivi des sessions d'alimentation
           </p>
         </div>
-        <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle session
-        </Button>
+        <NewFeedingModal />
       </div>
 
       {/* Stats du jour */}

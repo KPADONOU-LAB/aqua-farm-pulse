@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Plus, TrendingUp, Users, Euro, Fish } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import NewSaleModal from "@/components/modals/NewSaleModal";
 
 const mockSales = [
   {
@@ -102,10 +103,7 @@ const Sales = () => {
             Suivi commercial et performance des ventes
           </p>
         </div>
-        <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle vente
-        </Button>
+        <NewSaleModal />
       </div>
 
       {/* KPIs du jour */}

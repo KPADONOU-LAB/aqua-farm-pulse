@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Package, Plus, AlertTriangle, TrendingUp, Coffee, Pill, Wrench } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import NewInventoryModal from "@/components/modals/NewInventoryModal";
 
 const mockInventory = [
   {
@@ -118,10 +119,7 @@ const Inventory = () => {
             Suivi des approvisionnements et inventaire
           </p>
         </div>
-        <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle entrée
-        </Button>
+        <NewInventoryModal />
       </div>
 
       {/* Indicateurs stocks */}

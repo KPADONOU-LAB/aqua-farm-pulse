@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Fish, Plus, TrendingUp, Calendar, Weight, Users } from "lucide-react";
+import NewCageModal from "@/components/modals/NewCageModal";
 
 const mockCages = [
   {
@@ -73,10 +74,7 @@ const Cages = () => {
             Suivi et gestion de vos installations piscicoles
           </p>
         </div>
-        <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle cage
-        </Button>
+        <NewCageModal />
       </div>
 
       {/* Stats rapides */}

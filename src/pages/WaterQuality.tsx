@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Droplets, Plus, Thermometer, Waves, Wind, Eye } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import NewWaterQualityModal from "@/components/modals/NewWaterQualityModal";
 
 const mockMeasurements = [
   {
@@ -93,10 +94,7 @@ const WaterQuality = () => {
             Surveillance des paramètres environnementaux
           </p>
         </div>
-        <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle mesure
-        </Button>
+        <NewWaterQualityModal />
       </div>
 
       {/* Paramètres moyens */}
