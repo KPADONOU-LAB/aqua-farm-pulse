@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import NewCageModal from "@/components/modals/NewCageModal";
 import EditCageModal from "@/components/modals/EditCageModal";
 import CageHistoryModal from "@/components/modals/CageHistoryModal";
+import { CageDailyHistoryModal } from "@/components/modals/CageDailyHistoryModal";
+import { useCageMetrics } from "@/hooks/useCageMetrics";
 import * as XLSX from 'xlsx';
 import { HomeButton } from "@/components/HomeButton";
 
@@ -257,9 +259,10 @@ const Cages = () => {
                   <Badge className={getStatutColor(cage.statut)}>
                     {cage.statut}
                   </Badge>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 flex-wrap">
                     <EditCageModal cage={cage} onCageUpdated={loadCages} />
                     <CageHistoryModal cage={cage} />
+                    <CageDailyHistoryModal cage={cage} />
                   </div>
                 </div>
               </div>
@@ -292,6 +295,13 @@ const Cages = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">Croissance:</span>
                     <span className="text-green-400 font-semibold">{cage.croissance}</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/80">Taux mortalité:</span>
+                    <span className="text-red-400 font-semibold">
+                      {cage.taux_mortalite ? `${Number(cage.taux_mortalite).toFixed(1)}%` : '0%'}
+                    </span>
                   </div>
                   
                   <div className="flex justify-between items-center text-sm">

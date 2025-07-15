@@ -233,6 +233,7 @@ export type Database = {
           notes: string | null
           poids_moyen: number | null
           statut: string
+          taux_mortalite: number | null
           updated_at: string
           user_id: string
         }
@@ -248,6 +249,7 @@ export type Database = {
           notes?: string | null
           poids_moyen?: number | null
           statut?: string
+          taux_mortalite?: number | null
           updated_at?: string
           user_id: string
         }
@@ -263,6 +265,7 @@ export type Database = {
           notes?: string | null
           poids_moyen?: number | null
           statut?: string
+          taux_mortalite?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -830,6 +833,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_cage_fcr: {
+        Args: { cage_id_param: string }
+        Returns: number
+      }
+      calculate_cage_growth_rate: {
+        Args: { cage_id_param: string }
+        Returns: number
+      }
+      calculate_cage_mortality_rate: {
+        Args: { cage_id_param: string }
+        Returns: number
+      }
       calculate_cycle_profitability: {
         Args: { cycle_id: string }
         Returns: number
@@ -837,6 +852,17 @@ export type Database = {
       generate_automatic_alerts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      get_cage_daily_history: {
+        Args: { cage_id_param: string; date_debut?: string; date_fin?: string }
+        Returns: {
+          date_activite: string
+          alimentation: Json
+          qualite_eau: Json
+          sante: Json
+          ventes: Json
+          finance: Json
+        }[]
       }
     }
     Enums: {
