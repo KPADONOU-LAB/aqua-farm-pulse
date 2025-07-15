@@ -182,43 +182,47 @@ const Reports = () => {
       </div>
 
       {/* Performance par cage */}
-      <Card className="glass-effect mb-8">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
+      <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl mb-8">
+        <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
+          <CardTitle className="flex items-center gap-2">
             <Fish className="h-5 w-5" />
             Performance par cage
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <div className="space-y-4">
             {performanceData.filter(cage => cage.fcr > 0).map((cage, index) => (
-              <div key={cage.cage} className="p-4 bg-white/5 rounded-lg border border-white/10">
+              <div key={cage.cage} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-white font-medium text-lg">{cage.cage}</h4>
-                  <Badge className="bg-green-100/10 text-green-300 border-green-200/20">
+                  <h4 className="text-gray-800 font-bold text-lg">{cage.cage}</h4>
+                  <Badge className={`${
+                    cage.fcr <= 2 ? 'bg-green-100 text-green-800 border-green-200' : 
+                    cage.fcr <= 2.5 ? 'bg-blue-100 text-blue-800 border-blue-200' : 
+                    'bg-amber-100 text-amber-800 border-amber-200'
+                  } font-medium`}>
                     Performance: {cage.fcr <= 2 ? 'Excellente' : cage.fcr <= 2.5 ? 'Bonne' : 'À améliorer'}
                   </Badge>
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-3 bg-white/5 rounded-lg">
-                    <div className="text-white/70 text-sm mb-1">FCR</div>
-                    <div className="text-white font-bold text-xl">{cage.fcr}</div>
+                  <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div className="text-gray-600 text-sm font-medium mb-1">FCR</div>
+                    <div className="text-gray-900 font-bold text-2xl">{cage.fcr}</div>
                   </div>
                   
-                  <div className="text-center p-3 bg-white/5 rounded-lg">
-                    <div className="text-white/70 text-sm mb-1">Survie</div>
-                    <div className="text-white font-bold text-xl">{cage.survie}%</div>
+                  <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div className="text-gray-600 text-sm font-medium mb-1">Survie</div>
+                    <div className="text-gray-900 font-bold text-2xl">{cage.survie}%</div>
                   </div>
                   
-                  <div className="text-center p-3 bg-white/5 rounded-lg">
-                    <div className="text-white/70 text-sm mb-1">Croissance</div>
-                    <div className="text-white font-bold text-xl">{cage.croissance}kg</div>
+                  <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div className="text-gray-600 text-sm font-medium mb-1">Croissance</div>
+                    <div className="text-gray-900 font-bold text-2xl">{cage.croissance}kg</div>
                   </div>
                   
-                  <div className="text-center p-3 bg-white/5 rounded-lg">
-                    <div className="text-white/70 text-sm mb-1">Revenus</div>
-                    <div className="text-white font-bold text-xl">€{cage.revenus.toLocaleString()}</div>
+                  <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <div className="text-gray-600 text-sm font-medium mb-1">Revenus</div>
+                    <div className="text-gray-900 font-bold text-2xl">€{cage.revenus.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
