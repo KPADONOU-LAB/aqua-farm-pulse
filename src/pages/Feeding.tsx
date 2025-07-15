@@ -232,67 +232,101 @@ const Feeding = () => {
       </div>
 
       {/* Sessions d'alimentation récentes */}
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
-            <Coffee className="h-5 w-5" />
-            Sessions d'aujourd'hui
-          </CardTitle>
+      <Card className="glass-effect border-2 border-cyan-400/30 shadow-2xl backdrop-blur-lg relative overflow-hidden">
+        {/* Effet de lueur en arrière-plan */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-purple-500/10 pointer-events-none"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500"></div>
+        
+        <CardHeader className="relative z-10 pb-6">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-white flex items-center gap-4 text-2xl font-bold">
+              <div className="relative">
+                <div className="p-3 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-xl">
+                  <Coffee className="h-7 w-7 text-white" />
+                </div>
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-400 rounded-full animate-pulse shadow-lg"></div>
+              </div>
+              Sessions d'aujourd'hui
+            </CardTitle>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
+              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-white/90 text-sm font-medium">En temps réel</span>
+            </div>
+          </div>
+          <div className="mt-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        
+        <CardContent className="relative z-10">
+          <div className="space-y-6">
             {feedingSessions.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-white/70">Aucune session d'alimentation aujourd'hui</p>
-                <p className="text-white/50 text-sm mt-2">Ajoutez une nouvelle session pour commencer</p>
+              <div className="text-center py-12 relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 to-slate-900/20 rounded-2xl border border-white/10"></div>
+                <div className="relative z-10">
+                  <div className="p-4 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                    <Coffee className="h-8 w-8 text-cyan-400" />
+                  </div>
+                  <p className="text-white/80 text-lg font-medium">Aucune session d'alimentation aujourd'hui</p>
+                  <p className="text-white/60 text-sm mt-2">Ajoutez une nouvelle session pour commencer le suivi</p>
+                </div>
               </div>
             ) : (
-              feedingSessions.map((feeding) => (
-                <div key={feeding.id} className="p-5 bg-white/10 rounded-xl border border-white/20 hover:bg-white/15 transition-all hover-scale shadow-lg backdrop-blur-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="p-3 bg-ocean-gradient rounded-xl shadow-lg">
-                          <Fish className="h-6 w-6 text-white" />
+              feedingSessions.map((feeding, index) => (
+                <div key={feeding.id} className="group relative p-6 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl border border-white/20 hover:from-white/15 hover:to-white/10 transition-all duration-300 hover-scale shadow-xl backdrop-blur-sm overflow-hidden">
+                  {/* Effet de lueur sur hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Numéro de session */}
+                  <div className="absolute top-3 right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    #{index + 1}
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-5">
+                        <div className="relative">
+                          <div className="p-4 bg-gradient-to-br from-ocean-500 to-cyan-600 rounded-2xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                            <Fish className="h-7 w-7 text-white" />
+                          </div>
+                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-800 text-sm font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white">
+                            {feeding.cage?.nom}
+                          </div>
                         </div>
-                        <div className="absolute -top-1 -right-1 bg-white text-ocean-600 text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                          {feeding.cage?.nom}
+                        <div>
+                          <Badge className={`${getAlimentTypeColor(feeding.type_aliment)} px-4 py-2 text-sm font-bold rounded-xl shadow-lg border-2 border-white/20`}>
+                            {feeding.type_aliment.replace('_', ' ')}
+                          </Badge>
                         </div>
                       </div>
-                      <div>
-                        <Badge className={`${getAlimentTypeColor(feeding.type_aliment)} px-3 py-1 text-sm font-medium rounded-full shadow-md`}>
-                          {feeding.type_aliment.replace('_', ' ')}
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/30 shadow-lg">
+                          <div className="flex items-center gap-3 text-white">
+                            <Clock className="h-5 w-5 text-cyan-400" />
+                            <span className="font-mono font-bold text-lg">{feeding.heure}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-bold text-xl shadow-xl border-2 border-emerald-400/30">
+                          {feeding.quantite}kg
+                        </div>
+                        
+                        <Badge className={`${getAppetitColor(feeding.appetit)} px-5 py-3 text-sm font-bold rounded-xl border-2 border-white/20 shadow-lg`}>
+                          {feeding.appetit}
                         </Badge>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-3">
-                      <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/30">
-                        <div className="flex items-center gap-2 text-white">
-                          <Clock className="h-4 w-4" />
-                          <span className="font-mono font-bold">{feeding.heure}</span>
+                    {feeding.observations && (
+                      <div className="mt-6 pt-6 border-t border-gradient-to-r from-transparent via-white/20 to-transparent">
+                        <div className="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-sm p-4 rounded-xl border border-blue-400/30 shadow-lg">
+                          <p className="text-white/95 text-sm leading-relaxed">
+                            <span className="font-bold text-blue-300 text-base">💬 Observations:</span> 
+                            <span className="ml-2 font-medium">{feeding.observations}</span>
+                          </p>
                         </div>
                       </div>
-                      
-                      <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg font-bold text-lg shadow-lg">
-                        {feeding.quantite}kg
-                      </div>
-                      
-                      <Badge className={`${getAppetitColor(feeding.appetit)} px-4 py-2 text-sm font-bold rounded-lg`}>
-                        {feeding.appetit}
-                      </Badge>
-                    </div>
+                    )}
                   </div>
-                  
-                  {feeding.observations && (
-                    <div className="mt-4 pt-4 border-t border-white/20">
-                      <div className="bg-blue-500/20 backdrop-blur-sm p-3 rounded-lg border border-blue-400/30">
-                        <p className="text-white/90 text-sm">
-                          <span className="font-semibold text-blue-300">Observations:</span> {feeding.observations}
-                        </p>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))
             )}
