@@ -112,9 +112,9 @@ const Index = () => {
 
       {/* Graphiques */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="glass-effect">
+        <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-foreground flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
               Croissance moyenne (6 mois)
             </CardTitle>
@@ -122,31 +122,32 @@ const Index = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={croissanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="mois" stroke="#fff" />
-                <YAxis stroke="#fff" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="mois" stroke="hsl(var(--foreground))" />
+                <YAxis stroke="hsl(var(--foreground))" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))', 
+                    borderRadius: '8px',
+                    color: 'hsl(var(--foreground))'
                   }} 
                 />
                 <Line 
                   type="monotone" 
                   dataKey="poids" 
-                  stroke="#10b981" 
+                  stroke="hsl(var(--primary))" 
                   strokeWidth={3}
-                  dot={{ fill: '#10b981', strokeWidth: 2, r: 6 }}
+                  dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 6 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card className="glass-effect">
+        <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-foreground flex items-center gap-2">
               <ShoppingCart className="h-5 w-5" />
               Ventes hebdomadaires (tonnes)
             </CardTitle>
@@ -154,17 +155,18 @@ const Index = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={ventesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="jour" stroke="#fff" />
-                <YAxis stroke="#fff" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="jour" stroke="hsl(var(--foreground))" />
+                <YAxis stroke="hsl(var(--foreground))" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))', 
+                    borderRadius: '8px',
+                    color: 'hsl(var(--foreground))'
                   }} 
                 />
-                <Bar dataKey="ventes" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="ventes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
