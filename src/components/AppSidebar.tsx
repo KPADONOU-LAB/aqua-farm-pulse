@@ -8,6 +8,8 @@ import {
   Package, 
   ShoppingCart, 
   BarChart3,
+  Euro,
+  Users,
   Menu,
   LogOut
 } from "lucide-react";
@@ -35,6 +37,8 @@ const menuItems = [
   { title: "Santé", url: "/health", icon: Heart },
   { title: "Stocks", url: "/inventory", icon: Package },
   { title: "Ventes", url: "/sales", icon: ShoppingCart },
+  { title: "Finance", url: "/finance", icon: Euro },
+  { title: "CRM", url: "/crm", icon: Users },
   { title: "Rapports", url: "/reports", icon: BarChart3 },
 ];
 

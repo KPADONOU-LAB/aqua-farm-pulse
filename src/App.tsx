@@ -17,6 +17,8 @@ import Health from "./pages/Health";
 import Inventory from "./pages/Inventory";
 import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
+import Finance from "./pages/Finance";
+import CRM from "./pages/CRM";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +49,8 @@ const App = () => (
                         <Route path="/health" element={<Health />} />
                         <Route path="/inventory" element={<Inventory />} />
                         <Route path="/sales" element={<Sales />} />
+                        <Route path="/finance" element={<Finance />} />
+                        <Route path="/crm" element={<CRM />} />
                         <Route path="/reports" element={<Reports />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
