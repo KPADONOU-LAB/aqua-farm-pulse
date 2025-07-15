@@ -128,7 +128,7 @@ const Feeding = () => {
             </div>
           </CardHeader>
           <CardContent className="pt-2">
-            <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="bg-slate-800/30 rounded-xl p-4 border border-cyan-500/20 backdrop-blur-sm">
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.15)" />
@@ -193,7 +193,7 @@ const Feeding = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-2 text-lg">Optimisation FCR</h4>
-                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                  <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-emerald-500/20">
                     Réduire la quantité de 5% pour les cages avec FCR &gt; 2.0
                   </p>
                 </div>
@@ -207,7 +207,7 @@ const Feeding = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-2 text-lg">Suivi température</h4>
-                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                  <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-blue-500/20">
                     Ajuster les horaires selon la température de l'eau
                   </p>
                 </div>
@@ -221,7 +221,7 @@ const Feeding = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-2 text-lg">Surveillance</h4>
-                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                  <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-amber-500/20">
                     Cage #003 montre un appétit réduit - vérifier la qualité de l'eau
                   </p>
                 </div>
