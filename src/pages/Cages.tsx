@@ -160,10 +160,10 @@ const Cages = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-ocean-700">Cages actives</CardTitle>
+            <CardTitle className="text-sm font-medium text-ocean-700 text-center w-full">Cages actives</CardTitle>
             <Fish className="h-5 w-5 text-ocean-600" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-3xl font-bold text-ocean-800">
               {cages.filter(c => c.statut === 'actif').length}
             </div>
@@ -172,10 +172,10 @@ const Cages = () => {
 
         <Card className="stat-card aqua-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-aqua-700">Total poissons</CardTitle>
+            <CardTitle className="text-sm font-medium text-aqua-700 text-center w-full">Total poissons</CardTitle>
             <Users className="h-5 w-5 text-aqua-600" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-3xl font-bold text-aqua-800">
               {cages.reduce((acc, cage) => acc + cage.nombre_poissons, 0).toLocaleString()}
             </div>
@@ -184,10 +184,10 @@ const Cages = () => {
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Poids moyen</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-700 text-center w-full">Poids moyen</CardTitle>
             <Weight className="h-5 w-5 text-blue-600" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-3xl font-bold text-gray-800">
               {cages.filter(c => c.statut === 'actif').length > 0 ? (
                 (cages
@@ -202,10 +202,10 @@ const Cages = () => {
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">FCR moyen</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-700 text-center w-full">FCR moyen</CardTitle>
             <TrendingUp className="h-5 w-5 text-green-600" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-3xl font-bold text-gray-800">
               {cages.filter(c => c.statut === 'actif').length > 0 ? (
                 (cages
