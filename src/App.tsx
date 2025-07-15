@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopNavigation } from "@/components/TopNavigation";
+import { HelpSystem } from "@/components/HelpSystem";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
@@ -56,6 +57,7 @@ const App = () => (
                       </Routes>
                       </main>
                     </div>
+                    <HelpSystem />
                   </div>
                 </SidebarProvider>
               </ProtectedRoute>
