@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { TopNavigation } from "@/components/TopNavigation";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
@@ -33,9 +34,11 @@ const App = () => (
             <Route path="/*" element={
               <ProtectedRoute>
                 <SidebarProvider>
-                  <div className="min-h-screen flex w-full bg-underwater-gradient">
-                    <AppSidebar />
-                    <main className="flex-1 overflow-auto">
+                  <div className="min-h-screen flex flex-col w-full bg-underwater-gradient">
+                    <TopNavigation />
+                    <div className="flex flex-1">
+                      <AppSidebar />
+                      <main className="flex-1 overflow-auto">
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/cages" element={<Cages />} />
@@ -47,7 +50,8 @@ const App = () => (
                         <Route path="/reports" element={<Reports />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
-                    </main>
+                      </main>
+                    </div>
                   </div>
                 </SidebarProvider>
               </ProtectedRoute>
