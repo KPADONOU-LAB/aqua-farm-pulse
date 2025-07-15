@@ -37,28 +37,14 @@ const Cages = () => {
 
   const loadCages = async () => {
     try {
-      const { data: cagesData, error } = await supabase
+      const { data, error } = await supabase
         .from('cages')
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
-      // Calculer les coûts de production pour chaque cage
-      const cagesWithCosts = await Promise.all((cagesData || []).map(async (cage) => {
-        const { data: costs } = await supabase
-          .from('financial_data')
-          .select('montant')
-          .eq('user_id', user?.id)
-          .eq('cage_id', cage.id)
-          .eq('type_transaction', 'expense');
-
-        const production_cost = costs?.reduce((sum, cost) => sum + cost.montant, 0) || 0;
-        return { ...cage, production_cost };
-      }));
-
-      setCages(cagesWithCosts);
+      setCages(data || []);
     } catch (error) {
       console.error('Error loading cages:', error);
     } finally {
@@ -280,13 +266,6 @@ const Cages = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">FCR:</span>
                     <span className="text-white font-semibold">{cage.fcr}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Coût production:</span>
-                    <span className="text-yellow-400 font-semibold">
-                      {cage.production_cost ? `${cage.production_cost.toLocaleString('fr-FR')}€` : 'N/A'}
-                    </span>
                   </div>
                   
                   <div className="flex justify-between items-center">
