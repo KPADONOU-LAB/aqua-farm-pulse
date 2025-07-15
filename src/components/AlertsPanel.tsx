@@ -158,7 +158,12 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
         
         {alerts.length > maxAlerts && (
           <div className="text-center mt-4">
-            <Button variant="outline" size="sm" className="text-muted-foreground border-border hover:bg-accent">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-muted-foreground border-border hover:bg-accent"
+              onClick={() => window.location.href = '/alerts'}
+            >
               Voir toutes les alertes ({alerts.length})
             </Button>
           </div>

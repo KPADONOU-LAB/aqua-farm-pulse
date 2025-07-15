@@ -20,6 +20,7 @@ import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
 import Finance from "./pages/Finance";
 import CRM from "./pages/CRM";
+import Alerts from "./pages/Alerts";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -53,6 +54,7 @@ const App = () => (
                         <Route path="/finance" element={<Finance />} />
                         <Route path="/crm" element={<CRM />} />
                         <Route path="/reports" element={<Reports />} />
+                        <Route path="/alerts" element={<Alerts />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                       </main>
