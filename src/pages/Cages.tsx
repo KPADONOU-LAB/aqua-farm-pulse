@@ -245,18 +245,18 @@ const Cages = () => {
           </div>
         ) : (
           cages.map((cage) => (
-          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300 overflow-hidden">
-            <CardHeader className="pb-3">
+          <Card key={cage.id} className="bg-white/95 backdrop-blur-sm hover:scale-105 transition-all duration-300 overflow-hidden border border-white/20 shadow-lg">
+            <CardHeader className="pb-3 bg-gradient-to-r from-blue-50 to-cyan-50">
               <div className="flex justify-between items-start gap-3">
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-white flex items-center gap-2 text-lg font-bold">
-                    <Fish className="h-5 w-5 flex-shrink-0" />
+                  <CardTitle className="text-gray-800 flex items-center gap-2 text-lg font-bold">
+                    <Fish className="h-5 w-5 flex-shrink-0 text-blue-600" />
                     <span className="truncate">{cage.nom}</span>
                   </CardTitle>
-                  <p className="text-white/70 mt-1 text-sm">{cage.espece}</p>
+                  <p className="text-gray-600 mt-1 text-sm font-medium">{cage.espece}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <Badge className={`${getStatutColor(cage.statut)} text-xs font-medium px-2 py-1`}>
+                  <Badge className={`${getStatutColor(cage.statut)} text-xs font-medium px-3 py-1 shadow-sm`}>
                     {cage.statut}
                   </Badge>
                 </div>
@@ -267,62 +267,62 @@ const Cages = () => {
                 <CageDailyHistoryModal cage={cage} />
               </div>
             </CardHeader>
-            <CardContent className="pt-0 space-y-3">
+            <CardContent className="pt-0 space-y-3 bg-white">
               {cage.statut === 'actif' ? (
                 <div className="grid grid-cols-1 gap-3">
-                  <div className="bg-white/5 rounded-lg p-3 space-y-2">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 space-y-3 border border-blue-200">
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">Poissons:</span>
-                      <span className="text-white font-bold text-base">{cage.nombre_poissons.toLocaleString()}</span>
+                      <span className="text-gray-700 text-sm font-semibold">Poissons:</span>
+                      <span className="text-gray-900 font-bold text-lg">{cage.nombre_poissons.toLocaleString()}</span>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">Poids moyen:</span>
-                      <span className="text-white font-bold text-base">{cage.poids_moyen}kg</span>
+                      <span className="text-gray-700 text-sm font-semibold">Poids moyen:</span>
+                      <span className="text-gray-900 font-bold text-lg">{cage.poids_moyen}kg</span>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">FCR:</span>
-                      <span className="text-blue-300 font-bold text-base">{cage.fcr || '0'}</span>
+                      <span className="text-gray-700 text-sm font-semibold">FCR:</span>
+                      <span className="text-blue-700 font-bold text-lg">{cage.fcr || '0'}</span>
                     </div>
                   </div>
                   
-                  <div className="bg-white/5 rounded-lg p-3 space-y-2">
+                  <div className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg p-4 space-y-3 border border-amber-200">
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">Coût production:</span>
-                      <span className="text-yellow-400 font-bold text-base">
+                      <span className="text-gray-700 text-sm font-semibold">Coût production:</span>
+                      <span className="text-amber-700 font-bold text-lg">
                         {cage.production_cost ? `${cage.production_cost.toLocaleString('fr-FR')}€` : 'N/A'}
                       </span>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">Croissance:</span>
-                      <span className="text-green-400 font-bold text-base">{cage.croissance || '0%'}</span>
+                      <span className="text-gray-700 text-sm font-semibold">Croissance:</span>
+                      <span className="text-green-700 font-bold text-lg">{cage.croissance || '0%'}</span>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-white/70 text-sm font-medium">Taux mortalité:</span>
-                      <span className="text-red-400 font-bold text-base">
+                      <span className="text-gray-700 text-sm font-semibold">Taux mortalité:</span>
+                      <span className="text-red-700 font-bold text-lg">
                         {cage.taux_mortalite ? `${Number(cage.taux_mortalite).toFixed(1)}%` : '0%'}
                       </span>
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center text-xs bg-white/5 rounded-lg p-2">
-                    <span className="text-white/60 flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
+                  <div className="flex justify-between items-center text-sm bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
+                    <span className="text-gray-600 flex items-center gap-2 font-medium">
+                      <Calendar className="h-4 w-4" />
                       Introduit:
                     </span>
-                    <span className="text-white/80 font-medium">
+                    <span className="text-gray-800 font-semibold">
                       {cage.date_introduction ? new Date(cage.date_introduction).toLocaleDateString('fr-FR') : 'N/A'}
                     </span>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <Fish className="h-12 w-12 text-white/30 mx-auto mb-3" />
-                  <p className="text-white/60 mb-4">Cage disponible</p>
-                  <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <div className="text-center py-8 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                  <Fish className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 mb-4 font-medium">Cage disponible</p>
+                  <Button variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 font-medium">
                     Démarrer cycle
                   </Button>
                 </div>
