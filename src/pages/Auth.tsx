@@ -7,13 +7,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Fish } from 'lucide-react';
+import { Fish, ArrowLeft } from 'lucide-react';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp, user } = useAuth();
+  const [showReset, setShowReset] = useState(false);
+  const { signIn, signUp, resetPassword, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -88,6 +90,83 @@ export default function Auth() {
     }
   };
 
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const { error } = await resetPassword(resetEmail);
+      if (error) {
+        toast({
+          title: "Erreur",
+          description: "Impossible d'envoyer l'email de récupération",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Email envoyé",
+          description: "Un lien de récupération a été envoyé à votre adresse email",
+        });
+        setShowReset(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showReset) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-underwater-gradient p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="h-12 w-12 bg-primary rounded-full flex items-center justify-center">
+                <Fish className="h-6 w-6 text-primary-foreground" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold">Récupération du mot de passe</CardTitle>
+            <CardDescription>
+              Entrez votre email pour recevoir un lien de récupération
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="votre@email.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Envoi..." : "Envoyer le lien"}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => setShowReset(false)}
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour à la connexion
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-underwater-gradient p-4">
       <Card className="w-full max-w-md">
@@ -135,6 +214,14 @@ export default function Auth() {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Connexion..." : "Se connecter"}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="link" 
+                  className="w-full text-sm" 
+                  onClick={() => setShowReset(true)}
+                >
+                  Mot de passe oublié ?
                 </Button>
               </form>
             </TabsContent>
