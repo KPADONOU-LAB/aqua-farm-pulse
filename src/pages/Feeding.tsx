@@ -112,60 +112,120 @@ const Feeding = () => {
       </div>
 
       {/* Graphique consommation hebdomadaire */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Consommation hebdomadaire (kg)
-            </CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <Card className="glass-effect border-2 border-white/20 shadow-2xl backdrop-blur-lg">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-white flex items-center gap-3 text-xl font-bold">
+                <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-lg">
+                  <TrendingUp className="h-6 w-6 text-white" />
+                </div>
+                Consommation hebdomadaire (kg)
+              </CardTitle>
+              <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                <span className="text-white/90 text-sm font-medium">Cette semaine</span>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={weeklyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="jour" stroke="#fff" />
-                <YAxis stroke="#fff" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
-                  }} 
-                />
-                <Bar dataKey="quantite" fill="#10b981" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <CardContent className="pt-2">
+            <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.15)" />
+                  <XAxis 
+                    dataKey="jour" 
+                    stroke="#fff" 
+                    fontSize={12}
+                    fontWeight="500"
+                    tick={{ fill: '#fff' }}
+                  />
+                  <YAxis 
+                    stroke="#fff" 
+                    fontSize={12}
+                    fontWeight="500"
+                    tick={{ fill: '#fff' }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                      border: '1px solid rgba(255,255,255,0.2)', 
+                      borderRadius: '12px',
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                      color: '#fff',
+                      fontSize: '14px',
+                      fontWeight: '500'
+                    }} 
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  />
+                  <Bar 
+                    dataKey="quantite" 
+                    fill="url(#greenGradient)" 
+                    radius={[6, 6, 0, 0]}
+                    stroke="rgba(16, 185, 129, 0.3)"
+                    strokeWidth={1}
+                  />
+                  <defs>
+                    <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#059669" />
+                    </linearGradient>
+                  </defs>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <Coffee className="h-5 w-5" />
+        <Card className="glass-effect border-2 border-white/20 shadow-2xl backdrop-blur-lg">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-white flex items-center gap-3 text-xl font-bold">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg shadow-lg">
+                <Coffee className="h-6 w-6 text-white" />
+              </div>
               Recommandations
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-green-50/10 rounded-lg border border-green-200/20">
-              <h4 className="text-white font-medium mb-2">💡 Optimisation FCR</h4>
-              <p className="text-white/80 text-sm">
-                Réduire la quantité de 5% pour les cages avec FCR &gt; 2.0
-              </p>
+            <div className="group p-5 bg-gradient-to-r from-emerald-500/20 to-teal-600/20 rounded-xl border border-emerald-400/30 hover:from-emerald-500/30 hover:to-teal-600/30 transition-all duration-300 hover-scale backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-emerald-500 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                  <span className="text-white text-lg">💡</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-bold mb-2 text-lg">Optimisation FCR</h4>
+                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                    Réduire la quantité de 5% pour les cages avec FCR &gt; 2.0
+                  </p>
+                </div>
+              </div>
             </div>
             
-            <div className="p-4 bg-blue-50/10 rounded-lg border border-blue-200/20">
-              <h4 className="text-white font-medium mb-2">📊 Suivi température</h4>
-              <p className="text-white/80 text-sm">
-                Ajuster les horaires selon la température de l'eau
-              </p>
+            <div className="group p-5 bg-gradient-to-r from-blue-500/20 to-indigo-600/20 rounded-xl border border-blue-400/30 hover:from-blue-500/30 hover:to-indigo-600/30 transition-all duration-300 hover-scale backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-blue-500 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                  <span className="text-white text-lg">📊</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-bold mb-2 text-lg">Suivi température</h4>
+                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                    Ajuster les horaires selon la température de l'eau
+                  </p>
+                </div>
+              </div>
             </div>
             
-            <div className="p-4 bg-amber-50/10 rounded-lg border border-amber-200/20">
-              <h4 className="text-white font-medium mb-2">⚠️ Surveillance</h4>
-              <p className="text-white/80 text-sm">
-                Cage #003 montre un appétit réduit - vérifier la qualité de l'eau
-              </p>
+            <div className="group p-5 bg-gradient-to-r from-amber-500/20 to-orange-600/20 rounded-xl border border-amber-400/30 hover:from-amber-500/30 hover:to-orange-600/30 transition-all duration-300 hover-scale backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-amber-500 rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+                  <span className="text-white text-lg">⚠️</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-bold mb-2 text-lg">Surveillance</h4>
+                  <p className="text-white/90 text-sm font-medium bg-white/10 p-2 rounded-lg">
+                    Cage #003 montre un appétit réduit - vérifier la qualité de l'eau
+                  </p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
