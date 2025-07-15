@@ -17,21 +17,21 @@ const getAlertIcon = (type: string) => {
 
 const getSeverityColor = (severity: string) => {
   switch (severity) {
-    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
+    case 'high': return 'bg-orange-500/20 text-orange-300 border-orange-500/30';
+    case 'medium': return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
+    case 'low': return 'bg-primary/20 text-primary border-primary/30';
+    default: return 'bg-muted/20 text-muted-foreground border-muted/30';
   }
 };
 
 const getSeverityBgColor = (severity: string) => {
   switch (severity) {
-    case 'critical': return 'bg-red-50/10 border-red-200/20';
-    case 'high': return 'bg-orange-50/10 border-orange-200/20';
-    case 'medium': return 'bg-yellow-50/10 border-yellow-200/20';
-    case 'low': return 'bg-blue-50/10 border-blue-200/20';
-    default: return 'bg-gray-50/10 border-gray-200/20';
+    case 'critical': return 'bg-destructive/10 border-destructive/20 backdrop-blur-sm';
+    case 'high': return 'bg-orange-500/10 border-orange-500/20 backdrop-blur-sm';
+    case 'medium': return 'bg-yellow-500/10 border-yellow-500/20 backdrop-blur-sm';
+    case 'low': return 'bg-primary/10 border-primary/20 backdrop-blur-sm';
+    default: return 'bg-card/50 border-border backdrop-blur-sm';
   }
 };
 
@@ -52,14 +52,14 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
   const criticalCount = getCriticalCount();
 
   return (
-    <Card className="glass-effect">
+    <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-white flex items-center gap-2">
+          <CardTitle className="text-foreground flex items-center gap-2">
             <AlertTriangle className="h-5 w-5" />
             Alertes
             {unacknowledgedCount > 0 && (
-              <Badge className="bg-red-500 text-white ml-2">
+              <Badge className="bg-destructive text-destructive-foreground ml-2">
                 {unacknowledgedCount}
               </Badge>
             )}
@@ -87,7 +87,7 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
         </div>
         
         {criticalCount > 0 && (
-          <div className="text-red-400 text-sm font-medium">
+          <div className="text-destructive text-sm font-medium bg-destructive/10 border border-destructive/20 rounded-lg p-3">
             ⚠️ {criticalCount} alerte{criticalCount > 1 ? 's' : ''} critique{criticalCount > 1 ? 's' : ''} nécessite{criticalCount > 1 ? 'nt' : ''} une attention immédiate
           </div>
         )}
@@ -97,8 +97,8 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
         <div className="space-y-3">
           {filteredAlerts.length === 0 ? (
             <div className="text-center py-4">
-              <BellOff className="h-8 w-8 text-white/40 mx-auto mb-2" />
-              <p className="text-white/70">
+              <BellOff className="h-8 w-8 text-muted-foreground/60 mx-auto mb-2" />
+              <p className="text-muted-foreground">
                 {filter === 'unacknowledged' ? 'Aucune nouvelle alerte' : 'Aucune alerte'}
               </p>
             </div>
@@ -113,26 +113,26 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="p-1.5 bg-white/10 rounded-lg">
-                      <IconComponent className="h-4 w-4 text-white" />
+                    <div className="p-1.5 bg-primary/20 rounded-lg">
+                      <IconComponent className="h-4 w-4 text-primary" />
                     </div>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="text-white font-medium text-sm">{alert.title}</h4>
+                        <h4 className="text-foreground font-medium text-sm">{alert.title}</h4>
                         <Badge className={getSeverityColor(alert.severity)}>
                           {alert.severity}
                         </Badge>
                       </div>
                       
-                      <p className="text-white/80 text-xs mb-2">{alert.description}</p>
+                      <p className="text-muted-foreground text-xs mb-2">{alert.description}</p>
                       
                       {alert.cage_name && (
-                        <p className="text-white/60 text-xs mb-2">📍 {alert.cage_name}</p>
+                        <p className="text-muted-foreground/80 text-xs mb-2">📍 {alert.cage_name}</p>
                       )}
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-white/50 text-xs">
+                        <span className="text-muted-foreground/70 text-xs">
                           {new Date(alert.created_at).toLocaleString('fr-FR')}
                         </span>
                         
@@ -141,7 +141,7 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
                             size="sm"
                             variant="outline"
                             onClick={() => acknowledgeAlert(alert.id)}
-                            className="h-6 px-2 text-xs bg-white/10 border-white/20 text-white hover:bg-white/20"
+                            className="h-6 px-2 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
                           >
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Marquer comme lu
@@ -158,7 +158,7 @@ export const AlertsPanel = ({ maxAlerts = 5, showAllTypes = true }: AlertsPanelP
         
         {alerts.length > maxAlerts && (
           <div className="text-center mt-4">
-            <Button variant="outline" size="sm" className="text-white/80 border-white/20">
+            <Button variant="outline" size="sm" className="text-muted-foreground border-border hover:bg-accent">
               Voir toutes les alertes ({alerts.length})
             </Button>
           </div>
