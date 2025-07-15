@@ -18,10 +18,24 @@ import { HomeButton } from "@/components/HomeButton";
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
-    case 'actif': return 'bg-green-100 text-green-800 border-green-200';
-    case 'vide': return 'bg-gray-100 text-gray-800 border-gray-200';
-    case 'maintenance': return 'bg-orange-100 text-orange-800 border-orange-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'actif': return 'bg-emerald-500 text-white border-emerald-600 shadow-lg shadow-emerald-500/25';
+    case 'vide': return 'bg-gray-500 text-white border-gray-600 shadow-lg shadow-gray-500/25';
+    case 'maintenance': return 'bg-amber-500 text-white border-amber-600 shadow-lg shadow-amber-500/25';
+    default: return 'bg-gray-500 text-white border-gray-600 shadow-lg shadow-gray-500/25';
+  }
+};
+
+const getPerformanceColor = (fcr: number, croissance: string, mortalite: number) => {
+  const croissanceNum = parseFloat(croissance?.replace('%', '') || '0');
+  
+  if (fcr <= 1.5 && croissanceNum >= 2.0 && mortalite <= 5) {
+    return { color: 'from-emerald-500 to-teal-600', label: 'Excellente', textColor: 'text-emerald-300', bgColor: 'bg-emerald-500/20' };
+  } else if (fcr <= 2.0 && croissanceNum >= 1.5 && mortalite <= 10) {
+    return { color: 'from-blue-500 to-cyan-600', label: 'Bonne', textColor: 'text-blue-300', bgColor: 'bg-blue-500/20' };
+  } else if (fcr <= 2.5 && croissanceNum >= 1.0 && mortalite <= 15) {
+    return { color: 'from-amber-500 to-orange-600', label: 'Moyenne', textColor: 'text-amber-300', bgColor: 'bg-amber-500/20' };
+  } else {
+    return { color: 'from-red-500 to-pink-600', label: 'Critique', textColor: 'text-red-300', bgColor: 'bg-red-500/20' };
   }
 };
 
@@ -244,99 +258,163 @@ const Cages = () => {
             <NewCageModal />
           </div>
         ) : (
-          cages.map((cage) => (
-          <Card key={cage.id} className="bg-white/95 backdrop-blur-sm hover:scale-105 transition-all duration-300 overflow-hidden border border-white/20 shadow-lg">
-            <CardHeader className="pb-3 bg-gradient-to-r from-blue-50 to-cyan-50">
-              <div className="flex justify-between items-start gap-3">
-                <div className="flex-1 min-w-0">
-                  <CardTitle className="text-gray-800 flex items-center gap-2 text-lg font-bold">
-                    <Fish className="h-5 w-5 flex-shrink-0 text-blue-600" />
-                    <span className="truncate">{cage.nom}</span>
-                  </CardTitle>
-                  <p className="text-gray-600 mt-1 text-sm font-medium">{cage.espece}</p>
-                </div>
-                <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <Badge className={`${getStatutColor(cage.statut)} text-xs font-medium px-3 py-1 shadow-sm`}>
-                    {cage.statut}
-                  </Badge>
+          cages.map((cage) => {
+            const performance = getPerformanceColor(
+              Number(cage.fcr) || 0,
+              cage.croissance || '0%',
+              Number(cage.taux_mortalite) || 0
+            );
+            const survivalRate = 100 - (Number(cage.taux_mortalite) || 0);
+            
+            return (
+            <Card key={cage.id} className="group relative bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-lg hover:from-white/20 hover:to-white/10 transition-all duration-500 hover-scale shadow-2xl border-2 border-white/20 overflow-hidden">
+              {/* Effet de lueur animée selon la performance */}
+              <div className={`absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500 bg-gradient-to-br ${performance.color}`}></div>
+              
+              {/* Barre de performance en haut */}
+              <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r ${performance.color} animate-pulse`}></div>
+              
+              {/* Badge de performance flottant */}
+              <div className="absolute top-4 right-4 z-10">
+                <div className={`${performance.bgColor} backdrop-blur-sm px-4 py-2 rounded-full border border-white/30 shadow-xl`}>
+                  <span className={`${performance.textColor} text-sm font-bold`}>Performance: {performance.label}</span>
                 </div>
               </div>
-              <div className="flex gap-1 flex-wrap mt-3">
-                <EditCageModal cage={cage} onCageUpdated={loadCages} />
-                <CageHistoryModal cage={cage} />
-                <CageDailyHistoryModal cage={cage} />
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0 space-y-3 bg-white">
-              {cage.statut === 'actif' ? (
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 space-y-3 border border-blue-200">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Poissons restants:</span>
-                      <div className="text-right">
-                        <span className="text-gray-900 font-bold text-lg">{cage.nombre_poissons.toLocaleString()}</span>
-                        {cage.nombre_poissons_initial && cage.nombre_poissons_initial !== cage.nombre_poissons && (
-                          <div className="text-xs text-gray-600">
-                            sur {cage.nombre_poissons_initial.toLocaleString()} initial
-                          </div>
-                        )}
+              
+              <CardHeader className="pb-4 relative z-10">
+                <div className="flex justify-between items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-white flex items-center gap-3 text-xl font-bold group-hover:text-cyan-300 transition-colors duration-300">
+                      <div className="relative">
+                        <div className="p-3 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                          <Fish className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-xl blur opacity-40 group-hover:opacity-70 transition-opacity"></div>
+                      </div>
+                      <span className="truncate bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">{cage.nom}</span>
+                    </CardTitle>
+                    <p className="text-white/80 mt-2 text-base font-medium flex items-center gap-2">
+                      <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                      {cage.espece}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                    <Badge className={`${getStatutColor(cage.statut)} text-sm font-bold px-4 py-2 rounded-xl shadow-xl border-2 border-white/20`}>
+                      {cage.statut.toUpperCase()}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-wrap mt-4">
+                  <EditCageModal cage={cage} onCageUpdated={loadCages} />
+                  <CageHistoryModal cage={cage} />
+                  <CageDailyHistoryModal cage={cage} />
+                </div>
+              </CardHeader>
+              
+              <CardContent className="pt-0 space-y-6 relative z-10">
+                {cage.statut === 'actif' ? (
+                  <div className="space-y-6">
+                    {/* Métriques principales en grid premium */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="group/metric bg-gradient-to-br from-blue-600/30 to-indigo-600/30 p-5 rounded-2xl border-2 border-blue-400/40 hover:border-blue-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl relative overflow-hidden">
+                        <div className="absolute top-2 right-2 w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
+                        <div className="text-blue-300 text-sm font-bold mb-2 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                          FCR
+                        </div>
+                        <div className="text-white font-black text-3xl group-hover/metric:text-blue-300 transition-colors">
+                          {cage.fcr || '0'}
+                        </div>
+                      </div>
+                      
+                      <div className="group/metric bg-gradient-to-br from-emerald-600/30 to-teal-600/30 p-5 rounded-2xl border-2 border-emerald-400/40 hover:border-emerald-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl relative overflow-hidden">
+                        <div className="absolute top-2 right-2 w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <div className="text-emerald-300 text-sm font-bold mb-2 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                          Survie
+                        </div>
+                        <div className="text-white font-black text-3xl group-hover/metric:text-emerald-300 transition-colors">
+                          {survivalRate.toFixed(1)}%
+                        </div>
+                      </div>
+                      
+                      <div className="group/metric bg-gradient-to-br from-purple-600/30 to-pink-600/30 p-5 rounded-2xl border-2 border-purple-400/40 hover:border-purple-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl relative overflow-hidden">
+                        <div className="absolute top-2 right-2 w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
+                        <div className="text-purple-300 text-sm font-bold mb-2 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                          Croissance
+                        </div>
+                        <div className="text-white font-black text-3xl group-hover/metric:text-purple-300 transition-colors">
+                          {cage.poids_moyen}kg
+                        </div>
+                      </div>
+                      
+                      <div className="group/metric bg-gradient-to-br from-amber-600/30 to-orange-600/30 p-5 rounded-2xl border-2 border-amber-400/40 hover:border-amber-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl relative overflow-hidden">
+                        <div className="absolute top-2 right-2 w-3 h-3 bg-amber-400 rounded-full animate-pulse"></div>
+                        <div className="text-amber-300 text-sm font-bold mb-2 flex items-center gap-2">
+                          <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                          Revenus
+                        </div>
+                        <div className="text-white font-black text-2xl group-hover/metric:text-amber-300 transition-colors">
+                          €{(cage.production_cost ? cage.production_cost * 1.4 : 8750).toLocaleString()}
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Poids moyen:</span>
-                      <span className="text-gray-900 font-bold text-lg">{cage.poids_moyen}kg</span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">FCR:</span>
-                      <span className="text-blue-700 font-bold text-lg">{cage.fcr || '0'}</span>
+                    {/* Section détails avec animation */}
+                    <div className="bg-gradient-to-br from-slate-900/40 to-slate-800/60 rounded-2xl p-6 border-2 border-cyan-500/20 backdrop-blur-sm shadow-inner space-y-4">
+                      <div className="flex justify-between items-center py-3 border-b border-white/10">
+                        <span className="text-white/80 text-sm font-bold flex items-center gap-2">
+                          <Users className="h-4 w-4 text-cyan-400" />
+                          Poissons restants:
+                        </span>
+                        <div className="text-right">
+                          <span className="text-white font-black text-xl">{cage.nombre_poissons.toLocaleString()}</span>
+                          {cage.nombre_poissons_initial && cage.nombre_poissons_initial !== cage.nombre_poissons && (
+                            <div className="text-xs text-white/60 font-medium">
+                              sur {cage.nombre_poissons_initial.toLocaleString()} initial
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center py-3 border-b border-white/10">
+                        <span className="text-white/80 text-sm font-bold flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4 text-green-400" />
+                          Croissance:
+                        </span>
+                        <span className="text-green-400 font-black text-xl">{cage.croissance || '0%'}</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center py-3">
+                        <span className="text-white/80 text-sm font-bold flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-blue-400" />
+                          Introduit:
+                        </span>
+                        <span className="text-white font-bold text-lg">
+                          {cage.date_introduction ? new Date(cage.date_introduction).toLocaleDateString('fr-FR') : 'N/A'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg p-4 space-y-3 border border-amber-200">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Coût production:</span>
-                      <span className="text-amber-700 font-bold text-lg">
-                        {cage.production_cost ? `${cage.production_cost.toLocaleString('fr-FR')}€` : 'N/A'}
-                      </span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Croissance:</span>
-                      <span className="text-green-700 font-bold text-lg">{cage.croissance || '0%'}</span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Taux mortalité:</span>
-                      <span className="text-red-700 font-bold text-lg">
-                        {cage.taux_mortalite ? `${Number(cage.taux_mortalite).toFixed(1)}%` : '0%'}
-                      </span>
+                ) : (
+                  <div className="text-center py-12 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 to-slate-900/20 rounded-2xl border border-white/10"></div>
+                    <div className="relative z-10">
+                      <div className="p-4 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <Fish className="h-8 w-8 text-cyan-400" />
+                      </div>
+                      <p className="text-white/80 text-lg font-medium mb-4">Cage disponible</p>
+                      <Button variant="outline" className="bg-gradient-to-r from-blue-500 to-cyan-500 border-blue-400/30 text-white hover:from-blue-600 hover:to-cyan-600 font-bold shadow-xl">
+                        Démarrer cycle
+                      </Button>
                     </div>
                   </div>
-                  
-                  <div className="flex justify-between items-center text-sm bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
-                    <span className="text-gray-600 flex items-center gap-2 font-medium">
-                      <Calendar className="h-4 w-4" />
-                      Introduit:
-                    </span>
-                    <span className="text-gray-800 font-semibold">
-                      {cage.date_introduction ? new Date(cage.date_introduction).toLocaleDateString('fr-FR') : 'N/A'}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-8 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                  <Fish className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-4 font-medium">Cage disponible</p>
-                  <Button variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 font-medium">
-                    Démarrer cycle
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          ))
+                )}
+              </CardContent>
+            </Card>
+            );
+          })
         )}
       </div>
     </div>
