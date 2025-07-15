@@ -272,8 +272,15 @@ const Cages = () => {
                 <div className="grid grid-cols-1 gap-3">
                   <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 space-y-3 border border-blue-200">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 text-sm font-semibold">Poissons:</span>
-                      <span className="text-gray-900 font-bold text-lg">{cage.nombre_poissons.toLocaleString()}</span>
+                      <span className="text-gray-700 text-sm font-semibold">Poissons restants:</span>
+                      <div className="text-right">
+                        <span className="text-gray-900 font-bold text-lg">{cage.nombre_poissons.toLocaleString()}</span>
+                        {cage.nombre_poissons_initial && cage.nombre_poissons_initial !== cage.nombre_poissons && (
+                          <div className="text-xs text-gray-600">
+                            sur {cage.nombre_poissons_initial.toLocaleString()} initial
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="flex justify-between items-center">

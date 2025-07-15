@@ -230,6 +230,7 @@ export type Database = {
           id: string
           nom: string
           nombre_poissons: number
+          nombre_poissons_initial: number | null
           notes: string | null
           poids_moyen: number | null
           statut: string
@@ -246,6 +247,7 @@ export type Database = {
           id?: string
           nom: string
           nombre_poissons?: number
+          nombre_poissons_initial?: number | null
           notes?: string | null
           poids_moyen?: number | null
           statut?: string
@@ -262,6 +264,7 @@ export type Database = {
           id?: string
           nom?: string
           nombre_poissons?: number
+          nombre_poissons_initial?: number | null
           notes?: string | null
           poids_moyen?: number | null
           statut?: string
@@ -847,6 +850,10 @@ export type Database = {
       }
       calculate_cycle_profitability: {
         Args: { cycle_id: string }
+        Returns: number
+      }
+      calculate_remaining_fish: {
+        Args: { cage_id_param: string }
         Returns: number
       }
       generate_automatic_alerts: {
