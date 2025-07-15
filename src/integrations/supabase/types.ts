@@ -14,6 +14,171 @@ export type Database = {
   }
   public: {
     Tables: {
+      alerts: {
+        Row: {
+          actions_recommandees: string[] | null
+          cage_id: string | null
+          created_at: string
+          date_alerte: string
+          date_resolution: string | null
+          id: string
+          lu: boolean | null
+          message: string
+          priorite: string
+          source_id: string | null
+          titre: string
+          type_alerte: string
+          user_id: string
+        }
+        Insert: {
+          actions_recommandees?: string[] | null
+          cage_id?: string | null
+          created_at?: string
+          date_alerte?: string
+          date_resolution?: string | null
+          id?: string
+          lu?: boolean | null
+          message: string
+          priorite?: string
+          source_id?: string | null
+          titre: string
+          type_alerte: string
+          user_id: string
+        }
+        Update: {
+          actions_recommandees?: string[] | null
+          cage_id?: string | null
+          created_at?: string
+          date_alerte?: string
+          date_resolution?: string | null
+          id?: string
+          lu?: boolean | null
+          message?: string
+          priorite?: string
+          source_id?: string | null
+          titre?: string
+          type_alerte?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      analytics_predictions: {
+        Row: {
+          cage_id: string | null
+          created_at: string
+          date_prediction: string
+          horizon_jours: number
+          id: string
+          intervalle_confiance: number | null
+          parametres_entree: Json | null
+          precision_reelle: number | null
+          statut: string
+          type_prediction: string
+          user_id: string
+          valeur_predite: number
+        }
+        Insert: {
+          cage_id?: string | null
+          created_at?: string
+          date_prediction?: string
+          horizon_jours: number
+          id?: string
+          intervalle_confiance?: number | null
+          parametres_entree?: Json | null
+          precision_reelle?: number | null
+          statut?: string
+          type_prediction: string
+          user_id: string
+          valeur_predite: number
+        }
+        Update: {
+          cage_id?: string | null
+          created_at?: string
+          date_prediction?: string
+          horizon_jours?: number
+          id?: string
+          intervalle_confiance?: number | null
+          parametres_entree?: Json | null
+          precision_reelle?: number | null
+          statut?: string
+          type_prediction?: string
+          user_id?: string
+          valeur_predite?: number
+        }
+        Relationships: []
+      }
+      budgets: {
+        Row: {
+          budget_aliments: number | null
+          budget_equipements: number | null
+          budget_maintenance: number | null
+          budget_medicaments: number | null
+          budget_personnel: number | null
+          created_at: string
+          id: string
+          nom_budget: string
+          objectif_chiffre_affaires: number | null
+          objectif_marge: number | null
+          periode_debut: string
+          periode_fin: string
+          reel_aliments: number | null
+          reel_chiffre_affaires: number | null
+          reel_equipements: number | null
+          reel_maintenance: number | null
+          reel_medicaments: number | null
+          reel_personnel: number | null
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_aliments?: number | null
+          budget_equipements?: number | null
+          budget_maintenance?: number | null
+          budget_medicaments?: number | null
+          budget_personnel?: number | null
+          created_at?: string
+          id?: string
+          nom_budget: string
+          objectif_chiffre_affaires?: number | null
+          objectif_marge?: number | null
+          periode_debut: string
+          periode_fin: string
+          reel_aliments?: number | null
+          reel_chiffre_affaires?: number | null
+          reel_equipements?: number | null
+          reel_maintenance?: number | null
+          reel_medicaments?: number | null
+          reel_personnel?: number | null
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_aliments?: number | null
+          budget_equipements?: number | null
+          budget_maintenance?: number | null
+          budget_medicaments?: number | null
+          budget_personnel?: number | null
+          created_at?: string
+          id?: string
+          nom_budget?: string
+          objectif_chiffre_affaires?: number | null
+          objectif_marge?: number | null
+          periode_debut?: string
+          periode_fin?: string
+          reel_aliments?: number | null
+          reel_chiffre_affaires?: number | null
+          reel_equipements?: number | null
+          reel_maintenance?: number | null
+          reel_medicaments?: number | null
+          reel_personnel?: number | null
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cage_history: {
         Row: {
           cage_id: string
@@ -103,6 +268,57 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          adresse: string | null
+          chiffre_affaires_annuel: number | null
+          contact_principal: string | null
+          created_at: string
+          derniere_commande: string | null
+          email: string | null
+          id: string
+          nom_entreprise: string
+          notes: string | null
+          statut: string
+          telephone: string | null
+          type_client: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          adresse?: string | null
+          chiffre_affaires_annuel?: number | null
+          contact_principal?: string | null
+          created_at?: string
+          derniere_commande?: string | null
+          email?: string | null
+          id?: string
+          nom_entreprise: string
+          notes?: string | null
+          statut?: string
+          telephone?: string | null
+          type_client?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          adresse?: string | null
+          chiffre_affaires_annuel?: number | null
+          contact_principal?: string | null
+          created_at?: string
+          derniere_commande?: string | null
+          email?: string | null
+          id?: string
+          nom_entreprise?: string
+          notes?: string | null
+          statut?: string
+          telephone?: string | null
+          type_client?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feeding_sessions: {
         Row: {
           appetit: string
@@ -152,6 +368,105 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      financial_data: {
+        Row: {
+          cage_id: string | null
+          categorie: string
+          created_at: string
+          date_transaction: string
+          description: string | null
+          id: string
+          montant: number
+          reference_document: string | null
+          type_transaction: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id?: string | null
+          categorie: string
+          created_at?: string
+          date_transaction?: string
+          description?: string | null
+          id?: string
+          montant: number
+          reference_document?: string | null
+          type_transaction: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string | null
+          categorie?: string
+          created_at?: string
+          date_transaction?: string
+          description?: string | null
+          id?: string
+          montant?: number
+          reference_document?: string | null
+          type_transaction?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      fish_lots: {
+        Row: {
+          cage_id: string
+          certifications: string[] | null
+          created_at: string
+          date_introduction: string
+          espece: string
+          historique_alimentation: Json | null
+          historique_traitements: Json | null
+          id: string
+          nombre_initial: number
+          numero_lot: string
+          origine: string
+          qr_code: string | null
+          souche: string | null
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          certifications?: string[] | null
+          created_at?: string
+          date_introduction: string
+          espece: string
+          historique_alimentation?: Json | null
+          historique_traitements?: Json | null
+          id?: string
+          nombre_initial: number
+          numero_lot: string
+          origine: string
+          qr_code?: string | null
+          souche?: string | null
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          certifications?: string[] | null
+          created_at?: string
+          date_introduction?: string
+          espece?: string
+          historique_alimentation?: Json | null
+          historique_traitements?: Json | null
+          id?: string
+          nombre_initial?: number
+          numero_lot?: string
+          origine?: string
+          qr_code?: string | null
+          souche?: string | null
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       health_observations: {
         Row: {
@@ -249,6 +564,129 @@ export type Database = {
           stock_actuel?: number
           stock_min?: number
           unite?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          client_id: string
+          created_at: string
+          date_commande: string
+          date_livraison_prevue: string | null
+          date_livraison_reelle: string | null
+          id: string
+          montant_total: number
+          notes: string | null
+          numero_commande: string
+          prix_kg: number
+          quantite_kg: number
+          statut: string
+          type_poisson: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          date_commande?: string
+          date_livraison_prevue?: string | null
+          date_livraison_reelle?: string | null
+          id?: string
+          montant_total: number
+          notes?: string | null
+          numero_commande: string
+          prix_kg: number
+          quantite_kg: number
+          statut?: string
+          type_poisson: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          date_commande?: string
+          date_livraison_prevue?: string | null
+          date_livraison_reelle?: string | null
+          id?: string
+          montant_total?: number
+          notes?: string | null
+          numero_commande?: string
+          prix_kg?: number
+          quantite_kg?: number
+          statut?: string
+          type_poisson?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      production_cycles: {
+        Row: {
+          cage_id: string
+          cout_total: number | null
+          created_at: string
+          croissance_reelle: number | null
+          date_debut: string
+          date_fin_prevue: string
+          date_fin_reelle: string | null
+          id: string
+          marge_beneficiaire: number | null
+          nom_cycle: string
+          nombre_poissons_final: number | null
+          nombre_poissons_initial: number
+          notes: string | null
+          objectif_croissance: number | null
+          poids_final_moyen: number | null
+          poids_initial_moyen: number | null
+          revenu_total: number | null
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          cout_total?: number | null
+          created_at?: string
+          croissance_reelle?: number | null
+          date_debut: string
+          date_fin_prevue: string
+          date_fin_reelle?: string | null
+          id?: string
+          marge_beneficiaire?: number | null
+          nom_cycle: string
+          nombre_poissons_final?: number | null
+          nombre_poissons_initial: number
+          notes?: string | null
+          objectif_croissance?: number | null
+          poids_final_moyen?: number | null
+          poids_initial_moyen?: number | null
+          revenu_total?: number | null
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          cout_total?: number | null
+          created_at?: string
+          croissance_reelle?: number | null
+          date_debut?: string
+          date_fin_prevue?: string
+          date_fin_reelle?: string | null
+          id?: string
+          marge_beneficiaire?: number | null
+          nom_cycle?: string
+          nombre_poissons_final?: number | null
+          nombre_poissons_initial?: number
+          notes?: string | null
+          objectif_croissance?: number | null
+          poids_final_moyen?: number | null
+          poids_initial_moyen?: number | null
+          revenu_total?: number | null
+          statut?: string
           updated_at?: string
           user_id?: string
         }
@@ -392,7 +830,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_cycle_profitability: {
+        Args: { cycle_id: string }
+        Returns: number
+      }
+      generate_automatic_alerts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
