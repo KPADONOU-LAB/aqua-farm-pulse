@@ -11,12 +11,19 @@ import { HomeButton } from "@/components/HomeButton";
 
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
-    case 'excellent': return 'bg-green-100 text-green-800 border-green-200';
-    case 'bon': return 'bg-blue-100 text-blue-800 border-blue-200';
-    case 'moyen': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'faible': return 'bg-red-100 text-red-800 border-red-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'excellent': return 'bg-emerald-500 text-white border-emerald-600 shadow-lg shadow-emerald-500/25';
+    case 'bon': return 'bg-blue-500 text-white border-blue-600 shadow-lg shadow-blue-500/25';
+    case 'moyen': return 'bg-amber-500 text-white border-amber-600 shadow-lg shadow-amber-500/25';
+    case 'faible': return 'bg-red-500 text-white border-red-600 shadow-lg shadow-red-500/25';
+    default: return 'bg-gray-500 text-white border-gray-600 shadow-lg shadow-gray-500/25';
   }
+};
+
+const getAlimentTypeColor = (type: string) => {
+  if (type.includes('standard')) return 'bg-slate-500 text-white';
+  if (type.includes('croissance')) return 'bg-purple-500 text-white';
+  if (type.includes('finition')) return 'bg-indigo-500 text-white';
+  return 'bg-gray-500 text-white';
 };
 
 const Feeding = () => {
@@ -181,39 +188,49 @@ const Feeding = () => {
               </div>
             ) : (
               feedingSessions.map((feeding) => (
-                <div key={feeding.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div key={feeding.id} className="p-5 bg-white/10 rounded-xl border border-white/20 hover:bg-white/15 transition-all hover-scale shadow-lg backdrop-blur-sm">
+                  <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-ocean-gradient rounded-lg">
-                        <Fish className="h-5 w-5 text-white" />
+                      <div className="relative">
+                        <div className="p-3 bg-ocean-gradient rounded-xl shadow-lg">
+                          <Fish className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="absolute -top-1 -right-1 bg-white text-ocean-600 text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                          {feeding.cage?.nom}
+                        </div>
                       </div>
                       <div>
-                        <h4 className="text-white font-medium">{feeding.cage?.nom}</h4>
-                        <p className="text-white/70 text-sm">{feeding.type_aliment}</p>
+                        <Badge className={`${getAlimentTypeColor(feeding.type_aliment)} px-3 py-1 text-sm font-medium rounded-full shadow-md`}>
+                          {feeding.type_aliment.replace('_', ' ')}
+                        </Badge>
                       </div>
                     </div>
                     
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                      <div className="flex items-center gap-1 text-white/80">
-                        <Clock className="h-4 w-4" />
-                        {feeding.heure}
+                    <div className="flex items-center gap-3">
+                      <div className="bg-white/20 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/30">
+                        <div className="flex items-center gap-2 text-white">
+                          <Clock className="h-4 w-4" />
+                          <span className="font-mono font-bold">{feeding.heure}</span>
+                        </div>
                       </div>
                       
-                      <div className="text-white font-medium">
+                      <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg font-bold text-lg shadow-lg">
                         {feeding.quantite}kg
                       </div>
                       
-                      <Badge className={getAppetitColor(feeding.appetit)}>
+                      <Badge className={`${getAppetitColor(feeding.appetit)} px-4 py-2 text-sm font-bold rounded-lg`}>
                         {feeding.appetit}
                       </Badge>
                     </div>
                   </div>
                   
                   {feeding.observations && (
-                    <div className="mt-3 pt-3 border-t border-white/10">
-                      <p className="text-white/70 text-sm">
-                        <strong>Observations:</strong> {feeding.observations}
-                      </p>
+                    <div className="mt-4 pt-4 border-t border-white/20">
+                      <div className="bg-blue-500/20 backdrop-blur-sm p-3 rounded-lg border border-blue-400/30">
+                        <p className="text-white/90 text-sm">
+                          <span className="font-semibold text-blue-300">Observations:</span> {feeding.observations}
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
