@@ -245,80 +245,84 @@ const Cages = () => {
           </div>
         ) : (
           cages.map((cage) => (
-          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Fish className="h-5 w-5" />
-                    {cage.nom}
+          <Card key={cage.id} className="glass-effect hover:scale-105 transition-all duration-300 overflow-hidden">
+            <CardHeader className="pb-3">
+              <div className="flex justify-between items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="text-white flex items-center gap-2 text-lg font-bold">
+                    <Fish className="h-5 w-5 flex-shrink-0" />
+                    <span className="truncate">{cage.nom}</span>
                   </CardTitle>
-                  <p className="text-white/70 mt-1">{cage.espece}</p>
+                  <p className="text-white/70 mt-1 text-sm">{cage.espece}</p>
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                  <Badge className={getStatutColor(cage.statut)}>
+                <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                  <Badge className={`${getStatutColor(cage.statut)} text-xs font-medium px-2 py-1`}>
                     {cage.statut}
                   </Badge>
-                  <div className="flex gap-1 flex-wrap">
-                    <EditCageModal cage={cage} onCageUpdated={loadCages} />
-                    <CageHistoryModal cage={cage} />
-                    <CageDailyHistoryModal cage={cage} />
-                  </div>
                 </div>
               </div>
+              <div className="flex gap-1 flex-wrap mt-3">
+                <EditCageModal cage={cage} onCageUpdated={loadCages} />
+                <CageHistoryModal cage={cage} />
+                <CageDailyHistoryModal cage={cage} />
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="pt-0 space-y-3">
               {cage.statut === 'actif' ? (
-                <>
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Poissons:</span>
-                    <span className="text-white font-semibold">{cage.nombre_poissons.toLocaleString()}</span>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="bg-white/5 rounded-lg p-3 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">Poissons:</span>
+                      <span className="text-white font-bold text-base">{cage.nombre_poissons.toLocaleString()}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">Poids moyen:</span>
+                      <span className="text-white font-bold text-base">{cage.poids_moyen}kg</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">FCR:</span>
+                      <span className="text-blue-300 font-bold text-base">{cage.fcr || '0'}</span>
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Poids moyen:</span>
-                    <span className="text-white font-semibold">{cage.poids_moyen}kg</span>
+                  <div className="bg-white/5 rounded-lg p-3 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">Coût production:</span>
+                      <span className="text-yellow-400 font-bold text-base">
+                        {cage.production_cost ? `${cage.production_cost.toLocaleString('fr-FR')}€` : 'N/A'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">Croissance:</span>
+                      <span className="text-green-400 font-bold text-base">{cage.croissance || '0%'}</span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/70 text-sm font-medium">Taux mortalité:</span>
+                      <span className="text-red-400 font-bold text-base">
+                        {cage.taux_mortalite ? `${Number(cage.taux_mortalite).toFixed(1)}%` : '0%'}
+                      </span>
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">FCR:</span>
-                    <span className="text-white font-semibold">{cage.fcr}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Coût production:</span>
-                    <span className="text-yellow-400 font-semibold">
-                      {cage.production_cost ? `${cage.production_cost.toLocaleString('fr-FR')}€` : 'N/A'}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Croissance:</span>
-                    <span className="text-green-400 font-semibold">{cage.croissance}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">Taux mortalité:</span>
-                    <span className="text-red-400 font-semibold">
-                      {cage.taux_mortalite ? `${Number(cage.taux_mortalite).toFixed(1)}%` : '0%'}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs bg-white/5 rounded-lg p-2">
                     <span className="text-white/60 flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       Introduit:
                     </span>
-                    <span className="text-white/80">
+                    <span className="text-white/80 font-medium">
                       {cage.date_introduction ? new Date(cage.date_introduction).toLocaleDateString('fr-FR') : 'N/A'}
                     </span>
                   </div>
-                </>
+                </div>
               ) : (
                 <div className="text-center py-8">
                   <Fish className="h-12 w-12 text-white/30 mx-auto mb-3" />
-                  <p className="text-white/60">Cage disponible</p>
-                  <Button variant="outline" className="mt-3 bg-white/10 border-white/20 text-white hover:bg-white/20">
+                  <p className="text-white/60 mb-4">Cage disponible</p>
+                  <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
                     Démarrer cycle
                   </Button>
                 </div>
