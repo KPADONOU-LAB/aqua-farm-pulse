@@ -112,9 +112,9 @@ const Reports = () => {
 
       {/* Graphiques principaux */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
+            <CardTitle className="flex items-center gap-2">
               <Euro className="h-5 w-5" />
               Évolution profit mensuel (€)
             </CardTitle>
@@ -144,9 +144,9 @@ const Reports = () => {
           </CardContent>
         </Card>
 
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
+            <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
               Répartition des coûts (%)
             </CardTitle>
@@ -232,31 +232,31 @@ const Reports = () => {
       </Card>
 
       {/* Recommandations */}
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
+      <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
+          <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
             Recommandations d'optimisation
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 bg-green-50/10 rounded-lg border border-green-200/20">
-            <h4 className="text-white font-medium mb-2">💰 Optimisation financière</h4>
-            <p className="text-white/80 text-sm">
+        <CardContent className="p-6 space-y-4">
+          <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+            <h4 className="text-green-800 font-medium mb-2">💰 Optimisation financière</h4>
+            <p className="text-green-700 text-sm">
               Réduire les coûts d'alimentation de 8% en optimisant les rations selon la température de l'eau
             </p>
           </div>
           
-          <div className="p-4 bg-blue-50/10 rounded-lg border border-blue-200/20">
-            <h4 className="text-white font-medium mb-2">🐟 Performance technique</h4>
-            <p className="text-white/80 text-sm">
+          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="text-blue-800 font-medium mb-2">🐟 Performance technique</h4>
+            <p className="text-blue-700 text-sm">
               Cage #002 montre un FCR élevé (2.1) - réviser le protocole d'alimentation et surveiller la qualité de l'eau
             </p>
           </div>
           
-          <div className="p-4 bg-amber-50/10 rounded-lg border border-amber-200/20">
-            <h4 className="text-white font-medium mb-2">📈 Croissance business</h4>
-            <p className="text-white/80 text-sm">
+          <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <h4 className="text-amber-800 font-medium mb-2">📈 Croissance business</h4>
+            <p className="text-amber-700 text-sm">
               Potentiel d'augmentation de 15% des revenus en diversifiant vers des espèces premium (Bar, Dorade)
             </p>
           </div>
