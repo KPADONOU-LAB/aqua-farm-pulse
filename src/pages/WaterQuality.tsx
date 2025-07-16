@@ -60,112 +60,176 @@ const WaterQuality = () => {
 
       {/* Paramètres moyens */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="stat-card ocean-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-ocean-700">Température moy.</CardTitle>
-            <Thermometer className="h-5 w-5 text-ocean-600" />
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <CardHeader className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+            <CardTitle className="text-lg mb-2 flex items-center gap-2">
+              <span className="text-2xl">🌡️</span>
+              Température moyenne
+            </CardTitle>
+            <div className="text-white/90 text-2xl font-bold">
+              {stats.moyenneTemp.toFixed(1)}°C
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-ocean-800">{stats.moyenneTemp.toFixed(1)}°C</div>
-            <p className="text-xs text-ocean-600">Plage: 22-28°C</p>
+          <CardContent className="p-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min((stats.moyenneTemp / 30) * 100, 100)}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-2">
+              {stats.moyenneTemp < 18 ? 'Température basse' : stats.moyenneTemp > 25 ? 'Température élevée' : 'Température optimale'}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="stat-card aqua-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-aqua-700">pH moyen</CardTitle>
-            <Droplets className="h-5 w-5 text-aqua-600" />
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <CardHeader className="bg-gradient-to-br from-green-500 to-emerald-500 text-white">
+            <CardTitle className="text-lg mb-2 flex items-center gap-2">
+              <span className="text-2xl">⚗️</span>
+              pH moyen
+            </CardTitle>
+            <div className="text-white/90 text-2xl font-bold">
+              {stats.moyennePh.toFixed(1)}
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-aqua-800">{stats.moyennePh.toFixed(1)}</div>
-            <p className="text-xs text-aqua-600">Plage: 6.5-8.0</p>
+          <CardContent className="p-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(((stats.moyennePh - 6) / (8.5 - 6)) * 100, 100)}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-2">
+              {stats.moyennePh < 7 ? 'pH acide' : stats.moyennePh > 8 ? 'pH basique' : 'pH optimal'}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Oxygène moy.</CardTitle>
-            <Wind className="h-5 w-5 text-blue-600" />
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <CardHeader className="bg-gradient-to-br from-purple-500 to-violet-500 text-white">
+            <CardTitle className="text-lg mb-2 flex items-center gap-2">
+              <span className="text-2xl">💨</span>
+              Oxygène moyen
+            </CardTitle>
+            <div className="text-white/90 text-2xl font-bold">
+              {stats.moyenneOxygene.toFixed(1)} mg/L
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stats.moyenneOxygene.toFixed(1)}mg/L</div>
-            <p className="text-xs text-blue-600">Min: 5.0mg/L</p>
+          <CardContent className="p-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-purple-500 to-violet-500 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min((stats.moyenneOxygene / 12) * 100, 100)}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-2">
+              {stats.moyenneOxygene < 5 ? 'Oxygène faible' : stats.moyenneOxygene > 8 ? 'Oxygène élevé' : 'Oxygène optimal'}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Mesures today</CardTitle>
-            <Eye className="h-5 w-5 text-green-600" />
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <CardHeader className="bg-gradient-to-br from-orange-500 to-amber-500 text-white">
+            <CardTitle className="text-lg mb-2 flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              Mesures aujourd'hui
+            </CardTitle>
+            <div className="text-white/90 text-2xl font-bold">
+              {stats.mesuresToday} mesures
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stats.mesuresToday}</div>
-            <p className="text-xs text-green-600">Mesures aujourd'hui</p>
+          <CardContent className="p-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min((stats.mesuresToday / 10) * 100, 100)}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-2">
+              {stats.mesuresToday < 3 ? 'Peu de mesures' : stats.mesuresToday > 8 ? 'Nombreuses mesures' : 'Bon suivi'}
+            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Graphiques */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+            <CardTitle className="flex items-center gap-2">
               <Thermometer className="h-5 w-5" />
               Évolution température (°C)
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={temperatureData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="heure" stroke="#fff" />
-                <YAxis stroke="#fff" domain={['dataMin - 1', 'dataMax + 1']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="heure" stroke="#374151" />
+                <YAxis stroke="#374151" domain={['dataMin - 1', 'dataMax + 1']} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
+                    backgroundColor: 'white', 
+                    border: '1px solid #e5e7eb', 
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }} 
                 />
                 <Line 
                   type="monotone" 
                   dataKey="temperature" 
-                  stroke="#ef4444" 
+                  stroke="url(#temperatureGradient)" 
                   strokeWidth={3}
-                  dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }}
+                  dot={{ fill: '#3b82f6', strokeWidth: 2, r: 5 }}
+                  activeDot={{ r: 7, stroke: '#3b82f6', strokeWidth: 2 }}
                 />
+                <defs>
+                  <linearGradient id="temperatureGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#06b6d4" />
+                  </linearGradient>
+                </defs>
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card className="glass-effect">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+            <CardTitle className="flex items-center gap-2">
               <Droplets className="h-5 w-5" />
               Évolution pH
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6 bg-white">
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={phData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="heure" stroke="#fff" />
-                <YAxis stroke="#fff" domain={[6.5, 8.0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="heure" stroke="#374151" />
+                <YAxis stroke="#374151" domain={[6.5, 8.0]} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
+                    backgroundColor: 'white', 
+                    border: '1px solid #e5e7eb', 
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }} 
                 />
                 <Line 
                   type="monotone" 
                   dataKey="ph" 
-                  stroke="#10b981" 
+                  stroke="url(#phGradient)" 
                   strokeWidth={3}
-                  dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+                  dot={{ fill: '#10b981', strokeWidth: 2, r: 5 }}
+                  activeDot={{ r: 7, stroke: '#10b981', strokeWidth: 2 }}
                 />
+                <defs>
+                  <linearGradient id="phGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -173,86 +237,109 @@ const WaterQuality = () => {
       </div>
 
       {/* Mesures récentes */}
-      <Card className="glass-effect">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
-            <Waves className="h-5 w-5" />
+      <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-xl">📋</span>
             Mesures d'aujourd'hui
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {measurements.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-white/70">Aucune mesure aujourd'hui</p>
-                <p className="text-white/50 text-sm mt-2">Ajoutez une nouvelle mesure pour commencer</p>
-              </div>
-            ) : (
-              measurements.map((measurement) => (
-                <div key={measurement.id} className="p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 bg-ocean-gradient rounded-lg">
-                        <Droplets className="h-5 w-5 text-white" />
+        <CardContent className="p-6">
+          {measurements.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📊</div>
+              <p className="text-gray-500 text-lg mb-2">Aucune mesure enregistrée aujourd'hui</p>
+              <p className="text-gray-400 text-sm">Commencez par ajouter une nouvelle mesure</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {measurements.map((measurement) => (
+                <div
+                  key={measurement.id}
+                  className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="text-gray-800 font-semibold text-lg flex items-center gap-2">
+                        <span className="text-blue-500">🏊</span>
+                        {measurement.cage?.nom}
+                      </h4>
+                      <p className="text-gray-500 text-sm flex items-center gap-1">
+                        <span>🕐</span> {measurement.heure}
+                      </p>
+                    </div>
+                    <Badge className={getStatutColor(measurement.statut)}>
+                      {measurement.statut}
+                    </Badge>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                    <div className="bg-blue-50 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-blue-500">🌡️</span>
+                        <span className="text-gray-600 text-sm">Température</span>
                       </div>
-                      <div>
-                        <h4 className="text-white font-medium">{measurement.cage?.nom}</h4>
-                        <p className="text-white/70 text-sm">{measurement.heure}</p>
+                      <p className="text-blue-700 font-bold text-lg">{measurement.temperature}°C</p>
+                      <div className="w-full bg-blue-200 rounded-full h-1 mt-1">
+                        <div 
+                          className="bg-blue-500 h-1 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min((measurement.temperature / 30) * 100, 100)}%` }}
+                        />
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-6">
-                      <Badge className={getStatutColor(measurement.statut)}>
-                        {measurement.statut}
-                      </Badge>
+                    <div className="bg-green-50 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-green-500">⚗️</span>
+                        <span className="text-gray-600 text-sm">pH</span>
+                      </div>
+                      <p className="text-green-700 font-bold text-lg">{measurement.ph}</p>
+                      <div className="w-full bg-green-200 rounded-full h-1 mt-1">
+                        <div 
+                          className="bg-green-500 h-1 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(((measurement.ph - 6) / (8.5 - 6)) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="bg-purple-50 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-purple-500">💨</span>
+                        <span className="text-gray-600 text-sm">Oxygène</span>
+                      </div>
+                      <p className="text-purple-700 font-bold text-lg">{measurement.oxygene_dissous} mg/L</p>
+                      <div className="w-full bg-purple-200 rounded-full h-1 mt-1">
+                        <div 
+                          className="bg-purple-500 h-1 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min((measurement.oxygene_dissous / 12) * 100, 100)}%` }}
+                        />
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center p-3 bg-white/5 rounded-lg">
-                      <div className="flex items-center justify-center gap-1 mb-1">
-                        <Thermometer className="h-4 w-4 text-red-400" />
-                        <span className="text-white/70 text-sm">Temp.</span>
+                  {measurement.turbidite && (
+                    <div className="bg-orange-50 rounded-lg p-3 mb-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-orange-500">🌫️</span>
+                        <span className="text-gray-600 text-sm">Turbidité</span>
                       </div>
-                      <div className="text-white font-semibold">{measurement.temperature}°C</div>
+                      <p className="text-orange-700 font-bold">{measurement.turbidite} NTU</p>
                     </div>
-                    
-                    <div className="text-center p-3 bg-white/5 rounded-lg">
-                      <div className="flex items-center justify-center gap-1 mb-1">
-                        <Droplets className="h-4 w-4 text-blue-400" />
-                        <span className="text-white/70 text-sm">pH</span>
-                      </div>
-                      <div className="text-white font-semibold">{measurement.ph}</div>
-                    </div>
-                    
-                    <div className="text-center p-3 bg-white/5 rounded-lg">
-                      <div className="flex items-center justify-center gap-1 mb-1">
-                        <Wind className="h-4 w-4 text-green-400" />
-                        <span className="text-white/70 text-sm">O₂</span>
-                      </div>
-                      <div className="text-white font-semibold">{measurement.oxygene_dissous}mg/L</div>
-                    </div>
-                    
-                    <div className="text-center p-3 bg-white/5 rounded-lg">
-                      <div className="flex items-center justify-center gap-1 mb-1">
-                        <Eye className="h-4 w-4 text-amber-400" />
-                        <span className="text-white/70 text-sm">Turbidité</span>
-                      </div>
-                      <div className="text-white font-semibold">{measurement.turbidite || 'N/A'}</div>
-                    </div>
-                  </div>
+                  )}
                   
                   {measurement.observations && (
-                    <div className="mt-4 pt-3 border-t border-white/10">
-                      <p className="text-white/70 text-sm">
-                        <strong>Observations:</strong> {measurement.observations}
-                      </p>
+                    <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-gray-400">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-gray-500">📝</span>
+                        <span className="text-gray-600 text-sm font-medium">Observations</span>
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed">{measurement.observations}</p>
                     </div>
                   )}
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
