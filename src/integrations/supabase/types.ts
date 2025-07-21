@@ -325,54 +325,6 @@ export type Database = {
         }
         Relationships: []
       }
-      feeding_plans: {
-        Row: {
-          cage_id: string
-          created_at: string
-          date_debut: string
-          date_fin: string | null
-          frequence_par_jour: number
-          id: string
-          notes: string | null
-          poids_corporel_total: number
-          pourcentage_poids_corporel: number
-          quantite_prevue_jour: number
-          statut: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          cage_id: string
-          created_at?: string
-          date_debut?: string
-          date_fin?: string | null
-          frequence_par_jour?: number
-          id?: string
-          notes?: string | null
-          poids_corporel_total?: number
-          pourcentage_poids_corporel?: number
-          quantite_prevue_jour?: number
-          statut?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          cage_id?: string
-          created_at?: string
-          date_debut?: string
-          date_fin?: string | null
-          frequence_par_jour?: number
-          id?: string
-          notes?: string | null
-          poids_corporel_total?: number
-          pourcentage_poids_corporel?: number
-          quantite_prevue_jour?: number
-          statut?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       feeding_sessions: {
         Row: {
           appetit: string
@@ -623,54 +575,6 @@ export type Database = {
         }
         Relationships: []
       }
-      notifications: {
-        Row: {
-          created_at: string
-          data_contexte: Json | null
-          date_envoi: string | null
-          date_lu: string | null
-          envoye_email: boolean | null
-          envoye_push: boolean | null
-          id: string
-          message: string
-          priorite: string
-          statut: string
-          titre: string
-          type_notification: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          data_contexte?: Json | null
-          date_envoi?: string | null
-          date_lu?: string | null
-          envoye_email?: boolean | null
-          envoye_push?: boolean | null
-          id?: string
-          message: string
-          priorite?: string
-          statut?: string
-          titre: string
-          type_notification: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          data_contexte?: Json | null
-          date_envoi?: string | null
-          date_lu?: string | null
-          envoye_email?: boolean | null
-          envoye_push?: boolean | null
-          id?: string
-          message?: string
-          priorite?: string
-          statut?: string
-          titre?: string
-          type_notification?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       orders: {
         Row: {
           client_id: string
@@ -871,54 +775,6 @@ export type Database = {
           },
         ]
       }
-      sync_queue: {
-        Row: {
-          created_at: string
-          data_payload: Json
-          device_id: string | null
-          error_message: string | null
-          id: string
-          last_sync_attempt: string | null
-          operation: string
-          record_id: string
-          sync_attempts: number | null
-          synced: boolean | null
-          table_name: string
-          timestamp_local: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          data_payload: Json
-          device_id?: string | null
-          error_message?: string | null
-          id?: string
-          last_sync_attempt?: string | null
-          operation: string
-          record_id: string
-          sync_attempts?: number | null
-          synced?: boolean | null
-          table_name: string
-          timestamp_local: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          data_payload?: Json
-          device_id?: string | null
-          error_message?: string | null
-          id?: string
-          last_sync_attempt?: string | null
-          operation?: string
-          record_id?: string
-          sync_attempts?: number | null
-          synced?: boolean | null
-          table_name?: string
-          timestamp_local?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       water_quality: {
         Row: {
           cage_id: string
@@ -975,54 +831,6 @@ export type Database = {
           },
         ]
       }
-      weekly_weighings: {
-        Row: {
-          biomasse_totale: number
-          cage_id: string
-          created_at: string
-          date_pesee: string
-          id: string
-          nombre_echantillons: number
-          observations: string | null
-          photos: string[] | null
-          poids_estime_total: number
-          poids_moyen_echantillon: number
-          taux_croissance_semaine: number | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          biomasse_totale: number
-          cage_id: string
-          created_at?: string
-          date_pesee?: string
-          id?: string
-          nombre_echantillons?: number
-          observations?: string | null
-          photos?: string[] | null
-          poids_estime_total: number
-          poids_moyen_echantillon: number
-          taux_croissance_semaine?: number | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          biomasse_totale?: number
-          cage_id?: string
-          created_at?: string
-          date_pesee?: string
-          id?: string
-          nombre_echantillons?: number
-          observations?: string | null
-          photos?: string[] | null
-          poids_estime_total?: number
-          poids_moyen_echantillon?: number
-          taux_croissance_semaine?: number | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
@@ -1044,19 +852,11 @@ export type Database = {
         Args: { cycle_id: string }
         Returns: number
       }
-      calculate_feeding_plan: {
-        Args: { cage_id_param: string }
-        Returns: undefined
-      }
       calculate_remaining_fish: {
         Args: { cage_id_param: string }
         Returns: number
       }
       generate_automatic_alerts: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      generate_feeding_notifications: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
