@@ -23,6 +23,7 @@ import CRM from "./pages/CRM";
 import Alerts from "./pages/Alerts";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import WeeklyWeighings from "./pages/WeeklyWeighings";
 
 const queryClient = new QueryClient();
 
@@ -43,20 +44,21 @@ const App = () => (
                     <div className="flex flex-1">
                       <AppSidebar />
                       <main className="flex-1 overflow-auto">
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/cages" element={<Cages />} />
-                        <Route path="/feeding" element={<Feeding />} />
-                        <Route path="/water-quality" element={<WaterQuality />} />
-                        <Route path="/health" element={<Health />} />
-                        <Route path="/inventory" element={<Inventory />} />
-                        <Route path="/sales" element={<Sales />} />
-                        <Route path="/finance" element={<Finance />} />
-                        <Route path="/crm" element={<CRM />} />
-                        <Route path="/reports" element={<Reports />} />
-                        <Route path="/alerts" element={<Alerts />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
+                       <Routes>
+                         <Route path="/" element={<Index />} />
+                         <Route path="/cages" element={<Cages />} />
+                         <Route path="/feeding" element={<Feeding />} />
+                         <Route path="/water-quality" element={<WaterQuality />} />
+                         <Route path="/health" element={<Health />} />
+                         <Route path="/inventory" element={<Inventory />} />
+                         <Route path="/sales" element={<Sales />} />
+                         <Route path="/finance" element={<Finance />} />
+                         <Route path="/crm" element={<CRM />} />
+                         <Route path="/reports" element={<Reports />} />
+                         <Route path="/alerts" element={<Alerts />} />
+                         <Route path="/weighings" element={<WeeklyWeighings />} />
+                         <Route path="*" element={<NotFound />} />
+                       </Routes>
                       </main>
                     </div>
                     <HelpSystem />
