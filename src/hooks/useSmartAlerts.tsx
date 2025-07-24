@@ -7,7 +7,7 @@ interface SmartAlert {
   id: string;
   cage_id?: string;
   type_alerte: string;
-  niveau_criticite: 'info' | 'warning' | 'error' | 'critical';
+  niveau_criticite: string;
   titre: string;
   message: string;
   recommandations: string[];
@@ -15,13 +15,13 @@ interface SmartAlert {
   date_detection: string;
   date_lecture?: string;
   date_resolution?: string;
-  statut: 'active' | 'read' | 'resolved' | 'dismissed';
+  statut: string;
   actions_effectuees: string[];
   impact_estime?: number;
   created_at: string;
   cage?: {
     nom: string;
-  };
+  } | null;
 }
 
 export const useSmartAlerts = () => {
@@ -36,15 +36,16 @@ export const useSmartAlerts = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('smart_alerts')
-        .select(`
-          *,
-          cage:cages(nom)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('date_detection', { ascending: false });
 
-      if (error) throw error;
-      setAlerts(data || []);
+      if (error) {
+        console.error('Erreur lors du chargement des alertes:', error);
+        toast.error('Erreur lors du chargement des alertes');
+      } else {
+        setAlerts(data || []);
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des alertes:', error);
       toast.error('Erreur lors du chargement des alertes');

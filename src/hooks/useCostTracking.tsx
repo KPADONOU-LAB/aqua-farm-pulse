@@ -19,7 +19,7 @@ interface CostEntry {
   created_at: string;
   cage?: {
     nom: string;
-  };
+  } | null;
 }
 
 interface CostSummary {
@@ -45,18 +45,20 @@ export const useCostTracking = () => {
 
     try {
       setLoading(true);
+      // Essayer d'abord avec jointure, puis fallback sans jointure
       const { data, error } = await supabase
         .from('cost_tracking')
-        .select(`
-          *,
-          cage:cages(nom)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('date_cout', { ascending: false });
 
-      if (error) throw error;
-      setCosts(data || []);
-      calculateSummary(data || []);
+      if (error) {
+        console.error('Erreur lors du chargement des coûts:', error);
+        toast.error('Erreur lors du chargement des coûts');
+      } else {
+        setCosts(data || []);
+        calculateSummary(data || []);
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des coûts:', error);
       toast.error('Erreur lors du chargement des coûts');

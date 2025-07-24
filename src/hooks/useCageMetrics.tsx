@@ -20,6 +20,34 @@ interface DailyHistory {
 export const useCageMetrics = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [cages, setCages] = useState<any[]>([]);
+
+  // Charger toutes les cages de l'utilisateur
+  const fetchCages = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('cages')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCages(data || []);
+    } catch (error) {
+      console.error('Erreur lors du chargement des cages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchCages();
+    }
+  }, [user]);
 
   const calculateCageMetrics = async (cageId: string): Promise<CageMetrics> => {
     if (!user) throw new Error('User not authenticated');
@@ -101,6 +129,9 @@ export const useCageMetrics = () => {
         .eq('user_id', user.id)
         .single();
 
+      // Recharger la liste des cages
+      fetchCages();
+
       return metrics;
     } catch (error) {
       console.error('Erreur lors de la mise à jour des métriques:', error);
@@ -109,6 +140,8 @@ export const useCageMetrics = () => {
   };
 
   return {
+    cages,
+    fetchCages,
     calculateCageMetrics,
     getCageDailyHistory,
     updateAllCageMetrics,

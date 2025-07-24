@@ -22,7 +22,7 @@ interface PerformanceTarget {
     fcr?: number;
     poids_moyen?: number;
     taux_mortalite?: number;
-  };
+  } | null;
 }
 
 interface PerformanceComparison {
@@ -54,15 +54,16 @@ export const usePerformanceTargets = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('performance_targets')
-        .select(`
-          *,
-          cage:cages(nom, fcr, poids_moyen, taux_mortalite)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setTargets(data || []);
+      if (error) {
+        console.error('Erreur lors du chargement des objectifs:', error);
+        toast.error('Erreur lors du chargement des objectifs');
+      } else {
+        setTargets(data || []);
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des objectifs:', error);
       toast.error('Erreur lors du chargement des objectifs');
@@ -138,18 +139,27 @@ export const usePerformanceTargets = () => {
 
   const calculatePerformanceComparison = async (cageId: string): Promise<PerformanceComparison | null> => {
     const target = getTargetByCage(cageId);
-    if (!target || !target.cage) return null;
+    if (!target) return null;
 
     try {
+      // Récupérer les données de la cage
+      const { data: cageData } = await supabase
+        .from('cages')
+        .select('fcr, poids_moyen, taux_mortalite')
+        .eq('id', cageId)
+        .single();
+
+      if (!cageData) return null;
+
       // Récupérer le coût par kg réel
       const { data: costPerKg } = await supabase.rpc('calculate_cost_per_kg', {
         cage_id_param: cageId
       });
 
       const actual = {
-        fcr: target.cage.fcr || 0,
-        survival_rate: 100 - (target.cage.taux_mortalite || 0),
-        average_weight: target.cage.poids_moyen || 0,
+        fcr: cageData.fcr || 0,
+        survival_rate: 100 - (cageData.taux_mortalite || 0),
+        average_weight: cageData.poids_moyen || 0,
         cost_per_kg: costPerKg || 0
       };
 

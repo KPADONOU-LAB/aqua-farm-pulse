@@ -14,7 +14,7 @@ interface ProductionPrediction {
   created_at: string;
   cage?: {
     nom: string;
-  };
+  } | null;
 }
 
 export const useProductionPredictions = () => {
@@ -29,15 +29,16 @@ export const useProductionPredictions = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('production_predictions')
-        .select(`
-          *,
-          cage:cages(nom)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setPredictions(data || []);
+      if (error) {
+        console.error('Erreur lors du chargement des prédictions:', error);
+        toast.error('Erreur lors du chargement des prédictions');
+      } else {
+        setPredictions(data || []);
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des prédictions:', error);
       toast.error('Erreur lors du chargement des prédictions');
