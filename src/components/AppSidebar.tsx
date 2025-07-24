@@ -15,7 +15,8 @@ import {
   Brain,
   TrendingUp,
   Bell,
-  FileText
+  FileText,
+  LayoutDashboard
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -52,6 +53,10 @@ const analyticsItems = [
   { title: "Performance", url: "/performance", icon: TrendingUp },
   { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
   { title: "Alertes", url: "/alerts", icon: Bell },
+];
+
+const dashboardItems = [
+  { title: "Dashboards", url: "/custom-dashboards", icon: LayoutDashboard },
 ];
 
 export function AppSidebar() {
@@ -125,6 +130,32 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {analyticsItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild className="h-12">
+                    <NavLink
+                      to={item.url}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${getNavClass(item.url)}`}
+                    >
+                      <item.icon className={`h-5 w-5 ${collapsed ? "mx-auto" : ""}`} />
+                      {!collapsed && (
+                        <span className="font-medium">{item.title}</span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Section Dashboards */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2 mt-4">
+            {!collapsed && "Dashboards"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {dashboardItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="h-12">
                     <NavLink

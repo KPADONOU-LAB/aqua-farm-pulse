@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useCustomDashboard, DashboardLayout } from '@/hooks/useCustomDashboard';
 import { WidgetRenderer } from '@/components/widgets/WidgetRenderer';
+import { WidgetCreator } from '@/components/widgets/WidgetCreator';
 import { useToast } from '@/hooks/use-toast';
 import 'react-grid-layout/css/styles.css';
 
@@ -384,10 +385,11 @@ const CustomDashboards = () => {
                   Ajouter un Widget
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-2">
+                <WidgetCreator onWidgetCreated={() => setAddWidgetDialog(false)} />
                 <Dialog open={addWidgetDialog} onOpenChange={setAddWidgetDialog}>
                   <DialogTrigger asChild>
-                    <Button className="w-full">
+                    <Button variant="outline" className="w-full">
                       Parcourir les widgets
                     </Button>
                   </DialogTrigger>

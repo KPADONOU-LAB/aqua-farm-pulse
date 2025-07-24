@@ -207,7 +207,7 @@ export const WidgetRenderer: React.FC<WidgetRendererProps> = ({ widget, onRemove
         <Progress value={progress} className="w-full" />
         {config.showPercentage && (
           <p className="text-xs text-muted-foreground text-center">
-            {widgetData?.[0]?.[config.metric] || 0} / {config.maxValue}
+            {Number(widgetData?.[0]?.[config.metric]) || 0} / {Number(config.maxValue) || 1}
           </p>
         )}
       </div>

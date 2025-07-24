@@ -68,10 +68,13 @@ export const useCustomDashboard = () => {
   const { data: availableWidgets, isLoading: widgetsLoading } = useQuery({
     queryKey: ['dashboard-widgets'],
     queryFn: async () => {
+      const user = await supabase.auth.getUser();
+      const userId = user.data.user?.id;
+      
       const { data, error } = await supabase
         .from('dashboard_widgets')
         .select('*')
-        .or('est_public.eq.true,user_id.eq.' + (await supabase.auth.getUser()).data.user?.id);
+        .or(userId ? `est_public.eq.true,user_id.eq.${userId}` : 'est_public.eq.true');
       
       if (error) throw error;
       return data as DashboardWidget[];
