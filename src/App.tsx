@@ -21,6 +21,9 @@ import Reports from "./pages/Reports";
 import Finance from "./pages/Finance";
 import CRM from "./pages/CRM";
 import Alerts from "./pages/Alerts";
+import Predictions from "./pages/Predictions";
+import SmartAlerts from "./pages/SmartAlerts";
+import PerformanceAnalysis from "./pages/PerformanceAnalysis";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -43,20 +46,23 @@ const App = () => (
                     <div className="flex flex-1">
                       <AppSidebar />
                       <main className="flex-1 overflow-auto">
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/cages" element={<Cages />} />
-                        <Route path="/feeding" element={<Feeding />} />
-                        <Route path="/water-quality" element={<WaterQuality />} />
-                        <Route path="/health" element={<Health />} />
-                        <Route path="/inventory" element={<Inventory />} />
-                        <Route path="/sales" element={<Sales />} />
-                        <Route path="/finance" element={<Finance />} />
-                        <Route path="/crm" element={<CRM />} />
-                        <Route path="/reports" element={<Reports />} />
-                        <Route path="/alerts" element={<Alerts />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
+                       <Routes>
+                         <Route path="/" element={<Index />} />
+                         <Route path="/cages" element={<Cages />} />
+                         <Route path="/feeding" element={<Feeding />} />
+                         <Route path="/water-quality" element={<WaterQuality />} />
+                         <Route path="/health" element={<Health />} />
+                         <Route path="/inventory" element={<Inventory />} />
+                         <Route path="/sales" element={<Sales />} />
+                         <Route path="/finance" element={<Finance />} />
+                         <Route path="/crm" element={<CRM />} />
+                         <Route path="/reports" element={<Reports />} />
+                         <Route path="/alerts" element={<Alerts />} />
+                         <Route path="/predictions" element={<Predictions />} />
+                         <Route path="/smart-alerts" element={<SmartAlerts />} />
+                         <Route path="/performance" element={<PerformanceAnalysis />} />
+                         <Route path="*" element={<NotFound />} />
+                       </Routes>
                       </main>
                     </div>
                     <HelpSystem />

@@ -325,6 +325,162 @@ export type Database = {
         }
         Relationships: []
       }
+      cost_tracking: {
+        Row: {
+          cage_id: string
+          categorie_cout: string
+          cout_unitaire: number | null
+          created_at: string
+          cycle_id: string | null
+          date_cout: string
+          description: string | null
+          fournisseur: string | null
+          id: string
+          montant: number
+          quantite: number | null
+          reference_facture: string | null
+          sous_categorie: string | null
+          unite: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          categorie_cout: string
+          cout_unitaire?: number | null
+          created_at?: string
+          cycle_id?: string | null
+          date_cout?: string
+          description?: string | null
+          fournisseur?: string | null
+          id?: string
+          montant: number
+          quantite?: number | null
+          reference_facture?: string | null
+          sous_categorie?: string | null
+          unite?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          categorie_cout?: string
+          cout_unitaire?: number | null
+          created_at?: string
+          cycle_id?: string | null
+          date_cout?: string
+          description?: string | null
+          fournisseur?: string | null
+          id?: string
+          montant?: number
+          quantite?: number | null
+          reference_facture?: string | null
+          sous_categorie?: string | null
+          unite?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      feeding_adjustments: {
+        Row: {
+          ancien_pourcentage: number
+          ancienne_quantite: number
+          biomasse_actuelle: number
+          cage_id: string
+          created_at: string
+          date_ajustement: string
+          feeding_plan_id: string
+          id: string
+          notes: string | null
+          nouveau_pourcentage: number
+          nouvelle_quantite: number
+          poids_moyen_actuel: number
+          raison_ajustement: string
+          user_id: string
+        }
+        Insert: {
+          ancien_pourcentage: number
+          ancienne_quantite: number
+          biomasse_actuelle: number
+          cage_id: string
+          created_at?: string
+          date_ajustement?: string
+          feeding_plan_id: string
+          id?: string
+          notes?: string | null
+          nouveau_pourcentage: number
+          nouvelle_quantite: number
+          poids_moyen_actuel: number
+          raison_ajustement: string
+          user_id: string
+        }
+        Update: {
+          ancien_pourcentage?: number
+          ancienne_quantite?: number
+          biomasse_actuelle?: number
+          cage_id?: string
+          created_at?: string
+          date_ajustement?: string
+          feeding_plan_id?: string
+          id?: string
+          notes?: string | null
+          nouveau_pourcentage?: number
+          nouvelle_quantite?: number
+          poids_moyen_actuel?: number
+          raison_ajustement?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      feeding_plans: {
+        Row: {
+          cage_id: string
+          created_at: string
+          date_debut: string
+          date_fin: string | null
+          frequence_par_jour: number
+          id: string
+          notes: string | null
+          poids_corporel_total: number
+          pourcentage_poids_corporel: number
+          quantite_prevue_jour: number
+          statut: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          created_at?: string
+          date_debut?: string
+          date_fin?: string | null
+          frequence_par_jour?: number
+          id?: string
+          notes?: string | null
+          poids_corporel_total?: number
+          pourcentage_poids_corporel?: number
+          quantite_prevue_jour?: number
+          statut?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          created_at?: string
+          date_debut?: string
+          date_fin?: string | null
+          frequence_par_jour?: number
+          id?: string
+          notes?: string | null
+          poids_corporel_total?: number
+          pourcentage_poids_corporel?: number
+          quantite_prevue_jour?: number
+          statut?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feeding_sessions: {
         Row: {
           appetit: string
@@ -575,6 +731,54 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          data_contexte: Json | null
+          date_envoi: string | null
+          date_lu: string | null
+          envoye_email: boolean | null
+          envoye_push: boolean | null
+          id: string
+          message: string
+          priorite: string
+          statut: string
+          titre: string
+          type_notification: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_contexte?: Json | null
+          date_envoi?: string | null
+          date_lu?: string | null
+          envoye_email?: boolean | null
+          envoye_push?: boolean | null
+          id?: string
+          message: string
+          priorite?: string
+          statut?: string
+          titre: string
+          type_notification: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_contexte?: Json | null
+          date_envoi?: string | null
+          date_lu?: string | null
+          envoye_email?: boolean | null
+          envoye_push?: boolean | null
+          id?: string
+          message?: string
+          priorite?: string
+          statut?: string
+          titre?: string
+          type_notification?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           client_id: string
@@ -624,6 +828,60 @@ export type Database = {
           quantite_kg?: number
           statut?: string
           type_poisson?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      performance_targets: {
+        Row: {
+          cage_id: string
+          cout_revient_kg_cible: number
+          created_at: string
+          cycle_id: string | null
+          date_creation: string
+          duree_cycle_jours: number
+          fcr_cible: number
+          id: string
+          marge_beneficiaire_cible: number
+          notes: string | null
+          poids_moyen_cible: number
+          statut: string
+          taux_survie_cible: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cage_id: string
+          cout_revient_kg_cible: number
+          created_at?: string
+          cycle_id?: string | null
+          date_creation?: string
+          duree_cycle_jours?: number
+          fcr_cible?: number
+          id?: string
+          marge_beneficiaire_cible?: number
+          notes?: string | null
+          poids_moyen_cible: number
+          statut?: string
+          taux_survie_cible?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cage_id?: string
+          cout_revient_kg_cible?: number
+          created_at?: string
+          cycle_id?: string | null
+          date_creation?: string
+          duree_cycle_jours?: number
+          fcr_cible?: number
+          id?: string
+          marge_beneficiaire_cible?: number
+          notes?: string | null
+          poids_moyen_cible?: number
+          statut?: string
+          taux_survie_cible?: number
           updated_at?: string
           user_id?: string
         }
@@ -695,6 +953,54 @@ export type Database = {
           statut?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      production_predictions: {
+        Row: {
+          cage_id: string
+          created_at: string
+          date_prediction: string
+          horizon_jours: number
+          id: string
+          intervalle_confiance: number | null
+          parametres_calcul: Json | null
+          precision_reelle: number | null
+          statut: string
+          type_prediction: string
+          updated_at: string
+          user_id: string
+          valeur_predite: number
+        }
+        Insert: {
+          cage_id: string
+          created_at?: string
+          date_prediction?: string
+          horizon_jours: number
+          id?: string
+          intervalle_confiance?: number | null
+          parametres_calcul?: Json | null
+          precision_reelle?: number | null
+          statut?: string
+          type_prediction: string
+          updated_at?: string
+          user_id: string
+          valeur_predite: number
+        }
+        Update: {
+          cage_id?: string
+          created_at?: string
+          date_prediction?: string
+          horizon_jours?: number
+          id?: string
+          intervalle_confiance?: number | null
+          parametres_calcul?: Json | null
+          precision_reelle?: number | null
+          statut?: string
+          type_prediction?: string
+          updated_at?: string
+          user_id?: string
+          valeur_predite?: number
         }
         Relationships: []
       }
@@ -775,6 +1081,114 @@ export type Database = {
           },
         ]
       }
+      smart_alerts: {
+        Row: {
+          actions_effectuees: string[] | null
+          cage_id: string | null
+          created_at: string
+          date_detection: string
+          date_lecture: string | null
+          date_resolution: string | null
+          donnees_contexte: Json | null
+          id: string
+          impact_estime: number | null
+          message: string
+          niveau_criticite: string
+          recommandations: string[] | null
+          statut: string
+          titre: string
+          type_alerte: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actions_effectuees?: string[] | null
+          cage_id?: string | null
+          created_at?: string
+          date_detection?: string
+          date_lecture?: string | null
+          date_resolution?: string | null
+          donnees_contexte?: Json | null
+          id?: string
+          impact_estime?: number | null
+          message: string
+          niveau_criticite?: string
+          recommandations?: string[] | null
+          statut?: string
+          titre: string
+          type_alerte: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actions_effectuees?: string[] | null
+          cage_id?: string | null
+          created_at?: string
+          date_detection?: string
+          date_lecture?: string | null
+          date_resolution?: string | null
+          donnees_contexte?: Json | null
+          id?: string
+          impact_estime?: number | null
+          message?: string
+          niveau_criticite?: string
+          recommandations?: string[] | null
+          statut?: string
+          titre?: string
+          type_alerte?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sync_queue: {
+        Row: {
+          created_at: string
+          data_payload: Json
+          device_id: string | null
+          error_message: string | null
+          id: string
+          last_sync_attempt: string | null
+          operation: string
+          record_id: string
+          sync_attempts: number | null
+          synced: boolean | null
+          table_name: string
+          timestamp_local: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_payload: Json
+          device_id?: string | null
+          error_message?: string | null
+          id?: string
+          last_sync_attempt?: string | null
+          operation: string
+          record_id: string
+          sync_attempts?: number | null
+          synced?: boolean | null
+          table_name: string
+          timestamp_local: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_payload?: Json
+          device_id?: string | null
+          error_message?: string | null
+          id?: string
+          last_sync_attempt?: string | null
+          operation?: string
+          record_id?: string
+          sync_attempts?: number | null
+          synced?: boolean | null
+          table_name?: string
+          timestamp_local?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       water_quality: {
         Row: {
           cage_id: string
@@ -831,6 +1245,54 @@ export type Database = {
           },
         ]
       }
+      weekly_weighings: {
+        Row: {
+          biomasse_totale: number
+          cage_id: string
+          created_at: string
+          date_pesee: string
+          id: string
+          nombre_echantillons: number
+          observations: string | null
+          photos: string[] | null
+          poids_estime_total: number
+          poids_moyen_echantillon: number
+          taux_croissance_semaine: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          biomasse_totale: number
+          cage_id: string
+          created_at?: string
+          date_pesee?: string
+          id?: string
+          nombre_echantillons?: number
+          observations?: string | null
+          photos?: string[] | null
+          poids_estime_total: number
+          poids_moyen_echantillon: number
+          taux_croissance_semaine?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          biomasse_totale?: number
+          cage_id?: string
+          created_at?: string
+          date_pesee?: string
+          id?: string
+          nombre_echantillons?: number
+          observations?: string | null
+          photos?: string[] | null
+          poids_estime_total?: number
+          poids_moyen_echantillon?: number
+          taux_croissance_semaine?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -848,15 +1310,35 @@ export type Database = {
         Args: { cage_id_param: string }
         Returns: number
       }
+      calculate_cost_per_kg: {
+        Args: { cage_id_param: string }
+        Returns: number
+      }
       calculate_cycle_profitability: {
         Args: { cycle_id: string }
         Returns: number
+      }
+      calculate_feeding_plan: {
+        Args: { cage_id_param: string }
+        Returns: undefined
       }
       calculate_remaining_fish: {
         Args: { cage_id_param: string }
         Returns: number
       }
       generate_automatic_alerts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      generate_feeding_notifications: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      generate_production_predictions: {
+        Args: { cage_id_param: string }
+        Returns: undefined
+      }
+      generate_smart_alerts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
