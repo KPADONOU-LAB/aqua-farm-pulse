@@ -13,6 +13,10 @@ interface NewOrderModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
+  selectedClient?: {
+    id: string;
+    nom_entreprise: string;
+  } | null;
 }
 
 interface Client {
@@ -20,7 +24,7 @@ interface Client {
   nom_entreprise: string;
 }
 
-export const NewOrderModal = ({ open, onOpenChange, onSuccess }: NewOrderModalProps) => {
+export const NewOrderModal = ({ open, onOpenChange, onSuccess, selectedClient }: NewOrderModalProps) => {
   const [loading, setLoading] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [formData, setFormData] = useState({
@@ -39,8 +43,16 @@ export const NewOrderModal = ({ open, onOpenChange, onSuccess }: NewOrderModalPr
     if (open && user) {
       loadClients();
       generateOrderNumber();
+      
+      // Pré-sélectionner le client si fourni
+      if (selectedClient) {
+        setFormData(prev => ({
+          ...prev,
+          client_id: selectedClient.id
+        }));
+      }
     }
-  }, [open, user]);
+  }, [open, user, selectedClient]);
 
   const loadClients = async () => {
     if (!user) return;

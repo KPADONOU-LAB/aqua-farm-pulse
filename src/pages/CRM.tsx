@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useCRMData } from "@/hooks/useCRMData";
+import { useToast } from "@/hooks/use-toast";
 import { NewClientModal } from "@/components/modals/NewClientModal";
 import { NewOrderModal } from "@/components/modals/NewOrderModal";
 import { EditClientStatusModal } from "@/components/modals/EditClientStatusModal";
@@ -37,6 +38,7 @@ const CRM = () => {
     loading, 
     refreshData 
   } = useCRMData();
+  const { toast } = useToast();
 
   const handleNewClient = () => {
     setShowNewClientModal(false);
@@ -46,6 +48,25 @@ const CRM = () => {
   const handleNewOrder = () => {
     setShowNewOrderModal(false);
     refreshData();
+  };
+
+  const handleNewOrderForClient = (client: any) => {
+    setSelectedClient(client);
+    setShowNewOrderModal(true);
+  };
+
+  const handleContactClient = (client: any) => {
+    if (client.email) {
+      window.location.href = `mailto:${client.email}`;
+    } else if (client.telephone) {
+      window.location.href = `tel:${client.telephone}`;
+    } else {
+      toast({
+        title: "Information manquante",
+        description: "Aucune information de contact disponible pour ce client",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditStatus = (client: any) => {
@@ -290,10 +311,19 @@ const CRM = () => {
                     </div>
                   )}
                   <div className="flex gap-2 pt-2">
-                    <Button size="sm" variant="outline" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => handleContactClient(client)}
+                    >
                       Contacter
                     </Button>
-                    <Button size="sm" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleNewOrderForClient(client)}
+                    >
                       Nouvelle Commande
                     </Button>
                   </div>
@@ -423,6 +453,7 @@ const CRM = () => {
         open={showNewOrderModal}
         onOpenChange={setShowNewOrderModal}
         onSuccess={handleNewOrder}
+        selectedClient={selectedClient}
       />
       
       <EditClientStatusModal
