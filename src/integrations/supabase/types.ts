@@ -382,6 +382,93 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_dashboards: {
+        Row: {
+          configuration: Json
+          couleur: string | null
+          created_at: string
+          description: string | null
+          est_par_defaut: boolean | null
+          icone: string | null
+          id: string
+          nom_dashboard: string
+          ordre_affichage: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          configuration?: Json
+          couleur?: string | null
+          created_at?: string
+          description?: string | null
+          est_par_defaut?: boolean | null
+          icone?: string | null
+          id?: string
+          nom_dashboard: string
+          ordre_affichage?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          configuration?: Json
+          couleur?: string | null
+          created_at?: string
+          description?: string | null
+          est_par_defaut?: boolean | null
+          icone?: string | null
+          id?: string
+          nom_dashboard?: string
+          ordre_affichage?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dashboard_widgets: {
+        Row: {
+          categories: string[] | null
+          configuration: Json
+          created_at: string
+          description: string | null
+          est_public: boolean | null
+          icone: string | null
+          id: string
+          nom_widget: string
+          taille_defaut: string | null
+          type_widget: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          categories?: string[] | null
+          configuration?: Json
+          created_at?: string
+          description?: string | null
+          est_public?: boolean | null
+          icone?: string | null
+          id?: string
+          nom_widget: string
+          taille_defaut?: string | null
+          type_widget: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          categories?: string[] | null
+          configuration?: Json
+          created_at?: string
+          description?: string | null
+          est_public?: boolean | null
+          icone?: string | null
+          id?: string
+          nom_widget?: string
+          taille_defaut?: string | null
+          type_widget?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       feeding_adjustments: {
         Row: {
           ancien_pourcentage: number
