@@ -8,6 +8,7 @@ import { useCRMData } from "@/hooks/useCRMData";
 import { NewClientModal } from "@/components/modals/NewClientModal";
 import { NewOrderModal } from "@/components/modals/NewOrderModal";
 import { EditClientStatusModal } from "@/components/modals/EditClientStatusModal";
+import { EditClientModal } from "@/components/modals/EditClientModal";
 import { 
   Users, 
   ShoppingCart, 
@@ -25,6 +26,7 @@ const CRM = () => {
   const [showNewClientModal, setShowNewClientModal] = useState(false);
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
   const [showEditStatusModal, setShowEditStatusModal] = useState(false);
+  const [showEditClientModal, setShowEditClientModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -51,8 +53,19 @@ const CRM = () => {
     setShowEditStatusModal(true);
   };
 
+  const handleEditClient = (client: any) => {
+    setSelectedClient(client);
+    setShowEditClientModal(true);
+  };
+
   const handleStatusUpdated = () => {
     setShowEditStatusModal(false);
+    setSelectedClient(null);
+    refreshData();
+  };
+
+  const handleClientUpdated = () => {
+    setShowEditClientModal(false);
     setSelectedClient(null);
     refreshData();
   };
@@ -240,7 +253,7 @@ const CRM = () => {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleEditStatus(client)}
+                        onClick={() => handleEditClient(client)}
                         className="h-6 w-6 p-0"
                       >
                         <Edit className="h-3 w-3" />
@@ -416,6 +429,13 @@ const CRM = () => {
         open={showEditStatusModal}
         onOpenChange={setShowEditStatusModal}
         onSuccess={handleStatusUpdated}
+        client={selectedClient}
+      />
+
+      <EditClientModal
+        open={showEditClientModal}
+        onOpenChange={setShowEditClientModal}
+        onSuccess={handleClientUpdated}
         client={selectedClient}
       />
     </div>
