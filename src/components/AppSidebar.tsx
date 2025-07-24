@@ -11,7 +11,10 @@ import {
   Euro,
   Users,
   Menu,
-  LogOut
+  LogOut,
+  Brain,
+  TrendingUp,
+  Bell
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -39,7 +42,13 @@ const menuItems = [
   { title: "Ventes", url: "/sales", icon: ShoppingCart },
   { title: "Finance", url: "/finance", icon: Euro },
   { title: "CRM", url: "/crm", icon: Users },
+];
+
+const analyticsItems = [
   { title: "Rapports", url: "/reports", icon: BarChart3 },
+  { title: "Performance", url: "/performance", icon: TrendingUp },
+  { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
+  { title: "Alertes", url: "/alerts", icon: Bell },
 ];
 
 export function AppSidebar() {
@@ -79,6 +88,7 @@ export function AppSidebar() {
       </div>
 
       <SidebarContent className="px-2 py-4">
+        {/* Navigation principale */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2">
             {!collapsed && "Navigation"}
@@ -86,6 +96,32 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {menuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild className="h-12">
+                    <NavLink
+                      to={item.url}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${getNavClass(item.url)}`}
+                    >
+                      <item.icon className={`h-5 w-5 ${collapsed ? "mx-auto" : ""}`} />
+                      {!collapsed && (
+                        <span className="font-medium">{item.title}</span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Section Analytics */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2 mt-4">
+            {!collapsed && "Analytics"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {analyticsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="h-12">
                     <NavLink
