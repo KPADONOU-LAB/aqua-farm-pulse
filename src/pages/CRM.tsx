@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useCRMData } from "@/hooks/useCRMData";
 import { NewClientModal } from "@/components/modals/NewClientModal";
 import { NewOrderModal } from "@/components/modals/NewOrderModal";
+import { EditClientStatusModal } from "@/components/modals/EditClientStatusModal";
 import { 
   Users, 
   ShoppingCart, 
@@ -16,12 +17,15 @@ import {
   Calendar,
   Search,
   Filter,
-  Star
+  Star,
+  Edit
 } from "lucide-react";
 
 const CRM = () => {
   const [showNewClientModal, setShowNewClientModal] = useState(false);
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
+  const [showEditStatusModal, setShowEditStatusModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const { 
@@ -39,6 +43,17 @@ const CRM = () => {
 
   const handleNewOrder = () => {
     setShowNewOrderModal(false);
+    refreshData();
+  };
+
+  const handleEditStatus = (client: any) => {
+    setSelectedClient(client);
+    setShowEditStatusModal(true);
+  };
+
+  const handleStatusUpdated = () => {
+    setShowEditStatusModal(false);
+    setSelectedClient(null);
     refreshData();
   };
 
@@ -214,9 +229,23 @@ const CRM = () => {
                       {client.nom_entreprise}
                       {getTypeClientIcon(client.type_client)}
                     </CardTitle>
-                    <Badge variant={getStatusColor(client.statut)}>
-                      {client.statut}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge 
+                        variant={getStatusColor(client.statut)}
+                        className="cursor-pointer hover:opacity-80"
+                        onClick={() => handleEditStatus(client)}
+                      >
+                        {client.statut}
+                      </Badge>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleEditStatus(client)}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Edit className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
                   <CardDescription>
                     {client.contact_principal}
@@ -381,6 +410,13 @@ const CRM = () => {
         open={showNewOrderModal}
         onOpenChange={setShowNewOrderModal}
         onSuccess={handleNewOrder}
+      />
+      
+      <EditClientStatusModal
+        open={showEditStatusModal}
+        onOpenChange={setShowEditStatusModal}
+        onSuccess={handleStatusUpdated}
+        client={selectedClient}
       />
     </div>
   );
