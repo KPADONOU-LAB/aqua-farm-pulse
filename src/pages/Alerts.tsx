@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertTriangle, Bell, BellOff, CheckCircle, Droplets, Package, Heart, Coffee, Download, Search, Filter } from "lucide-react";
 import { useAlerts } from "@/hooks/useAlerts";
+import { NotificationCenter } from "@/components/NotificationCenter";
 import * as XLSX from "xlsx";
 
 const getAlertIcon = (type: string) => {
@@ -80,150 +82,163 @@ const Alerts = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Toutes les alertes</h1>
-        <p className="text-muted-foreground">Gérez et exportez vos alertes</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Alertes et notifications</h1>
+        <p className="text-muted-foreground">Gérez vos alertes et configurez vos notifications en temps réel</p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Filtres et recherche
-            </span>
-            <Button onClick={exportToExcel} className="flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              Exporter en Excel
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="lg:col-span-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  placeholder="Rechercher dans les alertes..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+      <Tabs defaultValue="alerts" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="alerts">Alertes actives</TabsTrigger>
+          <TabsTrigger value="notifications">Centre de notifications</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="alerts" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Filter className="h-5 w-5" />
+                  Filtres et recherche
+                </span>
+                <Button onClick={exportToExcel} className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Exporter en Excel
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="lg:col-span-2">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      placeholder="Rechercher dans les alertes..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                
+                <Select value={filterType} onValueChange={setFilterType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tous les types</SelectItem>
+                    <SelectItem value="water">Qualité eau</SelectItem>
+                    <SelectItem value="stock">Stock</SelectItem>
+                    <SelectItem value="health">Santé</SelectItem>
+                    <SelectItem value="feeding">Alimentation</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={filterSeverity} onValueChange={setFilterSeverity}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sévérité" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Toutes</SelectItem>
+                    <SelectItem value="critical">Critique</SelectItem>
+                    <SelectItem value="high">Élevée</SelectItem>
+                    <SelectItem value="medium">Moyenne</SelectItem>
+                    <SelectItem value="low">Faible</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tous</SelectItem>
+                    <SelectItem value="unacknowledged">Non lues</SelectItem>
+                    <SelectItem value="acknowledged">Lues</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
-            
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les types</SelectItem>
-                <SelectItem value="water">Qualité eau</SelectItem>
-                <SelectItem value="stock">Stock</SelectItem>
-                <SelectItem value="health">Santé</SelectItem>
-                <SelectItem value="feeding">Alimentation</SelectItem>
-              </SelectContent>
-            </Select>
+            </CardContent>
+          </Card>
 
-            <Select value={filterSeverity} onValueChange={setFilterSeverity}>
-              <SelectTrigger>
-                <SelectValue placeholder="Sévérité" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Toutes</SelectItem>
-                <SelectItem value="critical">Critique</SelectItem>
-                <SelectItem value="high">Élevée</SelectItem>
-                <SelectItem value="medium">Moyenne</SelectItem>
-                <SelectItem value="low">Faible</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Statut" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="unacknowledged">Non lues</SelectItem>
-                <SelectItem value="acknowledged">Lues</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            Alertes ({filteredAlerts.length})
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {filteredAlerts.length === 0 ? (
-              <div className="text-center py-8">
-                <BellOff className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
-                <p className="text-muted-foreground text-lg">Aucune alerte trouvée</p>
-                <p className="text-muted-foreground/80 text-sm">Ajustez vos filtres pour voir plus d'alertes</p>
-              </div>
-            ) : (
-              filteredAlerts.map((alert) => {
-                const IconComponent = getAlertIcon(alert.type);
-                return (
-                  <div
-                    key={alert.id}
-                    className={`p-4 rounded-lg border ${getSeverityBgColor(alert.severity)} ${
-                      alert.acknowledged ? 'opacity-60' : ''
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="p-2 bg-primary/20 rounded-lg">
-                        <IconComponent className="h-5 w-5 text-primary" />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="text-foreground font-medium">{alert.title}</h4>
-                          <Badge className={getSeverityColor(alert.severity)}>
-                            {alert.severity}
-                          </Badge>
-                          {alert.acknowledged && (
-                            <Badge variant="outline" className="text-xs">
-                              Lu
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <p className="text-muted-foreground text-sm mb-3">{alert.description}</p>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground/80">
-                            <span>Type: {alert.type}</span>
-                            {alert.cage_name && <span>📍 {alert.cage_name}</span>}
-                            <span>{new Date(alert.created_at).toLocaleString('fr-FR')}</span>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5" />
+                Alertes ({filteredAlerts.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {filteredAlerts.length === 0 ? (
+                  <div className="text-center py-8">
+                    <BellOff className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
+                    <p className="text-muted-foreground text-lg">Aucune alerte trouvée</p>
+                    <p className="text-muted-foreground/80 text-sm">Ajustez vos filtres pour voir plus d'alertes</p>
+                  </div>
+                ) : (
+                  filteredAlerts.map((alert) => {
+                    const IconComponent = getAlertIcon(alert.type);
+                    return (
+                      <div
+                        key={alert.id}
+                        className={`p-4 rounded-lg border ${getSeverityBgColor(alert.severity)} ${
+                          alert.acknowledged ? 'opacity-60' : ''
+                        }`}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="p-2 bg-primary/20 rounded-lg">
+                            <IconComponent className="h-5 w-5 text-primary" />
                           </div>
                           
-                          {!alert.acknowledged && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => acknowledgeAlert(alert.id)}
-                              className="h-8 px-3 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
-                            >
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Marquer comme lu
-                            </Button>
-                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="text-foreground font-medium">{alert.title}</h4>
+                              <Badge className={getSeverityColor(alert.severity)}>
+                                {alert.severity}
+                              </Badge>
+                              {alert.acknowledged && (
+                                <Badge variant="outline" className="text-xs">
+                                  Lu
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            <p className="text-muted-foreground text-sm mb-3">{alert.description}</p>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground/80">
+                                <span>Type: {alert.type}</span>
+                                {alert.cage_name && <span>📍 {alert.cage_name}</span>}
+                                <span>{new Date(alert.created_at).toLocaleString('fr-FR')}</span>
+                              </div>
+                              
+                              {!alert.acknowledged && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => acknowledgeAlert(alert.id)}
+                                  className="h-8 px-3 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
+                                >
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  Marquer comme lu
+                                </Button>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </CardContent>
-      </Card>
+                    );
+                  })
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="notifications" className="space-y-6">
+          <NotificationCenter />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
