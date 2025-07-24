@@ -17,7 +17,7 @@ const PerformanceAnalysis = () => {
   useEffect(() => {
     const loadComparisons = async () => {
       const results = [];
-      for (const cage of cages.filter(c => c.statut === 'en_production')) {
+      for (const cage of cages.filter(c => c.statut === 'actif')) {
         const comparison = await calculatePerformanceComparison(cage.id);
         if (comparison) {
           results.push({ ...comparison, cageName: cage.nom });
