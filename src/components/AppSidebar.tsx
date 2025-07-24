@@ -48,6 +48,7 @@ const menuItems = [
 const analyticsItems = [
   { title: "Rapports", url: "/reports", icon: BarChart3 },
   { title: "Rapports Avancés", url: "/advanced-reports", icon: FileText },
+  { title: "Notifications IA", url: "/smart-notifications", icon: Bell },
   { title: "Performance", url: "/performance", icon: TrendingUp },
   { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
   { title: "Alertes", url: "/alerts", icon: Bell },
