@@ -1,9 +1,16 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Download, Calendar, TrendingUp, Fish, Euro, Droplets } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { BarChart3, Download, Calendar as CalendarIcon, TrendingUp, Fish, Euro, Droplets } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { useToast } from "@/hooks/use-toast";
+import type { DateRange } from "react-day-picker";
 
 
 const performanceData = [
@@ -31,12 +38,110 @@ const costBreakdown = [
 ];
 
 const Reports = () => {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(new Date().getFullYear(), new Date().getMonth() - 5, 1),
+    to: new Date()
+  });
+  const { toast } = useToast();
+
   const totalProfit = monthlyProfit.reduce((acc, month) => acc + month.profit, 0);
   const avgFCR = performanceData.filter(c => c.fcr > 0).reduce((acc, cage) => acc + cage.fcr, 0) / 
                  performanceData.filter(c => c.fcr > 0).length;
   const avgSurvival = performanceData.filter(c => c.survie > 0).reduce((acc, cage) => acc + cage.survie, 0) / 
                      performanceData.filter(c => c.survie > 0).length;
   const totalRevenue = monthlyProfit.reduce((acc, month) => acc + month.revenus, 0);
+
+  const handleExportPDF = () => {
+    // Créer le contenu HTML pour le PDF
+    const printContent = document.createElement('div');
+    printContent.innerHTML = `
+      <html>
+        <head>
+          <title>Rapport de Performance - ${format(new Date(), 'dd/MM/yyyy', { locale: fr })}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+            .kpi-card { border: 1px solid #ccc; padding: 15px; text-align: center; }
+            .performance-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+            .performance-table th, .performance-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+            .performance-table th { background-color: #f5f5f5; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Rapport de Performance</h1>
+            <p>Période: ${dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy', { locale: fr }) : 'N/A'} - ${dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy', { locale: fr }) : 'N/A'}</p>
+            <p>Généré le ${format(new Date(), 'dd/MM/yyyy à HH:mm', { locale: fr })}</p>
+          </div>
+          
+          <h2>Indicateurs Clés</h2>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <h3>Profit Total</h3>
+              <p>€${(totalProfit / 1000).toFixed(1)}k</p>
+            </div>
+            <div class="kpi-card">
+              <h3>FCR Moyen</h3>
+              <p>${avgFCR.toFixed(1)}</p>
+            </div>
+            <div class="kpi-card">
+              <h3>Taux de Survie</h3>
+              <p>${avgSurvival.toFixed(1)}%</p>
+            </div>
+            <div class="kpi-card">
+              <h3>CA Total</h3>
+              <p>€${(totalRevenue / 1000).toFixed(1)}k</p>
+            </div>
+          </div>
+          
+          <h2>Performance par Cage</h2>
+          <table class="performance-table">
+            <thead>
+              <tr>
+                <th>Cage</th>
+                <th>FCR</th>
+                <th>Taux de Survie (%)</th>
+                <th>Croissance (kg)</th>
+                <th>Revenus (€)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${performanceData.filter(cage => cage.fcr > 0).map(cage => `
+                <tr>
+                  <td>${cage.cage}</td>
+                  <td>${cage.fcr}</td>
+                  <td>${cage.survie}%</td>
+                  <td>${cage.croissance}</td>
+                  <td>€${cage.revenus.toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `;
+
+    // Ouvrir une nouvelle fenêtre pour l'impression
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(printContent.innerHTML);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      
+      toast({
+        title: "Export PDF",
+        description: "Le rapport a été ouvert dans une nouvelle fenêtre pour impression/sauvegarde PDF.",
+      });
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'ouvrir la fenêtre d'impression. Vérifiez les paramètres de votre navigateur.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen p-6 animate-fade-in">
@@ -51,11 +156,36 @@ const Reports = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-            <Calendar className="mr-2 h-4 w-4" />
-            Période
-          </Button>
-          <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dateRange?.from && dateRange?.to ? (
+                  <>
+                    {format(dateRange.from, "dd/MM/yy", { locale: fr })} - {format(dateRange.to, "dd/MM/yy", { locale: fr })}
+                  </>
+                ) : (
+                  "Période"
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={dateRange.from}
+                selected={dateRange}
+                onSelect={setDateRange}
+                numberOfMonths={2}
+                className="pointer-events-auto"
+                locale={fr}
+              />
+            </PopoverContent>
+          </Popover>
+          <Button 
+            className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg"
+            onClick={handleExportPDF}
+          >
             <Download className="mr-2 h-4 w-4" />
             Exporter PDF
           </Button>
