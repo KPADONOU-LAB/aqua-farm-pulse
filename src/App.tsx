@@ -12,6 +12,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import Cages from "./pages/Cages";
 import Feeding from "./pages/Feeding";
 import WaterQuality from "./pages/WaterQuality";
