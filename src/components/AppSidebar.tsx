@@ -14,7 +14,8 @@ import {
   LogOut,
   Brain,
   TrendingUp,
-  Bell
+  Bell,
+  FileText
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -46,6 +47,7 @@ const menuItems = [
 
 const analyticsItems = [
   { title: "Rapports", url: "/reports", icon: BarChart3 },
+  { title: "Rapports Avancés", url: "/advanced-reports", icon: FileText },
   { title: "Performance", url: "/performance", icon: TrendingUp },
   { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
   { title: "Alertes", url: "/alerts", icon: Bell },

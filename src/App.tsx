@@ -25,7 +25,7 @@ import Alerts from "./pages/Alerts";
 import Predictions from "./pages/Predictions";
 import SmartAlerts from "./pages/SmartAlerts";
 import PerformanceAnalysis from "./pages/PerformanceAnalysis";
-import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import AdvancedReports from "./pages/AdvancedReports";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -70,7 +70,7 @@ const App = () => (
                            <Route path="/predictions" element={<Predictions />} />
                            <Route path="/smart-alerts" element={<SmartAlerts />} />
                            <Route path="/performance" element={<PerformanceAnalysis />} />
-                           <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
+                           <Route path="/advanced-reports" element={<AdvancedReports />} />
                            <Route path="*" element={<NotFound />} />
                          </Routes>
                         </main>
