@@ -7,7 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewFeedingModal from "@/components/modals/NewFeedingModal";
 import { useFeedingData } from "@/hooks/useFeedingData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HomeButton } from "@/components/HomeButton";
+
 
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
@@ -61,7 +61,6 @@ const Feeding = () => {
           </p>
         </div>
         <div className="flex gap-3 items-center">
-          <HomeButton />
           <NewFeedingModal />
         </div>
       </div>

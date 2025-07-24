@@ -13,7 +13,7 @@ import CageHistoryModal from "@/components/modals/CageHistoryModal";
 import { CageDailyHistoryModal } from "@/components/modals/CageDailyHistoryModal";
 import { useCageMetrics } from "@/hooks/useCageMetrics";
 import * as XLSX from 'xlsx';
-import { HomeButton } from "@/components/HomeButton";
+
 
 
 const getStatutColor = (statut: string) => {
@@ -173,7 +173,6 @@ const Cages = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <HomeButton />
           <Button
             onClick={exportAllHistory}
             variant="outline"

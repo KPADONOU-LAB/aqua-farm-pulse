@@ -10,7 +10,7 @@ import NewSaleModal from "@/components/modals/NewSaleModal";
 import { useSalesData } from "@/hooks/useSalesData";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { HomeButton } from "@/components/HomeButton";
+
 
 const monthlyRevenue = [
   { mois: 'Jan', revenus: 25400 },
@@ -66,7 +66,6 @@ const Sales = () => {
           </p>
         </div>
         <div className="flex gap-3 items-center">
-          <HomeButton />
           <NewSaleModal />
         </div>
       </div>

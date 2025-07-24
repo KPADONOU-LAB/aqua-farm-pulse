@@ -7,7 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewInventoryModal from "@/components/modals/NewInventoryModal";
 import { useInventoryData } from "@/hooks/useInventoryData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HomeButton } from "@/components/HomeButton";
+
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -71,7 +71,6 @@ const Inventory = () => {
           </p>
         </div>
         <div className="flex gap-3 items-center">
-          <HomeButton />
           <NewInventoryModal />
         </div>
       </div>
