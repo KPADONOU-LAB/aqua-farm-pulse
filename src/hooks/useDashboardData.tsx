@@ -58,7 +58,7 @@ export const useDashboardData = () => {
         .select('*')
         .eq('user_id', user.id);
 
-      const cagesActives = cages?.filter(cage => cage.statut === 'actif').length || 0;
+      const cagesActives = cages?.filter(cage => cage.statut === 'en_production').length || 0;
       const cagesVides = cages?.filter(cage => cage.statut === 'vide').length || 0;
       const totalPoissons = cages?.reduce((sum, cage) => sum + (cage.nombre_poissons || 0), 0) || 0;
       const poidsMoyenGlobal = cages && cages.length > 0 
@@ -132,7 +132,7 @@ export const useDashboardData = () => {
           .from('cages')
           .select('poids_moyen, nombre_poissons')
           .eq('user_id', user.id)
-          .eq('statut', 'actif');
+          .eq('statut', 'en_production');
 
         // Calculer le poids moyen pour ce mois
         const poidsMoyen = cageData && cageData.length > 0
