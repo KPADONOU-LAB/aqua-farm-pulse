@@ -21,7 +21,7 @@ const AdvancedAnalytics = () => {
   const [selectedCage, setSelectedCage] = useState<string>('');
   const { cages } = useCageMetrics();
 
-  const activeCages = cages.filter(cage => cage.statut === 'actif');
+  const activeCages = cages.filter(cage => cage.statut === 'en_production');
 
   return (
     <div className="min-h-screen p-6 animate-fade-in">

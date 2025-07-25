@@ -162,62 +162,67 @@ export const useAdvancedReports = () => {
     const analyses: CycleAnalysis[] = [];
 
     for (const cycle of cycles) {
-      // Récupérer les infos de la cage
-      const { data: cage } = await supabase
-        .from('cages')
-        .select('nom, nombre_poissons, poids_moyen, fcr')
-        .eq('id', cycle.cage_id)
-        .single();
+      try {
+        // Récupérer les infos de la cage
+        const { data: cage } = await supabase
+          .from('cages')
+          .select('nom, nombre_poissons, poids_moyen, fcr')
+          .eq('id', cycle.cage_id)
+          .single();
 
-      // Calculer les coûts totaux du cycle
-      const { data: costs } = await supabase
-        .from('cost_tracking')
-        .select('montant')
-        .eq('cycle_id', cycle.id);
+        // Calculer les coûts totaux du cycle
+        const { data: costs } = await supabase
+          .from('cost_tracking')
+          .select('montant')
+          .eq('cycle_id', cycle.id);
 
-      const totalCosts = costs?.reduce((sum, cost) => sum + cost.montant, 0) || 0;
+        const totalCosts = costs?.reduce((sum, cost) => sum + cost.montant, 0) || 0;
 
-      // Calculer les revenus du cycle
-      const { data: sales } = await supabase
-        .from('sales')
-        .select('prix_total')
-        .eq('cage_id', cycle.cage_id)
-        .gte('date_vente', cycle.date_debut)
-        .lte('date_vente', cycle.date_fin_reelle || new Date().toISOString().split('T')[0]);
+        // Calculer les revenus du cycle
+        const { data: sales } = await supabase
+          .from('sales')
+          .select('prix_total')
+          .eq('cage_id', cycle.cage_id)
+          .gte('date_vente', cycle.date_debut)
+          .lte('date_vente', cycle.date_fin_reelle || new Date().toISOString().split('T')[0]);
 
-      const revenue = sales?.reduce((sum, sale) => sum + sale.prix_total, 0) || 0;
+        const revenue = sales?.reduce((sum, sale) => sum + sale.prix_total, 0) || 0;
 
-      // Calculer le taux de survie
-      const { data: mortality } = await supabase
-        .from('health_observations')
-        .select('mortalite')
-        .eq('cage_id', cycle.cage_id)
-        .gte('date_observation', cycle.date_debut);
+        // Calculer le taux de survie
+        const { data: mortality } = await supabase
+          .from('health_observations')
+          .select('mortalite')
+          .eq('cage_id', cycle.cage_id)
+          .gte('date_observation', cycle.date_debut);
 
-      const totalMortality = mortality?.reduce((sum, obs) => sum + obs.mortalite, 0) || 0;
-      const survivalRate = cycle.nombre_poissons_initial > 0 
-        ? ((cycle.nombre_poissons_initial - totalMortality) / cycle.nombre_poissons_initial) * 100 
-        : 0;
+        const totalMortality = mortality?.reduce((sum, obs) => sum + obs.mortalite, 0) || 0;
+        const survivalRate = cycle.nombre_poissons_initial > 0 
+          ? ((cycle.nombre_poissons_initial - totalMortality) / cycle.nombre_poissons_initial) * 100 
+          : 0;
 
-      const profit = revenue - totalCosts;
-      const roi = totalCosts > 0 ? (profit / totalCosts) * 100 : 0;
+        const profit = revenue - totalCosts;
+        const roi = totalCosts > 0 ? (profit / totalCosts) * 100 : 0;
 
-      analyses.push({
-        cycleId: cycle.id,
-        cageName: cage?.nom || `Cage ${cycle.cage_id.slice(-4)}`,
-        startDate: cycle.date_debut,
-        endDate: cycle.date_fin_reelle,
-        initialStock: cycle.nombre_poissons_initial,
-        currentStock: cycle.nombre_poissons_final || cage?.nombre_poissons || 0,
-        totalCosts,
-        revenue,
-        profit,
-        roi,
-        fcr: cage?.fcr || 0,
-        survivalRate,
-        avgWeight: cycle.poids_final_moyen || cage?.poids_moyen || 0,
-        status: cycle.statut === 'termine' ? 'completed' : 'active'
-      });
+        analyses.push({
+          cycleId: cycle.id,
+          cageName: cage?.nom || `Cage ${cycle.cage_id.slice(-4)}`,
+          startDate: cycle.date_debut,
+          endDate: cycle.date_fin_reelle,
+          initialStock: cycle.nombre_poissons_initial,
+          currentStock: cycle.nombre_poissons_final || cage?.nombre_poissons || 0,
+          totalCosts,
+          revenue,
+          profit,
+          roi,
+          fcr: cage?.fcr || 0,
+          survivalRate,
+          avgWeight: cycle.poids_final_moyen || cage?.poids_moyen || 0,
+          status: cycle.statut === 'termine' ? 'completed' : 'active'
+        });
+      } catch (error) {
+        console.error(`Erreur lors de l'analyse du cycle ${cycle.id}:`, error);
+        // Continuer avec les autres cycles même si un échoue
+      }
     }
 
     setCycleAnalyses(analyses);
