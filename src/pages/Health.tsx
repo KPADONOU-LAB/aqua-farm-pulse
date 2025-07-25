@@ -75,7 +75,7 @@ const Health = () => {
   const tauxSurvieGlobal = survivalData[survivalData.length - 1]?.taux || 0;
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in">
+    <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
