@@ -144,9 +144,9 @@ export default {
 				'wave': 'wave 3s ease-in-out infinite'
 			},
 			backgroundImage: {
-				'ocean-gradient': 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%)',
-				'aqua-gradient': 'linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%)',
-				'underwater-gradient': 'linear-gradient(180deg, #0ea5e9 0%, #0284c7 50%, #075985 100%)'
+				'ocean-gradient': 'linear-gradient(135deg, #7dd3fc 0%, #38bdf8 50%, #0ea5e9 100%)',
+				'aqua-gradient': 'linear-gradient(135deg, #6ee7b7 0%, #34d399 50%, #10b981 100%)',
+				'underwater-gradient': 'linear-gradient(180deg, #7dd3fc 0%, #38bdf8 50%, #0ea5e9 100%)'
 			}
 		}
 	},

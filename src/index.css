@@ -109,7 +109,7 @@ All colors MUST be HSL.
   }
 
   .stat-card {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105;
+    @apply bg-card backdrop-blur-sm border border-border shadow-lg rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:scale-105;
   }
 
   .glass-effect {
