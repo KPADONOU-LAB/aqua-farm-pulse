@@ -35,6 +35,13 @@ export const useSmartRecommendations = () => {
   const [filters, setFilters] = useState<RecommendationFilters>({});
   const { user } = useAuth();
 
+  // Fonction helper pour générer des dates valides
+  const addDaysToDate = (days: number): string => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date.toISOString();
+  };
+
   const generateRecommendations = async () => {
     if (!user) return;
 
@@ -108,7 +115,7 @@ export const useSmartRecommendations = () => {
             implementation_difficulty: 'easy',
             cost_estimate: 0,
             roi_estimate: 1500,
-            deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+            deadline: addDaysToDate(7),
             created_at: new Date().toISOString()
           });
         }
@@ -135,7 +142,7 @@ export const useSmartRecommendations = () => {
             implementation_difficulty: 'medium',
             cost_estimate: 200,
             roi_estimate: 3000,
-            deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+            deadline: addDaysToDate(2),
             created_at: new Date().toISOString()
           });
         }
@@ -162,7 +169,7 @@ export const useSmartRecommendations = () => {
             implementation_difficulty: 'medium',
             cost_estimate: 500,
             roi_estimate: 2000,
-            deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+            deadline: addDaysToDate(14),
             created_at: new Date().toISOString()
           });
         }
@@ -228,7 +235,7 @@ export const useSmartRecommendations = () => {
     setRecommendations(prev => 
       prev.map(rec => 
         rec.id === recommendationId 
-          ? { ...rec, deadline: new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString() }
+          ? { ...rec, deadline: addDaysToDate(days) }
           : rec
       )
     );

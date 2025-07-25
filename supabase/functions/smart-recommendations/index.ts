@@ -200,6 +200,13 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
 function generateFallbackRecommendations(userData: any): SmartRecommendation[] {
   const recommendations: SmartRecommendation[] = [];
   const now = new Date().toISOString();
+  
+  // Fonction helper pour générer des dates valides
+  const addDaysToDate = (days: number): string => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date.toISOString();
+  };
 
   for (const cage of userData.cages) {
     // FCR élevé
@@ -224,7 +231,7 @@ function generateFallbackRecommendations(userData: any): SmartRecommendation[] {
         implementation_difficulty: 'easy',
         cost_estimate: 0,
         roi_estimate: 1500,
-        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        deadline: addDaysToDate(7),
         created_at: now
       });
     }
@@ -251,7 +258,7 @@ function generateFallbackRecommendations(userData: any): SmartRecommendation[] {
         implementation_difficulty: 'medium',
         cost_estimate: 200,
         roi_estimate: 3000,
-        deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        deadline: addDaysToDate(2),
         created_at: now
       });
     }
@@ -278,7 +285,7 @@ function generateFallbackRecommendations(userData: any): SmartRecommendation[] {
         implementation_difficulty: 'medium',
         cost_estimate: 500,
         roi_estimate: 2000,
-        deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        deadline: addDaysToDate(14),
         created_at: now
       });
     }

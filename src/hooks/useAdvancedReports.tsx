@@ -229,6 +229,13 @@ export const useAdvancedReports = () => {
   };
 
   const loadAutomatedConfigs = async () => {
+    // Fonction helper pour générer des dates valides
+    const addDaysToDate = (days: number): string => {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.toISOString();
+    };
+    
     // Configurations par défaut (sera stocké en base plus tard)
     const defaultConfigs: AutomatedReportConfig[] = [
       {
@@ -237,7 +244,7 @@ export const useAdvancedReports = () => {
         type: 'daily',
         sections: ['feeding', 'water_quality', 'mortality'],
         recipients: ['manager@ferme.com'],
-        nextGeneration: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        nextGeneration: addDaysToDate(1),
         enabled: true
       },
       {
@@ -246,7 +253,7 @@ export const useAdvancedReports = () => {
         type: 'weekly',
         sections: ['performance', 'fcr_analysis', 'feeding_efficiency'],
         recipients: ['technique@ferme.com'],
-        nextGeneration: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        nextGeneration: addDaysToDate(7),
         enabled: true
       },
       {
@@ -255,7 +262,7 @@ export const useAdvancedReports = () => {
         type: 'monthly',
         sections: ['financial_summary', 'cost_analysis', 'profitability', 'forecasts'],
         recipients: ['direction@ferme.com', 'comptable@ferme.com'],
-        nextGeneration: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        nextGeneration: addDaysToDate(30),
         enabled: true
       }
     ];
