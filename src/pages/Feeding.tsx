@@ -49,7 +49,7 @@ const Feeding = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in bg-gradient-to-br from-cyan-100 via-blue-50 to-cyan-50">
+    <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
