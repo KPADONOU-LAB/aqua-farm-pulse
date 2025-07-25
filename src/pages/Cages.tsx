@@ -188,7 +188,7 @@ const Cages = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-8 animate-fade-in">
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-muted/30">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
