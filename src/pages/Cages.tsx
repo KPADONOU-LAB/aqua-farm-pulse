@@ -18,10 +18,10 @@ import * as XLSX from 'xlsx';
 
 const getStatutColor = (statut: string) => {
   switch (statut) {
-    case 'actif': return 'bg-success text-success-foreground border-success/50';
-    case 'vide': return 'bg-muted text-muted-foreground border-muted';
-    case 'maintenance': return 'bg-warning text-warning-foreground border-warning/50';
-    default: return 'bg-secondary text-secondary-foreground border-secondary';
+    case 'actif': return 'bg-green-100 text-green-800 border-green-200';
+    case 'vide': return 'bg-card text-muted-foreground border-border';
+    case 'maintenance': return 'bg-orange-100 text-orange-800 border-orange-200';
+    default: return 'bg-card text-muted-foreground border-border';
   }
 };
 
@@ -214,43 +214,43 @@ const Cages = () => {
 
       {/* Statistiques Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="hover-scale">
+        <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Cages actives</CardTitle>
-            <Fish className="h-4 w-4 text-primary" />
+            <CardTitle className="text-sm font-medium text-ocean-700">Cages actives</CardTitle>
+            <Fish className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-ocean-800">
               {cages.filter(c => c.statut === 'actif').length}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-ocean-600">
               Sur {cages.length} total
             </p>
           </CardContent>
         </Card>
 
-        <Card className="hover-scale">
+        <Card className="stat-card aqua-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total poissons</CardTitle>
-            <Users className="h-4 w-4 text-primary" />
+            <CardTitle className="text-sm font-medium text-aqua-700">Total poissons</CardTitle>
+            <Users className="h-5 w-5 text-aqua-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-aqua-800">
               {cages.reduce((acc, cage) => acc + cage.nombre_poissons, 0).toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-aqua-600">
               Poissons en élevage
             </p>
           </CardContent>
         </Card>
 
-        <Card className="hover-scale">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Poids moyen</CardTitle>
-            <Weight className="h-4 w-4 text-primary" />
+            <CardTitle className="text-sm font-medium text-foreground">Poids moyen</CardTitle>
+            <Weight className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {cages.filter(c => c.statut === 'actif').length > 0 ? (
                 (cages
                   .filter(c => c.statut === 'actif')
@@ -265,13 +265,13 @@ const Cages = () => {
           </CardContent>
         </Card>
 
-        <Card className="hover-scale">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">FCR moyen</CardTitle>
-            <Activity className="h-4 w-4 text-primary" />
+            <CardTitle className="text-sm font-medium text-foreground">FCR moyen</CardTitle>
+            <Activity className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {cages.filter(c => c.statut === 'actif').length > 0 ? (
                 (cages
                   .filter(c => c.statut === 'actif')
@@ -377,8 +377,8 @@ const Cages = () => {
                           </div>
                         </div>
                         
-                        {/* Détails de la cage */}
-                        <div className="rounded-lg bg-muted/50 p-4 space-y-2">
+                         {/* Détails de la cage */}
+                        <div className="rounded-lg bg-card/50 backdrop-blur-sm border border-border/20 p-4 space-y-2">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Poissons restants</span>
                             <span className="font-semibold">{cage.nombre_poissons.toLocaleString()}</span>
