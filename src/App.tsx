@@ -28,6 +28,7 @@ import SmartAlerts from "./pages/SmartAlerts";
 import PerformanceAnalysis from "./pages/PerformanceAnalysis";
 import AdvancedReports from "./pages/AdvancedReports";
 import SmartNotifications from "./pages/SmartNotifications";
+import SmartRecommendations from "./pages/SmartRecommendations";
 import CustomDashboards from "./pages/CustomDashboards";
 import NotFound from "./pages/NotFound";
 
@@ -72,7 +73,8 @@ const App = () => (
                            <Route path="/predictions" element={<Predictions />} />
                            <Route path="/smart-alerts" element={<SmartAlerts />} />
                            <Route path="/performance" element={<PerformanceAnalysis />} />
-                            <Route path="/smart-notifications" element={<SmartNotifications />} />
+                    <Route path="/smart-notifications" element={<SmartNotifications />} />
+                    <Route path="/smart-recommendations" element={<SmartRecommendations />} />
                             <Route path="/custom-dashboards" element={<CustomDashboards />} />
                             <Route path="*" element={<NotFound />} />
                          </Routes>
