@@ -169,7 +169,16 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
     const data = await response.json();
+    
+    if (!data.choices || data.choices.length === 0) {
+      throw new Error('No choices returned from OpenAI API');
+    }
+    
     const aiResponse = data.choices[0].message.content;
     
     try {
