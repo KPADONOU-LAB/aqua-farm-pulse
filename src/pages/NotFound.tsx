@@ -15,20 +15,21 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-underwater-gradient p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-primary/80 p-6">
       <div className="text-center max-w-md">
         <div className="mb-8">
-          <Fish className="h-24 w-24 text-white/60 mx-auto mb-4 animate-wave" />
-          <h1 className="text-6xl font-bold text-white mb-4">404</h1>
-          <h2 className="text-2xl font-semibold text-white mb-2">Page introuvable</h2>
-          <p className="text-white/80 text-lg mb-6">
+          <Fish className="h-24 w-24 text-primary-foreground/60 mx-auto mb-4" />
+          <h1 className="text-6xl font-bold text-primary-foreground mb-4">404</h1>
+          <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Page introuvable</h2>
+          <p className="text-primary-foreground/80 text-lg mb-6">
             Cette page semble avoir pris la fuite comme un poisson ! 🐟
           </p>
         </div>
         
         <Button 
           onClick={() => window.location.href = '/'} 
-          className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg"
+          variant="secondary"
+          className="shadow-lg"
         >
           <Home className="mr-2 h-4 w-4" />
           Retour au tableau de bord
