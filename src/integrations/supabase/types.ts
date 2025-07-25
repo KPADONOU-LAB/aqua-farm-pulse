@@ -1413,20 +1413,16 @@ export type Database = {
         Args: { cage_id_param: string }
         Returns: number
       }
-      generate_automatic_alerts: {
+      daily_maintenance: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
-      generate_feeding_notifications: {
+      generate_intelligent_alerts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
       generate_production_predictions: {
         Args: { cage_id_param: string }
-        Returns: undefined
-      }
-      generate_smart_alerts: {
-        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       get_cage_daily_history: {
@@ -1439,6 +1435,10 @@ export type Database = {
           ventes: Json
           finance: Json
         }[]
+      }
+      update_all_cage_metrics: {
+        Args: { cage_id_param: string }
+        Returns: Json
       }
     }
     Enums: {

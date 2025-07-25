@@ -58,7 +58,7 @@ export const useSmartAlerts = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase.rpc('generate_smart_alerts');
+      const { error } = await supabase.rpc('generate_intelligent_alerts');
       if (error) throw error;
       
       toast.success('Alertes intelligentes générées');
