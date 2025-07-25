@@ -79,10 +79,10 @@ const Health = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold text-black mb-2">
             Santé des poissons
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-black/80 text-lg">
             Surveillance sanitaire et interventions vétérinaires
           </p>
         </div>
