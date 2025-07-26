@@ -26,13 +26,13 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in">
+    <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2">
+        <h1 className="text-4xl font-bold text-black mb-2">
           Tableau de bord
         </h1>
-        <p className="text-white/80 text-lg">
+        <p className="text-black/80 text-lg">
           Vue d'ensemble de votre ferme piscicole
         </p>
         <div className="flex items-center gap-2 mt-2 text-white/60">

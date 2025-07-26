@@ -142,7 +142,7 @@ const Health = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <Card className="glass-effect">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-black flex items-center gap-2">
               <TrendingDown className="h-5 w-5" />
               Mortalité hebdomadaire
             </CardTitle>
@@ -168,7 +168,7 @@ const Health = () => {
 
         <Card className="glass-effect">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-black flex items-center gap-2">
               <Activity className="h-5 w-5" />
               Évolution taux de survie (%)
             </CardTitle>
@@ -200,9 +200,9 @@ const Health = () => {
       </div>
 
       {/* Observations récentes */}
-      <Card className="glass-effect">
+        <Card className="glass-effect">
         <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
+          <CardTitle className="text-black flex items-center gap-2">
             <Heart className="h-5 w-5" />
             Observations sanitaires récentes
           </CardTitle>
