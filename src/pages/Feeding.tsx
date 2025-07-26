@@ -49,26 +49,25 @@ const Feeding = () => {
         </div>
       </div>;
   }
-  return <div className="min-h-screen p-6 animate-fade-in" style={{
-    backgroundColor: '#C8E9F6'
-  }}>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-black mb-2">
-            Suivi alimentaire
-          </h1>
-          <p className="text-black/80 text-lg">
-            Gestion et suivi des sessions d'alimentation
-          </p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <NewFeedingModal />
+  return (
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Suivi alimentaire</h1>
+            <p className="text-muted-foreground">
+              Gestion et suivi des sessions d'alimentation
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <NewFeedingModal />
+          </div>
         </div>
       </div>
 
-      {/* Stats du jour */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {/* Statistiques Overview */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-ocean-700">Sessions aujourd'hui</CardTitle>
@@ -89,25 +88,25 @@ const Feeding = () => {
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Prochaine session</CardTitle>
-            <Clock className="h-5 w-5 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Prochaine session</CardTitle>
+            <Clock className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stats.prochainSession}</div>
-            <p className="text-xs text-gray-600">Cage #004</p>
+            <div className="text-3xl font-bold text-foreground">{stats.prochainSession}</div>
+            <p className="text-xs text-muted-foreground">Cage #004</p>
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Alertes</CardTitle>
-            <AlertCircle className="h-5 w-5 text-red-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Alertes</CardTitle>
+            <AlertCircle className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stats.alertes}</div>
-            <p className="text-xs text-red-600">Appétit faible</p>
+            <div className="text-3xl font-bold text-foreground">{stats.alertes}</div>
+            <p className="text-xs text-muted-foreground">Appétit faible</p>
           </CardContent>
         </Card>
       </div>
@@ -317,6 +316,7 @@ const Feeding = () => {
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
 export default Feeding;

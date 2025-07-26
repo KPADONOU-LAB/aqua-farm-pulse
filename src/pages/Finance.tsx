@@ -53,29 +53,31 @@ const Finance = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Gestion Financière</h1>
-          <p className="text-muted-foreground">
-            Optimisez la rentabilité de votre ferme aquacole
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={() => setShowBudgetModal(true)} variant="outline">
-            <Target className="w-4 h-4 mr-2" />
-            Gérer Budget
-          </Button>
-          <Button onClick={() => setShowNewEntryModal(true)}>
-            <DollarSign className="w-4 h-4 mr-2" />
-            Nouvelle Transaction
-          </Button>
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Gestion Financière</h1>
+            <p className="text-muted-foreground">
+              Optimisez la rentabilité de votre ferme aquacole
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={() => setShowBudgetModal(true)} variant="outline" size="sm">
+              <Target className="w-4 h-4 mr-2" />
+              Gérer Budget
+            </Button>
+            <Button onClick={() => setShowNewEntryModal(true)}>
+              <DollarSign className="w-4 h-4 mr-2" />
+              Nouvelle Transaction
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* KPIs Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Statistiques Overview */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Chiffre d'Affaires</CardTitle>

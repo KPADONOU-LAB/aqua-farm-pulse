@@ -75,32 +75,32 @@ const Health = () => {
   const tauxSurvieGlobal = survivalData[survivalData.length - 1]?.taux || 0;
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-black mb-2">
-            Santé des poissons
-          </h1>
-          <p className="text-black/80 text-lg">
-            Surveillance sanitaire et interventions vétérinaires
-          </p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <NewHealthObservationModal />
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Santé des poissons</h1>
+            <p className="text-muted-foreground">
+              Surveillance sanitaire et interventions vétérinaires
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <NewHealthObservationModal />
+          </div>
         </div>
       </div>
 
-      {/* Indicateurs de santé */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="stat-card bg-white/90">
+      {/* Statistiques Overview */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Mortalité aujourd'hui</CardTitle>
-            <TrendingDown className="h-5 w-5 text-red-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Mortalité aujourd'hui</CardTitle>
+            <TrendingDown className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{totalMortaliteJour}</div>
-            <p className="text-xs text-red-600">+4 vs hier</p>
+            <div className="text-3xl font-bold text-foreground">{totalMortaliteJour}</div>
+            <p className="text-xs text-muted-foreground">+4 vs hier</p>
           </CardContent>
         </Card>
 
@@ -115,14 +115,14 @@ const Health = () => {
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Cages en alerte</CardTitle>
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Cages en alerte</CardTitle>
+            <AlertTriangle className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{cagesAlerte}</div>
-            <p className="text-xs text-red-600">Intervention requise</p>
+            <div className="text-3xl font-bold text-foreground">{cagesAlerte}</div>
+            <p className="text-xs text-muted-foreground">Intervention requise</p>
           </CardContent>
         </Card>
 

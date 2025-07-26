@@ -54,19 +54,19 @@ const Sales = () => {
   const prixMoyenKg = quantiteJour > 0 ? revenusJour / quantiteJour : 0;
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Gestion des ventes
-          </h1>
-          <p className="text-white/80 text-lg">
-            Suivi commercial et performance des ventes
-          </p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <NewSaleModal />
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Gestion des ventes</h1>
+            <p className="text-muted-foreground">
+              Suivi commercial et performance des ventes
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <NewSaleModal />
+          </div>
         </div>
       </div>
 
@@ -117,25 +117,25 @@ const Sales = () => {
               </CardContent>
             </Card>
 
-            <Card className="stat-card bg-white/90">
+            <Card className="stat-card bg-card/80">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-700">Clients servis</CardTitle>
-                <Users className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-sm font-medium text-foreground">Clients servis</CardTitle>
+                <Users className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-800">{nombreClientsJour}</div>
-                <p className="text-xs text-blue-600">Aujourd'hui</p>
+                <div className="text-3xl font-bold text-foreground">{nombreClientsJour}</div>
+                <p className="text-xs text-muted-foreground">Aujourd'hui</p>
               </CardContent>
             </Card>
 
-            <Card className="stat-card bg-white/90">
+            <Card className="stat-card bg-card/80">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-700">Prix moyen/kg</CardTitle>
-                <TrendingUp className="h-5 w-5 text-green-600" />
+                <CardTitle className="text-sm font-medium text-foreground">Prix moyen/kg</CardTitle>
+                <TrendingUp className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-800">€{prixMoyenKg.toFixed(2)}</div>
-                <p className="text-xs text-green-600">+5% ce mois</p>
+                <div className="text-3xl font-bold text-foreground">€{prixMoyenKg.toFixed(2)}</div>
+                <p className="text-xs text-muted-foreground">+5% ce mois</p>
               </CardContent>
             </Card>
           </div>

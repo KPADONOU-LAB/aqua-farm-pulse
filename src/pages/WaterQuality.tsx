@@ -41,24 +41,24 @@ const WaterQuality = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Qualité de l'eau
-          </h1>
-          <p className="text-white/80 text-lg">
-            Surveillance des paramètres environnementaux
-          </p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <NewWaterQualityModal />
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Qualité de l'eau</h1>
+            <p className="text-muted-foreground">
+              Surveillance des paramètres environnementaux
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <NewWaterQualityModal />
+          </div>
         </div>
       </div>
 
-      {/* Paramètres moyens */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {/* Statistiques Overview */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
           <CardHeader className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
             <CardTitle className="text-lg mb-2 flex items-center gap-2">

@@ -59,32 +59,32 @@ const Inventory = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Gestion des stocks
-          </h1>
-          <p className="text-white/80 text-lg">
-            Suivi des approvisionnements et inventaire
-          </p>
-        </div>
-        <div className="flex gap-3 items-center">
-          <NewInventoryModal />
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+      {/* Header Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">Gestion des stocks</h1>
+            <p className="text-muted-foreground">
+              Suivi des approvisionnements et inventaire
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <NewInventoryModal />
+          </div>
         </div>
       </div>
 
       {/* Indicateurs stocks */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="stat-card bg-white/90">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Stocks critiques</CardTitle>
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Stocks critiques</CardTitle>
+            <AlertTriangle className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">{stats.stocksCritiques}</div>
-            <p className="text-xs text-red-600">Réappro urgent</p>
+            <div className="text-3xl font-bold text-foreground">{stats.stocksCritiques}</div>
+            <p className="text-xs text-muted-foreground">Réappro urgent</p>
           </CardContent>
         </Card>
 
@@ -110,14 +110,14 @@ const Inventory = () => {
           </CardContent>
         </Card>
 
-        <Card className="stat-card bg-white/90">
+        <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Valeur totale</CardTitle>
-            <TrendingUp className="h-5 w-5 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-foreground">Valeur totale</CardTitle>
+            <TrendingUp className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">€{(stats.valeurTotale / 1000).toFixed(1)}k</div>
-            <p className="text-xs text-blue-600">Stock en valeur</p>
+            <div className="text-3xl font-bold text-foreground">€{(stats.valeurTotale / 1000).toFixed(1)}k</div>
+            <p className="text-xs text-muted-foreground">Stock en valeur</p>
           </CardContent>
         </Card>
       </div>
