@@ -99,7 +99,7 @@ En tant qu'expert en aquaculture avec 20 ans d'expérience, analysez ces donnée
 
 DONNÉES GÉNÉRALES:
 - Nombre de cages: ${userData.cages.length}
-- Cages actives: ${userData.cages.filter(c => c.statut === 'en_production').length}
+- Cages actives: ${userData.cages.filter(c => c.statut === 'actif').length}
 - Total poissons: ${userData.cages.reduce((sum, c) => sum + c.nombre_poissons, 0)}
 
 PERFORMANCE DES CAGES:
