@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,11 +38,7 @@ export function IntelligentDashboard() {
   const { alerts } = useOptimizedSmartAlerts();
   const [recommendedActions, setRecommendedActions] = useState<QuickAction[]>([]);
 
-  useEffect(() => {
-    generateIntelligentRecommendations();
-  }, [cages, alerts]);
-
-  const generateIntelligentRecommendations = () => {
+  const generateIntelligentRecommendations = useCallback(() => {
     const actions: QuickAction[] = [];
     const now = new Date();
     const today = now.toDateString();
@@ -66,7 +62,7 @@ export function IntelligentDashboard() {
     }
 
     // Vérification des cages en production
-    const activeCages = cages.filter(cage => cage.statut === 'en_production');
+    const activeCages = cages.filter(cage => cage.statut === 'actif');
     
     if (activeCages.length > 0) {
       // Recommandations d'alimentation
@@ -94,7 +90,7 @@ export function IntelligentDashboard() {
 
     // Cages prêtes pour la récolte
     const harvestReady = cages.filter(cage => 
-      cage.poids_moyen && cage.poids_moyen >= 0.8 && cage.statut === 'en_production'
+      cage.poids_moyen && cage.poids_moyen >= 0.8 && cage.statut === 'actif'
     );
     
     if (harvestReady.length > 0) {
@@ -170,7 +166,11 @@ export function IntelligentDashboard() {
     });
 
     setRecommendedActions(actions);
-  };
+  }, [cages, alerts]);
+
+  useEffect(() => {
+    generateIntelligentRecommendations();
+  }, [generateIntelligentRecommendations]);
 
   const getTimeBasedGreeting = () => {
     const hour = new Date().getHours();
@@ -227,7 +227,7 @@ export function IntelligentDashboard() {
               <Fish className="h-5 w-5 text-blue-500" />
               <div>
                 <p className="text-sm font-medium">Cages Actives</p>
-                <p className="text-2xl font-bold">{cages.filter(c => c.statut === 'en_production').length}</p>
+                <p className="text-2xl font-bold">{cages.filter(c => c.statut === 'actif').length}</p>
               </div>
             </div>
           </CardContent>
