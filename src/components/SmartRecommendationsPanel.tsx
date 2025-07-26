@@ -141,12 +141,12 @@ export const SmartRecommendationsPanel = () => {
 
           {/* Filtres */}
           <div className="flex flex-wrap gap-3 mb-4">
-            <Select value={filters.priority || ''} onValueChange={(value) => setFilters(prev => ({ ...prev, priority: value || undefined }))}>
+            <Select value={filters.priority || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, priority: value === 'all' ? undefined : value }))}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Priorité" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes</SelectItem>
+                <SelectItem value="all">Toutes</SelectItem>
                 <SelectItem value="critical">Critique</SelectItem>
                 <SelectItem value="high">Haute</SelectItem>
                 <SelectItem value="medium">Moyenne</SelectItem>
@@ -154,12 +154,12 @@ export const SmartRecommendationsPanel = () => {
               </SelectContent>
             </Select>
 
-            <Select value={filters.type || ''} onValueChange={(value) => setFilters(prev => ({ ...prev, type: value || undefined }))}>
+            <Select value={filters.type || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, type: value === 'all' ? undefined : value }))}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Tous</SelectItem>
+                <SelectItem value="all">Tous</SelectItem>
                 <SelectItem value="feeding">Alimentation</SelectItem>
                 <SelectItem value="health">Santé</SelectItem>
                 <SelectItem value="financial">Financier</SelectItem>
@@ -168,12 +168,12 @@ export const SmartRecommendationsPanel = () => {
               </SelectContent>
             </Select>
 
-            <Select value={filters.implementation_difficulty || ''} onValueChange={(value) => setFilters(prev => ({ ...prev, implementation_difficulty: value || undefined }))}>
+            <Select value={filters.implementation_difficulty || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, implementation_difficulty: value === 'all' ? undefined : value }))}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Difficulté" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes</SelectItem>
+                <SelectItem value="all">Toutes</SelectItem>
                 <SelectItem value="easy">Facile</SelectItem>
                 <SelectItem value="medium">Moyenne</SelectItem>
                 <SelectItem value="hard">Difficile</SelectItem>
