@@ -469,6 +469,81 @@ export type Database = {
         }
         Relationships: []
       }
+      farm_invitations: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          farm_owner_id: string
+          id: string
+          role: string
+          status: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          farm_owner_id: string
+          id?: string
+          role?: string
+          status?: string
+          token: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          farm_owner_id?: string
+          id?: string
+          role?: string
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      farm_settings: {
+        Row: {
+          basin_types: string[]
+          created_at: string
+          currency: string
+          farm_name: string
+          fish_species: string[]
+          id: string
+          is_configured: boolean
+          language: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          basin_types?: string[]
+          created_at?: string
+          currency?: string
+          farm_name: string
+          fish_species?: string[]
+          id?: string
+          is_configured?: boolean
+          language?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          basin_types?: string[]
+          created_at?: string
+          currency?: string
+          farm_name?: string
+          fish_species?: string[]
+          id?: string
+          is_configured?: boolean
+          language?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feeding_adjustments: {
         Row: {
           ancien_pourcentage: number
@@ -1272,6 +1347,33 @@ export type Database = {
           synced?: boolean | null
           table_name?: string
           timestamp_local?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          farm_owner_id: string
+          id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          farm_owner_id: string
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          farm_owner_id?: string
+          id?: string
+          role?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
