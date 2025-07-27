@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useFarm } from "@/contexts/FarmContext";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -71,6 +72,7 @@ export function TopNavigationOptimized() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
+  const { farmSettings } = useFarm();
   const { toggleSidebar } = useSidebar();
 
   const isActive = (path: string) => currentPath === path;
@@ -105,7 +107,9 @@ export function TopNavigationOptimized() {
               <Fish className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-white">PisciManager</h1>
+              <h1 className="font-bold text-lg text-white">
+                {farmSettings?.farm_name || 'PisciManager'}
+              </h1>
               <p className="text-xs text-white/70">Gestion intelligente</p>
             </div>
           </div>

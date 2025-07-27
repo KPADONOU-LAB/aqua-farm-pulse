@@ -9,6 +9,8 @@ import { TopNavigationOptimized } from "@/components/TopNavigationOptimized";
 import { IntelligentDashboard } from "@/components/IntelligentDashboard";
 import { HelpSystem } from "@/components/HelpSystem";
 import { AuthProvider } from "@/hooks/useAuth";
+import { FarmProvider } from "@/contexts/FarmContext";
+import { FarmSetupWrapper } from "@/components/FarmSetupWrapper";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Auth from "./pages/Auth";
@@ -47,12 +49,14 @@ export default function App() {
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
-            <NotificationProvider>
-              <Routes>
+            <FarmProvider>
+              <NotificationProvider>
+                <Routes>
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/*" element={
                   <ProtectedRoute>
-                    <SidebarProvider>
+                    <FarmSetupWrapper>
+                      <SidebarProvider>
                       <div className="flex h-screen bg-background">
                         <AppSidebarOptimized />
                         <div className="flex-1 flex flex-col overflow-hidden">
@@ -84,11 +88,13 @@ export default function App() {
                         </div>
                       </div>
                       <HelpSystem />
-                    </SidebarProvider>
+                      </SidebarProvider>
+                    </FarmSetupWrapper>
                   </ProtectedRoute>
                 } />
-              </Routes>
-            </NotificationProvider>
+                </Routes>
+              </NotificationProvider>
+            </FarmProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

@@ -5,9 +5,12 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertsPanel } from "@/components/AlertsPanel";
+import { FarmHeader } from "@/components/FarmHeader";
+import { useFarm } from "@/contexts/FarmContext";
 
 const Index = () => {
   const { stats, croissanceData, ventesData, loading } = useDashboardData();
+  const { formatCurrency } = useFarm();
 
   if (loading) {
     return (
@@ -27,19 +30,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-black mb-2">
-          Tableau de bord
-        </h1>
-        <p className="text-black/80 text-lg">
-          Vue d'ensemble de votre ferme piscicole
-        </p>
-        <div className="flex items-center gap-2 mt-2 text-white/60">
-          <div className="w-2 h-2 bg-aqua-400 rounded-full animate-pulse"></div>
-          <span className="text-sm">Dernière mise à jour: temps réel</span>
-        </div>
-      </div>
+      <FarmHeader title="dashboard" subtitle="overview" />
 
       {/* Stats principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
@@ -105,7 +96,7 @@ const Index = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{stats.ventesJour.toFixed(1)}kg</div>
-            <p className="text-xs text-blue-600 mt-1">€{stats.revenusJour.toLocaleString()} revenus</p>
+            <p className="text-xs text-blue-600 mt-1">{formatCurrency(stats.revenusJour)} revenus</p>
           </CardContent>
         </Card>
       </div>
