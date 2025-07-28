@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useFarm } from "@/contexts/FarmContext";
 import { Plus, Fish } from "lucide-react";
 
 interface NewCageModalProps {
@@ -28,6 +29,7 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
   });
   const { toast } = useToast();
   const { user } = useAuth();
+  const { farmSettings, translate } = useFarm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,11 +119,11 @@ const NewCageModal = ({ trigger }: NewCageModalProps) => {
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="tilapia">Tilapia</SelectItem>
-                  <SelectItem value="bar">Bar</SelectItem>
-                  <SelectItem value="dorade">Dorade</SelectItem>
-                  <SelectItem value="saumon">Saumon</SelectItem>
-                  <SelectItem value="truite">Truite</SelectItem>
+                  {farmSettings?.fish_species?.map((espece) => (
+                    <SelectItem key={espece} value={espece.toLowerCase()}>
+                      {espece}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
