@@ -10,6 +10,7 @@ import { fr } from "date-fns/locale";
 import { BarChart3, Download, Calendar as CalendarIcon, TrendingUp, Fish, Euro, Droplets } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { useFarm } from "@/contexts/FarmContext";
 import type { DateRange } from "react-day-picker";
 
 
@@ -43,6 +44,7 @@ const Reports = () => {
     to: new Date()
   });
   const { toast } = useToast();
+  const { formatCurrency, translate } = useFarm();
 
   const totalProfit = monthlyProfit.reduce((acc, month) => acc + month.profit, 0);
   const avgFCR = performanceData.filter(c => c.fcr > 0).reduce((acc, cage) => acc + cage.fcr, 0) / 
@@ -79,7 +81,7 @@ const Reports = () => {
           <div class="kpi-grid">
             <div class="kpi-card">
               <h3>Profit Total</h3>
-              <p>€${(totalProfit / 1000).toFixed(1)}k</p>
+              <p>${formatCurrency((totalProfit * 1000) / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
             </div>
             <div class="kpi-card">
               <h3>FCR Moyen</h3>
@@ -91,7 +93,7 @@ const Reports = () => {
             </div>
             <div class="kpi-card">
               <h3>CA Total</h3>
-              <p>€${(totalRevenue / 1000).toFixed(1)}k</p>
+              <p>${formatCurrency((totalRevenue * 1000) / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
             </div>
           </div>
           
@@ -113,7 +115,7 @@ const Reports = () => {
                   <td>${cage.fcr}</td>
                   <td>${cage.survie}%</td>
                   <td>${cage.croissance}</td>
-                  <td>€${cage.revenus.toLocaleString()}</td>
+                  <td>${formatCurrency(cage.revenus)}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -149,10 +151,10 @@ const Reports = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-bold text-white mb-2">
-            Rapports & Performance
+            {translate('reports')}
           </h1>
           <p className="text-white/80 text-lg">
-            Analyses et indicateurs de performance de votre ferme
+            {translate('reports_description') || 'Analyses et indicateurs de performance de votre ferme'}
           </p>
         </div>
         <div className="flex gap-3">
@@ -200,7 +202,7 @@ const Reports = () => {
             <Euro className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-ocean-800">€{(totalProfit / 1000).toFixed(1)}k</div>
+            <div className="text-3xl font-bold text-ocean-800">{formatCurrency(totalProfit).replace(/\s/g, '').slice(0, -3)}k</div>
             <p className="text-xs text-ocean-600">+12% vs période précédente</p>
           </CardContent>
         </Card>
@@ -233,7 +235,7 @@ const Reports = () => {
             <BarChart3 className="h-5 w-5 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-800">€{(totalRevenue / 1000).toFixed(1)}k</div>
+            <div className="text-3xl font-bold text-gray-800">{formatCurrency(totalRevenue).replace(/\s/g, '').slice(0, -3)}k</div>
             <p className="text-xs text-blue-600">Chiffre d'affaires</p>
           </CardContent>
         </Card>
@@ -245,7 +247,7 @@ const Reports = () => {
           <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
             <CardTitle className="flex items-center gap-2">
               <Euro className="h-5 w-5" />
-              Évolution profit mensuel (€)
+              Évolution profit mensuel
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -260,7 +262,7 @@ const Reports = () => {
                     border: 'none', 
                     borderRadius: '8px' 
                   }}
-                  formatter={(value, name) => [`€${value.toLocaleString()}`, 
+                  formatter={(value, name) => [formatCurrency(Number(value)), 
                     name === 'revenus' ? 'Revenus' : 
                     name === 'couts' ? 'Coûts' : 'Profit'
                   ]}
@@ -351,7 +353,7 @@ const Reports = () => {
                   
                   <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                     <div className="text-gray-600 text-sm font-medium mb-1">Revenus</div>
-                    <div className="text-gray-900 font-bold text-2xl">€{cage.revenus.toLocaleString()}</div>
+                    <div className="text-gray-900 font-bold text-2xl">{formatCurrency(cage.revenus)}</div>
                   </div>
                 </div>
               </div>

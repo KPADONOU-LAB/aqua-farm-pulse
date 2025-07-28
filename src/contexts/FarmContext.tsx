@@ -34,7 +34,6 @@ const translations = {
     'sales': 'Ventes',
     'inventory': 'Inventaire',
     'finance': 'Finance',
-    'reports': 'Rapports',
     'settings': 'Paramètres',
     
     // Common
@@ -47,6 +46,10 @@ const translations = {
     'loading': 'Chargement...',
     'error': 'Erreur',
     'success': 'Succès',
+    
+    // Reports
+    'reports': 'Rapports & Performance',
+    'reports_description': 'Analyses et indicateurs de performance de votre ferme',
     
     // Farm setup
     'farm_name': 'Nom de la ferme',
@@ -75,7 +78,6 @@ const translations = {
     'sales': 'Sales',
     'inventory': 'Inventory',
     'finance': 'Finance',
-    'reports': 'Reports',
     'settings': 'Settings',
     
     // Common
@@ -88,6 +90,10 @@ const translations = {
     'loading': 'Loading...',
     'error': 'Error',
     'success': 'Success',
+    
+    // Reports  
+    'reports': 'Reports & Performance',
+    'reports_description': 'Analyses and performance indicators for your farm',
     
     // Farm setup
     'farm_name': 'Farm Name',
