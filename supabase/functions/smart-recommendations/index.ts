@@ -208,6 +208,85 @@ function generateFallbackRecommendations(userData: any): SmartRecommendation[] {
     return date.toISOString();
   };
 
+  // Vérifier les alertes de température critique en priorité
+  if (userData.waterQuality && userData.waterQuality.length > 0) {
+    const cageTemperatureMap = new Map();
+    
+    // Grouper les données par cage
+    userData.waterQuality.forEach(wq => {
+      if (!cageTemperatureMap.has(wq.cage_id)) {
+        cageTemperatureMap.set(wq.cage_id, []);
+      }
+      cageTemperatureMap.get(wq.cage_id).push(wq);
+    });
+    
+    // Analyser chaque cage
+    cageTemperatureMap.forEach((waterData, cageId) => {
+      const cage = userData.cages.find(c => c.id === cageId);
+      if (!cage) return;
+      
+      const latestMeasurement = waterData.sort((a, b) => new Date(b.date_mesure + ' ' + b.heure).getTime() - new Date(a.date_mesure + ' ' + a.heure).getTime())[0];
+      const temperature = latestMeasurement.temperature;
+      const oxygen = latestMeasurement.oxygene_dissous;
+      
+      // Alerte critique pour température élevée
+      if (temperature > 28) {
+        recommendations.push({
+          id: `temp-critical-${cage.id}`,
+          type: 'water_quality',
+          priority: temperature > 30 ? 'critical' : 'high',
+          title: `🚨 URGENT: Température critique - ${cage.nom}`,
+          description: `Température de ${temperature}°C détectée! Risque imminent de mortalité massive. Action immédiate requise.`,
+          action_items: [
+            'Augmenter l\'aération à 100% immédiatement',
+            'Suspendre toute alimentation',
+            'Réduire la densité si possible',
+            'Vérifier les systèmes de circulation',
+            'Surveillance continue obligatoire'
+          ],
+          reasoning: 'Température > 28°C cause stress thermique sévère, hypoxie et mortalité rapide chez les poissons.',
+          impact_score: temperature > 30 ? 99 : 95,
+          cage_id: cage.id,
+          cage_name: cage.nom,
+          estimated_improvement: `Prévention de 40-60% de mortalité liée au stress thermique`,
+          implementation_difficulty: 'easy',
+          cost_estimate: 0,
+          roi_estimate: 8000,
+          deadline: addDaysToDate(0),
+          created_at: now
+        });
+      }
+      
+      // Alerte combinée température + oxygène
+      if (temperature > 25 && oxygen < 5) {
+        recommendations.push({
+          id: `temp-oxygen-${cage.id}`,
+          type: 'water_quality',
+          priority: 'critical',
+          title: `🆘 URGENCE ABSOLUE: Hypoxie thermique - ${cage.nom}`,
+          description: `Situation critique: ${temperature}°C + ${oxygen}mg/L O₂. Mortalité imminente sans action immédiate!`,
+          action_items: [
+            'URGENCE: Aération maximale maintenant',
+            'Arrêt total alimentation',
+            'Surveillance permanente',
+            'Préparer aération de secours',
+            'Contact vétérinaire d\'urgence'
+          ],
+          reasoning: 'Combinaison température élevée + hypoxie = létalité en quelques heures.',
+          impact_score: 100,
+          cage_id: cage.id,
+          cage_name: cage.nom,
+          estimated_improvement: 'Sauvegarde de 70-90% du stock',
+          implementation_difficulty: 'easy',
+          cost_estimate: 100,
+          roi_estimate: 15000,
+          deadline: addDaysToDate(0),
+          created_at: now
+        });
+      }
+    });
+  }
+
   for (const cage of userData.cages) {
     // FCR élevé
     if (cage.fcr > 2.0) {

@@ -82,11 +82,18 @@ export const useSmartRecommendations = () => {
     if (!user) return [];
 
     try {
-      // Récupérer les données des cages
+      // Récupérer les données des cages et de qualité de l'eau
       const { data: cages } = await supabase
         .from('cages')
         .select('*')
         .eq('user_id', user.id);
+
+      const { data: waterQuality } = await supabase
+        .from('water_quality')
+        .select('*')
+        .eq('user_id', user.id)
+        .gte('date_mesure', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])
+        .order('date_mesure', { ascending: false });
 
       if (!cages) return [];
 
@@ -172,6 +179,73 @@ export const useSmartRecommendations = () => {
             deadline: addDaysToDate(14),
             created_at: new Date().toISOString()
           });
+        }
+      }
+
+      // Vérifier les alertes de température élevée
+      if (waterQuality) {
+        for (const cage of cages) {
+          const cageWaterData = waterQuality.filter(wq => wq.cage_id === cage.id);
+          if (cageWaterData.length > 0) {
+            const latestTemperature = cageWaterData[0].temperature;
+            const avgTemperature = cageWaterData.reduce((sum, wq) => sum + wq.temperature, 0) / cageWaterData.length;
+            
+            // Alerte critique si température > 28°C ou moyenne > 26°C
+            if (latestTemperature > 28 || avgTemperature > 26) {
+              recommendations.push({
+                id: `temp-critical-${cage.id}`,
+                type: 'water_quality',
+                priority: latestTemperature > 30 ? 'critical' : 'high',
+                title: `🚨 Température critique - ${cage.nom}`,
+                description: `Température actuelle de ${latestTemperature}°C dépasse le seuil critique. Risque de stress thermique et mortalité accrue.`,
+                action_items: [
+                  'Augmenter l\'aération immédiatement',
+                  'Réduire la densité de poissons si possible',
+                  'Suspendre l\'alimentation temporairement',
+                  'Vérifier le système de circulation d\'eau',
+                  'Surveiller les signes de stress chez les poissons'
+                ],
+                reasoning: 'Une température élevée réduit l\'oxygène dissous, augmente le stress et peut causer une mortalité massive.',
+                impact_score: latestTemperature > 30 ? 98 : 90,
+                cage_id: cage.id,
+                cage_name: cage.nom,
+                estimated_improvement: 'Prévention de 30-50% de mortalité liée au stress thermique',
+                implementation_difficulty: 'easy',
+                cost_estimate: 100,
+                roi_estimate: 5000,
+                deadline: addDaysToDate(1),
+                created_at: new Date().toISOString()
+              });
+            }
+            
+            // Vérifier l'oxygène dissous en relation avec la température
+            const latestOxygen = cageWaterData[0].oxygene_dissous;
+            if (latestOxygen < 5 && latestTemperature > 25) {
+              recommendations.push({
+                id: `oxygen-temp-${cage.id}`,
+                type: 'water_quality',
+                priority: 'critical',
+                title: `⚠️ Oxygène critique avec température élevée - ${cage.nom}`,
+                description: `Combinaison dangereuse: O2 à ${latestOxygen}mg/L avec température de ${latestTemperature}°C. Action urgente requise.`,
+                action_items: [
+                  'Augmenter l\'aération au maximum',
+                  'Arrêter l\'alimentation immédiatement',
+                  'Surveiller le comportement des poissons',
+                  'Préparer un système d\'aération de secours'
+                ],
+                reasoning: 'La combinaison température élevée + faible oxygène est mortelle pour les poissons.',
+                impact_score: 99,
+                cage_id: cage.id,
+                cage_name: cage.nom,
+                estimated_improvement: 'Prévention d\'une mortalité massive',
+                implementation_difficulty: 'easy',
+                cost_estimate: 50,
+                roi_estimate: 10000,
+                deadline: addDaysToDate(0),
+                created_at: new Date().toISOString()
+              });
+            }
+          }
         }
       }
 
