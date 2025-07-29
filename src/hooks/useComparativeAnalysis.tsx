@@ -201,7 +201,19 @@ export const useComparativeAnalysis = () => {
   const calculateBenchmarks = (cages: CageMetrics[]) => {
     if (!cages.length) return {};
 
-    const activeCages = cages.filter(c => c.statut === 'en_production');
+    const activeCages = cages.filter(c => c.statut === 'en_production' || c.statut === 'actif');
+    
+    if (!activeCages.length) {
+      return {
+        average_fcr: 0,
+        average_mortality: 0,
+        average_growth: 0,
+        average_performance: 0,
+        best_performer: null,
+        total_biomass: 0,
+        total_fish: 0
+      };
+    }
     
     return {
       average_fcr: activeCages.reduce((sum, c) => sum + c.fcr, 0) / activeCages.length,
