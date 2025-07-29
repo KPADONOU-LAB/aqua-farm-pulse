@@ -78,6 +78,37 @@ export const useSmartRecommendations = () => {
     }
   };
 
+  const createSmartAlert = async (recommendation: SmartRecommendation) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('smart_alerts')
+        .insert({
+          user_id: user.id,
+          cage_id: recommendation.cage_id,
+          type_alerte: recommendation.type,
+          niveau_criticite: recommendation.priority === 'critical' ? 'error' : 
+                           recommendation.priority === 'high' ? 'warning' : 'info',
+          titre: recommendation.title,
+          message: recommendation.description,
+          recommandations: recommendation.action_items,
+          impact_estime: recommendation.roi_estimate || 0,
+          donnees_contexte: {
+            implementation_difficulty: recommendation.implementation_difficulty,
+            cost_estimate: recommendation.cost_estimate,
+            deadline: recommendation.deadline
+          }
+        });
+
+      if (error) {
+        console.error('Erreur lors de la création de l\'alerte:', error);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'alerte:', error);
+    }
+  };
+
   const generateFallbackRecommendations = async (): Promise<SmartRecommendation[]> => {
     if (!user) return [];
 
@@ -192,10 +223,10 @@ export const useSmartRecommendations = () => {
             
             // Alerte critique si température > 28°C ou moyenne > 26°C
             if (latestTemperature > 28 || avgTemperature > 26) {
-              recommendations.push({
+              const tempRecommendation = {
                 id: `temp-critical-${cage.id}`,
-                type: 'water_quality',
-                priority: latestTemperature > 30 ? 'critical' : 'high',
+                type: 'water_quality' as const,
+                priority: latestTemperature > 30 ? 'critical' as const : 'high' as const,
                 title: `🚨 Température critique - ${cage.nom}`,
                 description: `Température actuelle de ${latestTemperature}°C dépasse le seuil critique. Risque de stress thermique et mortalité accrue.`,
                 action_items: [
@@ -210,21 +241,25 @@ export const useSmartRecommendations = () => {
                 cage_id: cage.id,
                 cage_name: cage.nom,
                 estimated_improvement: 'Prévention de 30-50% de mortalité liée au stress thermique',
-                implementation_difficulty: 'easy',
+                implementation_difficulty: 'easy' as const,
                 cost_estimate: 100,
                 roi_estimate: 5000,
                 deadline: addDaysToDate(1),
                 created_at: new Date().toISOString()
-              });
+              };
+              
+              recommendations.push(tempRecommendation);
+              // Créer également une alerte dans la base de données
+              await createSmartAlert(tempRecommendation);
             }
             
             // Vérifier l'oxygène dissous en relation avec la température
             const latestOxygen = cageWaterData[0].oxygene_dissous;
             if (latestOxygen < 5 && latestTemperature > 25) {
-              recommendations.push({
+              const oxygenRecommendation = {
                 id: `oxygen-temp-${cage.id}`,
-                type: 'water_quality',
-                priority: 'critical',
+                type: 'water_quality' as const,
+                priority: 'critical' as const,
                 title: `⚠️ Oxygène critique avec température élevée - ${cage.nom}`,
                 description: `Combinaison dangereuse: O2 à ${latestOxygen}mg/L avec température de ${latestTemperature}°C. Action urgente requise.`,
                 action_items: [
@@ -238,12 +273,16 @@ export const useSmartRecommendations = () => {
                 cage_id: cage.id,
                 cage_name: cage.nom,
                 estimated_improvement: 'Prévention d\'une mortalité massive',
-                implementation_difficulty: 'easy',
+                implementation_difficulty: 'easy' as const,
                 cost_estimate: 50,
                 roi_estimate: 10000,
                 deadline: addDaysToDate(0),
                 created_at: new Date().toISOString()
-              });
+              };
+              
+              recommendations.push(oxygenRecommendation);
+              // Créer également une alerte dans la base de données
+              await createSmartAlert(oxygenRecommendation);
             }
           }
         }
