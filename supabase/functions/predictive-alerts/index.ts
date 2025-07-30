@@ -47,7 +47,7 @@ serve(async (req) => {
       .from('cages')
       .select('*')
       .eq('user_id', user_id)
-      .eq('statut', 'en_production');
+      .in('statut', ['en_production', 'actif']);
 
     if (cagesError) throw cagesError;
 

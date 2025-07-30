@@ -149,7 +149,7 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4o',
+      model: 'gpt-4o-mini',
       messages: [
         { 
           role: 'system', 
@@ -163,6 +163,12 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
   });
 
   const data = await response.json();
+  
+  if (!data.choices || data.choices.length === 0) {
+    console.error('No choices returned from OpenAI API');
+    return generateFallbackPredictions(cageData, predictionTypes);
+  }
+  
   const aiResponse = data.choices[0].message.content;
   
   try {

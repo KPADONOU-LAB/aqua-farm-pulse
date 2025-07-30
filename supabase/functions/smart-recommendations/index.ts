@@ -156,7 +156,7 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-4o-mini',
         messages: [
           { 
             role: 'system', 
@@ -170,7 +170,8 @@ Répondez UNIQUEMENT avec un JSON valide de ce format:
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+      console.error(`OpenAI API error: ${response.status}`);
+      return generateFallbackRecommendations(userData);
     }
 
     const data = await response.json();
