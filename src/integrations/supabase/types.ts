@@ -1538,6 +1538,21 @@ export type Database = {
           finance: Json
         }[]
       }
+      get_cage_feeding_history: {
+        Args: { cage_id_param: string; period_type?: string }
+        Returns: {
+          periode: string
+          date_debut: string
+          date_fin: string
+          quantite_totale: number
+          nombre_sessions: number
+          quantite_moyenne: number
+          fcr_calcule: number
+          poids_debut: number
+          poids_fin: number
+          gain_poids: number
+        }[]
+      }
       update_all_cage_metrics: {
         Args: { cage_id_param: string }
         Returns: Json
