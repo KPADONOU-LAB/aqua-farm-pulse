@@ -169,8 +169,10 @@ export function IntelligentDashboard() {
   }, [cages, alerts]);
 
   useEffect(() => {
-    generateIntelligentRecommendations();
-  }, [generateIntelligentRecommendations]);
+    if (cages.length > 0 || alerts.length > 0) {
+      generateIntelligentRecommendations();
+    }
+  }, [cages.length, alerts.length]);
 
   const getTimeBasedGreeting = () => {
     const hour = new Date().getHours();

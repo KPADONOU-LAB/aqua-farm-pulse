@@ -54,38 +54,18 @@ export const useCageMetrics = () => {
 
     setLoading(true);
     try {
-      // Calculer FCR
-      const { data: fcrData, error: fcrError } = await supabase.rpc('calculate_cage_fcr', {
+      // Utiliser la fonction optimisée qui calcule tous les métriques en une fois
+      const { data: allMetrics, error: metricsError } = await supabase.rpc('update_all_cage_metrics', {
         cage_id_param: cageId
       });
 
-      if (fcrError) throw fcrError;
+      if (metricsError) throw metricsError;
 
-      // Calculer taux de croissance
-      const { data: growthData, error: growthError } = await supabase.rpc('calculate_cage_growth_rate', {
-        cage_id_param: cageId
-      });
-
-      if (growthError) throw growthError;
-
-      // Calculer taux de mortalité
-      const { data: mortalityData, error: mortalityError } = await supabase.rpc('calculate_cage_mortality_rate', {
-        cage_id_param: cageId
-      });
-
-      if (mortalityError) throw mortalityError;
-
-      // Mettre à jour le taux de mortalité dans la table cages
-      await supabase
-        .from('cages')
-        .update({ taux_mortalite: mortalityData })
-        .eq('id', cageId)
-        .eq('user_id', user.id);
-
+      const metrics = allMetrics as any;
       return {
-        fcr: fcrData || 0,
-        growthRate: growthData || 0,
-        mortalityRate: mortalityData || 0,
+        fcr: metrics?.fcr || 0,
+        growthRate: metrics?.growth_rate || 0,
+        mortalityRate: metrics?.mortality_rate || 0,
       };
     } finally {
       setLoading(false);

@@ -32,6 +32,7 @@ import SmartRecommendations from "./pages/SmartRecommendations";
 import AdvancedReports from "./pages/AdvancedReports";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
 import CustomDashboards from "./pages/CustomDashboards";
+import CageHistory from "./pages/CageHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -82,6 +83,7 @@ export default function App() {
                               <Route path="/advanced-reports" element={<AdvancedReports />} />
                               <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                               <Route path="/custom-dashboards" element={<CustomDashboards />} />
+                              <Route path="/cage-history" element={<CageHistory />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </main>

@@ -52,8 +52,30 @@ export const useSalesData = () => {
     fetchSales();
   }, [user]);
 
-  // Fonction pour générer une facture
-  const generateInvoice = (sale: Sale) => {
+  // Fonction pour générer une facture avec devise configurée
+  const generateInvoice = async (sale: Sale) => {
+    // Récupérer les paramètres de ferme pour la devise
+    const { data: farmSettings } = await supabase
+      .from('farm_settings')
+      .select('currency, farm_name')
+      .eq('user_id', user?.id)
+      .single();
+
+    const currency = farmSettings?.currency || 'eur';
+    const farmName = farmSettings?.farm_name || 'AquaCulture Pro';
+    
+    const getCurrencySymbol = (curr: string) => {
+      switch (curr) {
+        case 'eur': return '€';
+        case 'usd': return '$';
+        case 'mad': return 'DH';
+        case 'cfa': return 'CFA';
+        default: return '€';
+      }
+    };
+
+    const symbol = getCurrencySymbol(currency);
+    
     const invoiceWindow = window.open('', '_blank');
     
     if (!invoiceWindow) return;
@@ -79,7 +101,7 @@ export const useSalesData = () => {
       </head>
       <body>
         <div class="header">
-          <div class="company">AquaCulture Pro</div>
+          <div class="company">${farmName}</div>
           <p>Gestion d'aquaculture professionnelle</p>
         </div>
         
@@ -109,14 +131,14 @@ export const useSalesData = () => {
               <td>${sale.cage?.espece || 'Poisson'}</td>
               <td>${sale.cage?.nom || 'N/A'}</td>
               <td>${sale.quantite_kg} kg</td>
-              <td>€${sale.prix_par_kg.toFixed(2)}/kg</td>
-              <td>€${sale.prix_total.toFixed(2)}</td>
+              <td>${symbol}${sale.prix_par_kg.toFixed(2)}/kg</td>
+              <td>${symbol}${sale.prix_total.toFixed(2)}</td>
             </tr>
           </tbody>
         </table>
         
         <div class="total">
-          <p>Total à payer: <strong>€${sale.prix_total.toFixed(2)}</strong></p>
+          <p>Total à payer: <strong>${symbol}${sale.prix_total.toFixed(2)}</strong></p>
         </div>
         
         ${sale.notes ? `<div><strong>Notes:</strong> ${sale.notes}</div>` : ''}

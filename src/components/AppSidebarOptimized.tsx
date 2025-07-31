@@ -45,6 +45,7 @@ import { useState } from "react";
 const coreOperations = [
   { title: "Tableau de bord", url: "/", icon: Home },
   { title: "Cages", url: "/cages", icon: Fish },
+  { title: "Historique Cages", url: "/cage-history", icon: BarChart3 },
   { title: "Alimentation", url: "/feeding", icon: Coffee },
   { title: "Santé", url: "/health", icon: Heart },
   { title: "Ventes", url: "/sales", icon: ShoppingCart },

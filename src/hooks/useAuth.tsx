@@ -42,13 +42,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl
+        emailRedirectTo: redirectUrl,
+        data: {
+          email: email
+        }
       }
     });
+    
+    // Si l'inscription réussit, créer automatiquement les paramètres de ferme
+    if (data.user && !error) {
+      try {
+        await supabase.from('farm_settings').insert({
+          user_id: data.user.id,
+          farm_name: `Ferme de ${email.split('@')[0]}`,
+          language: 'fr',
+          currency: 'eur',
+          basin_types: ['cage_flottante'],
+          fish_species: ['tilapia'],
+          is_configured: false
+        });
+      } catch (settingsError) {
+        console.error('Erreur lors de la création des paramètres de ferme:', settingsError);
+      }
+    }
+    
     return { error };
   };
 

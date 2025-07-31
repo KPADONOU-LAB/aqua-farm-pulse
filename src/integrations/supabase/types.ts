@@ -1553,6 +1553,24 @@ export type Database = {
           gain_poids: number
         }[]
       }
+      get_sales_history_by_period: {
+        Args: {
+          user_id_param: string
+          period_type?: string
+          cage_id_param?: string
+        }
+        Returns: {
+          periode: string
+          date_debut: string
+          date_fin: string
+          nombre_ventes: number
+          quantite_totale_kg: number
+          chiffre_affaires: number
+          prix_moyen_kg: number
+          clients_distincts: number
+          cage_nom: string
+        }[]
+      }
       update_all_cage_metrics: {
         Args: { cage_id_param: string }
         Returns: Json
