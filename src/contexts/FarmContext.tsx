@@ -5,8 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 interface FarmSettings {
   id: string;
   farm_name: string;
-  language: 'fr' | 'en';
-  currency: 'fcfa' | 'eur' | 'usd';
+  language: 'fr' | 'en' | 'ar';
+  currency: 'fcfa' | 'eur' | 'usd' | 'mad' | 'dza' | 'tnd';
   basin_types: string[];
   fish_species: string[];
   is_configured: boolean;
@@ -181,6 +181,12 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         return `${amount.toLocaleString()} FCFA`;
       case 'usd':
         return `$${amount.toLocaleString()}`;
+      case 'mad':
+        return `${amount.toLocaleString()} MAD`;
+      case 'dza':
+        return `${amount.toLocaleString()} DZD`;
+      case 'tnd':
+        return `${amount.toLocaleString()} TND`;
       case 'eur':
       default:
         return `€${amount.toLocaleString()}`;

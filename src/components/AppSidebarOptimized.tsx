@@ -57,6 +57,7 @@ const managementItems = [
   { title: "Stocks", url: "/inventory", icon: Package },
   { title: "Finance", url: "/finance", icon: Euro },
   { title: "CRM", url: "/crm", icon: Users },
+  { title: "Paramètres", url: "/settings", icon: Settings },
 ];
 
 // Analytics & Intelligence
