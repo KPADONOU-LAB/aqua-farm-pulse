@@ -132,12 +132,22 @@ const Settings = () => {
 
     setLoading(true);
     try {
+      console.log('Saving settings:', {
+        farm_name: formData.farm_name,
+        language: formData.language,
+        currency: formData.currency,
+        basin_types: formData.basin_types,
+        fish_species: formData.fish_species,
+        is_configured: true
+      });
+
       await updateFarmSettings({
         farm_name: formData.farm_name,
         language: formData.language,
         currency: formData.currency,
         basin_types: formData.basin_types,
-        fish_species: formData.fish_species
+        fish_species: formData.fish_species,
+        is_configured: true
       });
 
       toast({

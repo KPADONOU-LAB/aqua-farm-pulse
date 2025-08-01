@@ -151,6 +151,8 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
   const updateFarmSettings = async (settings: Partial<FarmSettings>) => {
     if (!user) return;
 
+    console.log('FarmContext updateFarmSettings called with:', settings);
+
     try {
       // Check if farm settings exist first
       const { data: existingSettings } = await supabase
@@ -200,7 +202,11 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (error) throw error;
 
+      console.log('Farm settings updated successfully:', data);
       setFarmSettings(data as FarmSettings);
+      
+      // Reload to ensure we have the latest data
+      await loadFarmSettings();
     } catch (error) {
       console.error('Error updating farm settings:', error);
       throw error;
