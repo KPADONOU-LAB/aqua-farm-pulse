@@ -152,17 +152,51 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
     if (!user) return;
 
     try {
-      const updateData: any = {
-        ...settings,
-        user_id: user.id,
-        updated_at: new Date().toISOString()
-      };
-
-      const { data, error } = await supabase
+      // Check if farm settings exist first
+      const { data: existingSettings } = await supabase
         .from('farm_settings')
-        .upsert(updateData)
-        .select()
+        .select('*')
+        .eq('user_id', user.id)
         .single();
+
+      let data, error;
+
+      if (existingSettings) {
+        // Update existing settings
+        const result = await supabase
+          .from('farm_settings')
+          .update({
+            ...settings,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', user.id)
+          .select()
+          .single();
+        
+        data = result.data;
+        error = result.error;
+      } else {
+        // Insert new settings
+        const insertData = {
+          user_id: user.id,
+          farm_name: settings.farm_name || 'Nouvelle ferme',
+          language: settings.language || 'fr',
+          currency: settings.currency || 'eur',
+          basin_types: settings.basin_types || [],
+          fish_species: settings.fish_species || [],
+          is_configured: settings.is_configured || false,
+          updated_at: new Date().toISOString()
+        };
+        
+        const result = await supabase
+          .from('farm_settings')
+          .insert(insertData)
+          .select()
+          .single();
+        
+        data = result.data;
+        error = result.error;
+      }
 
       if (error) throw error;
 
