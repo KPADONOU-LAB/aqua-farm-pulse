@@ -7,38 +7,34 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useFarm } from '@/contexts/FarmContext';
-import { Building2, Globe, DollarSign, Fish, Waves } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Building2, Globe, DollarSign, Fish, Waves, UserPlus } from 'lucide-react';
 
 const FarmSetup = () => {
-  const { updateFarmSettings } = useFarm();
+  const { updateFarmSettings, translate } = useFarm();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     farm_name: '',
-    language: 'fr' as 'fr' | 'en',
-    currency: 'eur' as 'fcfa' | 'eur' | 'usd',
+    language: 'en' as 'fr' | 'en',
+    currency: 'usd' as 'fcfa' | 'eur' | 'usd',
     basin_types: [] as string[],
     fish_species: [] as string[],
     custom_species: ''
   });
 
   const basinOptions = [
-    'cage_flottante',
-    'etang',
-    'bac_hors_sol',
-    'bassin_beton',
-    'raceway'
+    { value: 'flottante', label: { fr: 'Flottante', en: 'Floating' } },
+    { value: 'fixe', label: { fr: 'Fixe', en: 'Fixed' } },
+    { value: 'hors_sol', label: { fr: 'Hors-sol', en: 'Above ground' } }
   ];
 
   const speciesOptions = [
-    'tilapia',
-    'silure',
-    'carpe',
-    'truite',
-    'saumon',
-    'bar',
-    'daurade'
+    { value: 'tilapia', label: { fr: 'Tilapia', en: 'Tilapia' } },
+    { value: 'silure', label: { fr: 'Silure', en: 'Catfish' } },
+    { value: 'carpe', label: { fr: 'Carpe', en: 'Carp' } }
   ];
 
   const handleBasinTypeChange = (basinType: string, checked: boolean) => {
@@ -74,8 +70,8 @@ const FarmSetup = () => {
     
     if (!formData.farm_name || formData.basin_types.length === 0 || formData.fish_species.length === 0) {
       toast({
-        title: "Erreur",
-        description: "Veuillez remplir tous les champs obligatoires",
+        title: translate('error'),
+        description: translate('fill_required_fields'),
         variant: "destructive"
       });
       return;
@@ -93,18 +89,22 @@ const FarmSetup = () => {
       });
 
       toast({
-        title: "Configuration sauvegardée",
-        description: "Votre ferme a été configurée avec succès",
+        title: translate('config_saved'),
+        description: translate('farm_configured_success'),
       });
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Erreur lors de la sauvegarde de la configuration",
+        title: translate('error'),
+        description: translate('config_save_error'),
         variant: "destructive"
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  const goToUserManagement = () => {
+    navigate('/user-management');
   };
 
   return (
@@ -115,10 +115,10 @@ const FarmSetup = () => {
             <Building2 className="h-12 w-12 text-primary" />
           </div>
           <CardTitle className="text-3xl font-bold text-foreground">
-            Configuration initiale
+            {translate('initial_setup')}
           </CardTitle>
           <p className="text-muted-foreground text-lg">
-            Configurez votre ferme piscicole pour commencer
+            {translate('setup_description')}
           </p>
         </CardHeader>
         
@@ -128,13 +128,13 @@ const FarmSetup = () => {
             <div className="space-y-2">
               <Label htmlFor="farm_name" className="text-base font-semibold flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                Nom de la ferme ou société piscicole *
+                {translate('farm_name')} *
               </Label>
               <Input
                 id="farm_name"
                 value={formData.farm_name}
                 onChange={(e) => setFormData(prev => ({ ...prev, farm_name: e.target.value }))}
-                placeholder="Ex: Ferme Aquacole des Palmiers"
+                placeholder={translate('farm_name_placeholder')}
                 className="text-base"
                 required
               />
@@ -145,7 +145,7 @@ const FarmSetup = () => {
               <div className="space-y-2">
                 <Label className="text-base font-semibold flex items-center gap-2">
                   <Globe className="h-4 w-4" />
-                  Langue préférée
+                  {translate('language')}
                 </Label>
                 <Select value={formData.language} onValueChange={(value: 'fr' | 'en') => 
                   setFormData(prev => ({ ...prev, language: value }))}>
@@ -163,7 +163,7 @@ const FarmSetup = () => {
               <div className="space-y-2">
                 <Label className="text-base font-semibold flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
-                  Devise
+                  {translate('currency')}
                 </Label>
                 <Select value={formData.currency} onValueChange={(value: 'fcfa' | 'eur' | 'usd') => 
                   setFormData(prev => ({ ...prev, currency: value }))}>
@@ -183,18 +183,18 @@ const FarmSetup = () => {
             <div className="space-y-4">
               <Label className="text-base font-semibold flex items-center gap-2">
                 <Waves className="h-4 w-4" />
-                Types de bassins utilisés *
+                {translate('basin_types')} *
               </Label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {basinOptions.map((basin) => (
-                  <div key={basin} className="flex items-center space-x-2">
+                  <div key={basin.value} className="flex items-center space-x-2">
                     <Checkbox
-                      id={basin}
-                      checked={formData.basin_types.includes(basin)}
-                      onCheckedChange={(checked) => handleBasinTypeChange(basin, checked as boolean)}
+                      id={basin.value}
+                      checked={formData.basin_types.includes(basin.value)}
+                      onCheckedChange={(checked) => handleBasinTypeChange(basin.value, checked as boolean)}
                     />
-                    <Label htmlFor={basin} className="text-sm">
-                      {basin.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    <Label htmlFor={basin.value} className="text-sm">
+                      {basin.label[formData.language]}
                     </Label>
                   </div>
                 ))}
@@ -205,18 +205,18 @@ const FarmSetup = () => {
             <div className="space-y-4">
               <Label className="text-base font-semibold flex items-center gap-2">
                 <Fish className="h-4 w-4" />
-                Espèces élevées *
+                {translate('fish_species')} *
               </Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {speciesOptions.map((species) => (
-                  <div key={species} className="flex items-center space-x-2">
+                  <div key={species.value} className="flex items-center space-x-2">
                     <Checkbox
-                      id={species}
-                      checked={formData.fish_species.includes(species)}
-                      onCheckedChange={(checked) => handleSpeciesChange(species, checked as boolean)}
+                      id={species.value}
+                      checked={formData.fish_species.includes(species.value)}
+                      onCheckedChange={(checked) => handleSpeciesChange(species.value, checked as boolean)}
                     />
-                    <Label htmlFor={species} className="text-sm capitalize">
-                      {species}
+                    <Label htmlFor={species.value} className="text-sm">
+                      {species.label[formData.language]}
                     </Label>
                   </div>
                 ))}
@@ -227,11 +227,11 @@ const FarmSetup = () => {
                 <Input
                   value={formData.custom_species}
                   onChange={(e) => setFormData(prev => ({ ...prev, custom_species: e.target.value }))}
-                  placeholder="Autre espèce..."
+                  placeholder={translate('other_species')}
                   className="flex-1"
                 />
                 <Button type="button" onClick={addCustomSpecies} variant="outline">
-                  Ajouter
+                  {translate('add')}
                 </Button>
               </div>
               
@@ -247,9 +247,15 @@ const FarmSetup = () => {
               )}
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full text-lg py-6">
-              {loading ? 'Configuration en cours...' : 'Configurer ma ferme'}
-            </Button>
+            <div className="flex gap-4">
+              <Button type="submit" disabled={loading} className="flex-1 text-lg py-6">
+                {loading ? translate('configuring') : translate('validate_config')}
+              </Button>
+              <Button type="button" onClick={goToUserManagement} variant="outline" className="flex-1 text-lg py-6 flex items-center gap-2">
+                <UserPlus className="h-5 w-5" />
+                {translate('go_to_user_management')}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>

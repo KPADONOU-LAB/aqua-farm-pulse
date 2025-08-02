@@ -67,6 +67,17 @@ const translations = {
     'alerts': 'Alertes',
     'daily_sales': 'Ventes du jour',
     'avg_growth': 'Croissance moy.',
+    
+    // Configuration
+    'fill_required_fields': 'Veuillez remplir tous les champs obligatoires',
+    'config_saved': 'Configuration sauvegardée',
+    'farm_configured_success': 'Votre ferme a été configurée avec succès',
+    'config_save_error': 'Erreur lors de la sauvegarde de la configuration',
+    'farm_name_placeholder': 'Ex: Ferme Aquacole des Palmiers',
+    'other_species': 'Autre espèce...',
+    'configuring': 'Configuration en cours...',
+    'validate_config': 'Configurer ma ferme',
+    'go_to_user_management': 'Passer à l\'ajout des utilisateurs',
   },
   en: {
     // Navigation  
@@ -111,6 +122,17 @@ const translations = {
     'alerts': 'Alerts',
     'daily_sales': 'Daily sales',
     'avg_growth': 'Avg. growth',
+    
+    // Configuration
+    'fill_required_fields': 'Please fill all required fields',
+    'config_saved': 'Configuration saved',
+    'farm_configured_success': 'Your farm has been configured successfully',
+    'config_save_error': 'Error saving configuration',
+    'farm_name_placeholder': 'Ex: Palm Tree Aquaculture Farm',
+    'other_species': 'Other species...',
+    'configuring': 'Configuring...',
+    'validate_config': 'Configure my farm',
+    'go_to_user_management': 'Go to user management',
   }
 };
 
