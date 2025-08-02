@@ -1351,11 +1351,59 @@ export type Database = {
         }
         Relationships: []
       }
+      user_invitations: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          farm_owner_id: string
+          first_name: string | null
+          id: string
+          invitation_token: string
+          last_name: string | null
+          preferred_language: string
+          role: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          farm_owner_id: string
+          first_name?: string | null
+          id?: string
+          invitation_token: string
+          last_name?: string | null
+          preferred_language?: string
+          role?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          farm_owner_id?: string
+          first_name?: string | null
+          id?: string
+          invitation_token?: string
+          last_name?: string | null
+          preferred_language?: string
+          role?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
           farm_owner_id: string
+          first_name: string | null
           id: string
+          last_name: string | null
+          preferred_language: string | null
           role: string
           updated_at: string
           user_id: string
@@ -1363,7 +1411,10 @@ export type Database = {
         Insert: {
           created_at?: string
           farm_owner_id: string
+          first_name?: string | null
           id?: string
+          last_name?: string | null
+          preferred_language?: string | null
           role?: string
           updated_at?: string
           user_id: string
@@ -1371,7 +1422,10 @@ export type Database = {
         Update: {
           created_at?: string
           farm_owner_id?: string
+          first_name?: string | null
           id?: string
+          last_name?: string | null
+          preferred_language?: string | null
           role?: string
           updated_at?: string
           user_id?: string
@@ -1522,6 +1576,10 @@ export type Database = {
       generate_intelligent_alerts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      generate_invitation_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       generate_production_predictions: {
         Args: { cage_id_param: string }
