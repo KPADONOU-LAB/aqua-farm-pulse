@@ -6,116 +6,79 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useFarm } from '@/contexts/FarmContext';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Mail, UserPlus, Shield, Trash2 } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { 
+  UserPlus, 
+  Users, 
+  Mail, 
+  Trash2, 
+  Edit, 
+  Clock,
+  CheckCircle,
+  XCircle,
+  Globe,
+  UserCheck
+} from 'lucide-react';
+
+interface UserInvitation {
+  id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  role: string;
+  preferred_language: string;
+  status: string;
+  expires_at: string;
+  created_at: string;
+}
 
 interface UserRole {
   id: string;
   user_id: string;
   role: string;
+  first_name: string | null;
+  last_name: string | null;
+  preferred_language: string | null;
   created_at: string;
-  profiles?: {
-    email: string;
-  } | null;
-}
-
-interface Invitation {
-  id: string;
-  email: string;
-  role: string;
-  status: string;
-  created_at: string;
-  expires_at: string;
 }
 
 const UserManagement = () => {
+  const { translate } = useFarm();
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [invitations, setInvitations] = useState<UserInvitation[]>([]);
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
   
-  const [newInvitation, setNewInvitation] = useState({
+  const [formData, setFormData] = useState({
     email: '',
-    role: 'technicien' as string
+    first_name: '',
+    last_name: '',
+    role: 'viewer' as string,
+    preferred_language: 'en' as 'fr' | 'en'
   });
 
   const roleOptions = [
-    { value: 'promoteur', label: 'Promoteur', description: 'Propriétaire de la ferme, accès complet' },
-    { value: 'gestionnaire', label: 'Gestionnaire', description: 'Gestion complète des opérations' },
-    { value: 'superviseur', label: 'Superviseur', description: 'Supervision et contrôle' },
-    { value: 'technicien', label: 'Technicien', description: 'Exécution des tâches quotidiennes' },
-    { value: 'viewer', label: 'Observateur', description: 'Lecture seule' }
+    { value: 'promoter', label: { fr: 'Promoteur', en: 'Promoter' } },
+    { value: 'manager', label: { fr: 'Gestionnaire', en: 'Manager' } },
+    { value: 'supervisor', label: { fr: 'Superviseur', en: 'Supervisor' } },
+    { value: 'technician', label: { fr: 'Technicien', en: 'Technician' } },
+    { value: 'viewer', label: { fr: 'Observateur', en: 'Viewer' } }
   ];
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'promoteur': return 'bg-purple-100 text-purple-800';
-      case 'gestionnaire': return 'bg-blue-100 text-blue-800';
-      case 'superviseur': return 'bg-green-100 text-green-800';
-      case 'technicien': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   useEffect(() => {
-    if (user) {
-      loadUserRoles();
-      loadInvitations();
-    }
-  }, [user]);
-
-  const loadUserRoles = async () => {
-    try {
-      // Récupérer les rôles d'abord
-      const { data: rolesData, error: rolesError } = await supabase
-        .from('user_roles')
-        .select('*')
-        .eq('farm_owner_id', user?.id);
-
-      if (rolesError) throw rolesError;
-
-      // Puis récupérer les profils pour chaque utilisateur
-      const rolesWithProfiles = await Promise.all(
-        (rolesData || []).map(async (role) => {
-          const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('email')
-            .eq('user_id', role.user_id)
-            .single();
-
-          return {
-            ...role,
-            profiles: profileError ? null : profileData
-          };
-        })
-      );
-
-      setUserRoles(rolesWithProfiles);
-    } catch (error) {
-      console.error('Error loading user roles:', error);
-    }
-  };
+    loadInvitations();
+    loadUserRoles();
+  }, []);
 
   const loadInvitations = async () => {
     try {
       const { data, error } = await supabase
-        .from('farm_invitations')
+        .from('user_invitations')
         .select('*')
-        .eq('farm_owner_id', user?.id)
-        .in('status', ['pending', 'sent']);
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setInvitations(data || []);
@@ -124,39 +87,27 @@ const UserManagement = () => {
     }
   };
 
-  const generateInvitationToken = () => {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  const loadUserRoles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setUserRoles(data || []);
+    } catch (error) {
+      console.error('Error loading user roles:', error);
+    }
   };
 
-  const sendInvitation = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!newInvitation.email || !newInvitation.role) {
+    if (!formData.email || !formData.first_name || !formData.last_name || !user) {
       toast({
-        title: "Erreur",
-        description: "Veuillez remplir tous les champs",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Vérifier si l'email existe déjà
-    const existingRole = userRoles.find(ur => ur.profiles?.email === newInvitation.email);
-    const existingInvitation = invitations.find(inv => inv.email === newInvitation.email && inv.status === 'pending');
-
-    if (existingRole) {
-      toast({
-        title: "Erreur",
-        description: "Cet utilisateur fait déjà partie de votre ferme",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (existingInvitation) {
-      toast({
-        title: "Erreur",
-        description: "Une invitation est déjà en attente pour cet email",
+        title: translate('error'),
+        description: translate('fill_required_fields'),
         variant: "destructive"
       });
       return;
@@ -164,33 +115,45 @@ const UserManagement = () => {
 
     setLoading(true);
     try {
-      const token = generateInvitationToken();
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + 7); // Expire dans 7 jours
+      // Generate invitation token
+      const { data: tokenData, error: tokenError } = await supabase
+        .rpc('generate_invitation_token');
 
-      const { error } = await supabase
-        .from('farm_invitations')
+      if (tokenError) throw tokenError;
+
+      // Create invitation
+      const { error: inviteError } = await supabase
+        .from('user_invitations')
         .insert({
-          farm_owner_id: user?.id,
-          email: newInvitation.email,
-          role: newInvitation.role,
-          token,
-          expires_at: expiresAt.toISOString(),
-          status: 'pending'
+          farm_owner_id: user.id,
+          email: formData.email,
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          role: formData.role,
+          preferred_language: formData.preferred_language,
+          invitation_token: tokenData
         });
 
-      if (error) throw error;
+      if (inviteError) throw inviteError;
 
       toast({
-        title: "Invitation envoyée",
-        description: `Une invitation a été envoyée à ${newInvitation.email}`,
+        title: translate('success'),
+        description: "Invitation envoyée avec succès",
       });
 
-      setNewInvitation({ email: '', role: 'technicien' });
+      // Reset form and reload
+      setFormData({
+        email: '',
+        first_name: '',
+        last_name: '',
+        role: 'viewer',
+        preferred_language: 'en'
+      });
       loadInvitations();
     } catch (error) {
+      console.error('Error sending invitation:', error);
       toast({
-        title: "Erreur",
+        title: translate('error'),
         description: "Erreur lors de l'envoi de l'invitation",
         variant: "destructive"
       });
@@ -199,65 +162,87 @@ const UserManagement = () => {
     }
   };
 
-  const removeUserRole = async (roleId: string) => {
+  const deleteInvitation = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('user_roles')
+        .from('user_invitations')
         .delete()
-        .eq('id', roleId);
+        .eq('id', id);
 
       if (error) throw error;
 
       toast({
-        title: "Utilisateur retiré",
-        description: "L'utilisateur a été retiré de votre ferme",
+        title: translate('success'),
+        description: "Invitation supprimée",
       });
-
-      loadUserRoles();
+      loadInvitations();
     } catch (error) {
+      console.error('Error deleting invitation:', error);
       toast({
-        title: "Erreur",
-        description: "Erreur lors du retrait de l'utilisateur",
+        title: translate('error'),
+        description: "Erreur lors de la suppression",
         variant: "destructive"
       });
     }
   };
 
-  const cancelInvitation = async (invitationId: string) => {
+  const deleteUserRole = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('farm_invitations')
-        .update({ status: 'cancelled' })
-        .eq('id', invitationId);
+        .from('user_roles')
+        .delete()
+        .eq('id', id);
 
       if (error) throw error;
 
       toast({
-        title: "Invitation annulée",
-        description: "L'invitation a été annulée",
+        title: translate('success'),
+        description: "Utilisateur supprimé",
       });
-
-      loadInvitations();
+      loadUserRoles();
     } catch (error) {
+      console.error('Error deleting user role:', error);
       toast({
-        title: "Erreur",
-        description: "Erreur lors de l'annulation de l'invitation",
+        title: translate('error'),
+        description: "Erreur lors de la suppression",
         variant: "destructive"
       });
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'accepted':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'expired':
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'accepted':
+        return 'bg-green-100 text-green-800';
+      case 'expired':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <UserPlus className="h-8 w-8 text-primary" />
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Users className="h-8 w-8 text-primary" />
-            Gestion des utilisateurs
-          </h1>
-          <p className="text-muted-foreground">
-            Gérez les membres de votre équipe et leurs rôles
-          </p>
+          <h1 className="text-3xl font-bold">Gestion des utilisateurs</h1>
+          <p className="text-muted-foreground">Invitez et gérez les utilisateurs de votre ferme</p>
         </div>
       </div>
 
@@ -265,107 +250,134 @@ const UserManagement = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5" />
+            <Mail className="h-5 w-5" />
             Inviter un nouvel utilisateur
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={sendInvitation} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={newInvitation.email}
-                  onChange={(e) => setNewInvitation(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="email@exemple.com"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="role">Rôle *</Label>
-                <Select value={newInvitation.role} onValueChange={(value) => 
-                  setNewInvitation(prev => ({ ...prev, role: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roleOptions.map((role) => (
-                      <SelectItem key={role.value} value={role.value}>
-                        <div>
-                          <div className="font-medium">{role.label}</div>
-                          <div className="text-sm text-muted-foreground">{role.description}</div>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="first_name">Prénom *</Label>
+              <Input
+                id="first_name"
+                value={formData.first_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
+                placeholder="Prénom"
+                required
+              />
             </div>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Envoi en cours...' : 'Envoyer l\'invitation'}
-            </Button>
+
+            <div className="space-y-2">
+              <Label htmlFor="last_name">Nom *</Label>
+              <Input
+                id="last_name"
+                value={formData.last_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
+                placeholder="Nom de famille"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="utilisateur@exemple.com"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="role">Rôle</Label>
+              <Select value={formData.role} onValueChange={(value) => 
+                setFormData(prev => ({ ...prev, role: value }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {roleOptions.map((role) => (
+                    <SelectItem key={role.value} value={role.value}>
+                      {role.label.fr}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="preferred_language" className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                Langue préférée
+              </Label>
+              <Select value={formData.preferred_language} onValueChange={(value: 'fr' | 'en') => 
+                setFormData(prev => ({ ...prev, preferred_language: value }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fr">Français</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="md:col-span-2 lg:col-span-3">
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? 'Envoi en cours...' : 'Envoyer l\'invitation'}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
 
-      {/* Liste des utilisateurs actuels */}
+      {/* Liste des invitations en attente */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Membres de l'équipe ({userRoles.length})
+            <Clock className="h-5 w-5" />
+            Invitations en attente
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {userRoles.length === 0 ? (
+          {invitations.length === 0 ? (
             <p className="text-muted-foreground text-center py-4">
-              Aucun membre dans votre équipe pour le moment
+              Aucune invitation en cours
             </p>
           ) : (
             <div className="space-y-3">
-              {userRoles.map((userRole) => (
-                <div key={userRole.id} className="flex items-center justify-between p-3 border rounded-lg">
+              {invitations.map((invitation) => (
+                <div key={invitation.id} className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Users className="h-5 w-5 text-primary" />
-                    </div>
+                    {getStatusIcon(invitation.status)}
                     <div>
-                      <div className="font-medium">{userRole.profiles?.email || 'Email non disponible'}</div>
-                      <div className="text-sm text-muted-foreground">
-                        Membre depuis le {new Date(userRole.created_at).toLocaleDateString('fr-FR')}
+                      <div className="font-medium">
+                        {invitation.first_name} {invitation.last_name}
+                      </div>
+                      <div className="text-sm text-muted-foreground">{invitation.email}</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline">
+                          {roleOptions.find(r => r.value === invitation.role)?.label.fr}
+                        </Badge>
+                        <Badge className={getStatusColor(invitation.status)}>
+                          {invitation.status}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {invitation.preferred_language.toUpperCase()}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge className={getRoleColor(userRole.role)}>
-                      {roleOptions.find(r => r.value === userRole.role)?.label || userRole.role}
-                    </Badge>
-                    {userRole.user_id !== user?.id && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Retirer cet utilisateur ?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Cette action est irréversible. L'utilisateur perdra l'accès à votre ferme.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => removeUserRole(userRole.id)}>
-                              Retirer
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteInvitation(invitation.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
             </div>
@@ -373,48 +385,62 @@ const UserManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Invitations en attente */}
-      {invitations.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Mail className="h-5 w-5" />
-              Invitations en attente ({invitations.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+      {/* Liste des utilisateurs actifs */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Utilisateurs actifs
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {userRoles.length === 0 ? (
+            <p className="text-muted-foreground text-center py-4">
+              Aucun utilisateur actif
+            </p>
+          ) : (
             <div className="space-y-3">
-              {invitations.map((invitation) => (
-                <div key={invitation.id} className="flex items-center justify-between p-3 border rounded-lg">
+              {userRoles.map((user) => (
+                <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                      <Mail className="h-5 w-5 text-orange-600" />
-                    </div>
+                    <UserCheck className="h-5 w-5 text-green-500" />
                     <div>
-                      <div className="font-medium">{invitation.email}</div>
-                      <div className="text-sm text-muted-foreground">
-                        Invité le {new Date(invitation.created_at).toLocaleDateString('fr-FR')} • 
-                        Expire le {new Date(invitation.expires_at).toLocaleDateString('fr-FR')}
+                      <div className="font-medium">
+                        {user.first_name} {user.last_name}
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline">
+                          {roleOptions.find(r => r.value === user.role)?.label.fr}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {user.preferred_language?.toUpperCase() || 'EN'}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge className={getRoleColor(invitation.role)}>
-                      {roleOptions.find(r => r.value === invitation.role)?.label || invitation.role}
-                    </Badge>
-                    <Badge variant="outline" className="text-orange-600">
-                      En attente
-                    </Badge>
-                    <Button variant="ghost" size="sm" onClick={() => cancelInvitation(invitation.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {/* TODO: Edit user */}}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => deleteUserRole(user.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

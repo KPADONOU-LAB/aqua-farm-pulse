@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFarm } from '@/contexts/FarmContext';
+import { useAuth } from '@/hooks/useAuth';
 import FarmSetup from '@/pages/FarmSetup';
 
 interface FarmSetupWrapperProps {
@@ -8,6 +9,7 @@ interface FarmSetupWrapperProps {
 
 export const FarmSetupWrapper = ({ children }: FarmSetupWrapperProps) => {
   const { isConfigured, loading } = useFarm();
+  const { user } = useAuth();
 
   if (loading) {
     return (
@@ -20,9 +22,11 @@ export const FarmSetupWrapper = ({ children }: FarmSetupWrapperProps) => {
     );
   }
 
-  if (!isConfigured) {
+  // Si l'utilisateur est connecté mais la ferme n'est pas configurée, afficher FarmSetup
+  if (user && !isConfigured) {
     return <FarmSetup />;
   }
 
+  // Si tout est configuré, afficher l'application normale
   return <>{children}</>;
 };
