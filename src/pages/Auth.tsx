@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Fish, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Fish, ArrowLeft, Globe } from 'lucide-react';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ export default function Auth() {
   const [showReset, setShowReset] = useState(false);
   const { signIn, signUp, resetPassword, user } = useAuth();
   const { toast } = useToast();
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
 
   // Redirect if already authenticated
@@ -34,23 +37,23 @@ export default function Auth() {
       const { error } = await signIn(email, password);
       if (error) {
         toast({
-          title: "Erreur de connexion",
+          title: t('signin_error'),
           description: error.message === 'Invalid login credentials' 
-            ? "Email ou mot de passe incorrect" 
+            ? t('invalid_credentials')
             : error.message,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Connexion réussie",
-          description: "Bienvenue dans PisciManager !",
+          title: t('signin_success'),
+          description: t('welcome_message'),
         });
         navigate('/');
       }
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la connexion",
+        title: t('signin_error'),
+        description: t('generic_error'),
         variant: "destructive",
       });
     } finally {
@@ -66,23 +69,23 @@ export default function Auth() {
       const { error } = await signUp(email, password);
       if (error) {
         toast({
-          title: "Erreur d'inscription",
+          title: t('signup_error'),
           description: error.message === 'User already registered' 
-            ? "Cet email est déjà utilisé" 
+            ? t('user_already_exists')
             : error.message,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Inscription réussie",
-          description: "Votre compte a été créé avec succès !",
+          title: t('signup_success'),
+          description: t('account_created'),
         });
         navigate('/');
       }
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'inscription",
+        title: t('signup_error'),
+        description: t('generic_error'),
         variant: "destructive",
       });
     } finally {
@@ -98,21 +101,21 @@ export default function Auth() {
       const { error } = await resetPassword(resetEmail);
       if (error) {
         toast({
-          title: "Erreur",
-          description: "Impossible d'envoyer l'email de récupération",
+          title: t('signin_error'),
+          description: t('reset_error'),
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Email envoyé",
-          description: "Un lien de récupération a été envoyé à votre adresse email",
+          title: t('reset_email_sent'),
+          description: t('reset_link_sent'),
         });
         setShowReset(false);
       }
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue",
+        title: t('signin_error'),
+        description: t('generic_error'),
         variant: "destructive",
       });
     } finally {
@@ -123,6 +126,20 @@ export default function Auth() {
   if (showReset) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-underwater-gradient p-4">
+        {/* Language Selector */}
+        <div className="absolute top-4 right-4">
+          <Select value={language} onValueChange={setLanguage}>
+            <SelectTrigger className="w-40 bg-white/90 backdrop-blur-sm">
+              <Globe className="h-4 w-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="fr">{t('french')}</SelectItem>
+              <SelectItem value="en">{t('english')}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
@@ -130,26 +147,26 @@ export default function Auth() {
                 <Fish className="h-6 w-6 text-primary-foreground" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold">Récupération du mot de passe</CardTitle>
+            <CardTitle className="text-2xl font-bold">{t('reset_password_title')}</CardTitle>
             <CardDescription>
-              Entrez votre email pour recevoir un lien de récupération
+              {t('reset_password_description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="reset-email">Email</Label>
+                <Label htmlFor="reset-email">{t('email')}</Label>
                 <Input
                   id="reset-email"
                   type="email"
-                  placeholder="votre@email.com"
+                  placeholder={t('email_placeholder')}
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                   required
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Envoi..." : "Envoyer le lien"}
+                {loading ? t('sending') : t('send_reset_link')}
               </Button>
               <Button 
                 type="button" 
@@ -158,7 +175,7 @@ export default function Auth() {
                 onClick={() => setShowReset(false)}
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Retour à la connexion
+                {t('back_to_signin')}
               </Button>
             </form>
           </CardContent>
@@ -169,6 +186,20 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-underwater-gradient p-4">
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4">
+        <Select value={language} onValueChange={setLanguage}>
+          <SelectTrigger className="w-40 bg-white/90 backdrop-blur-sm">
+            <Globe className="h-4 w-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="fr">{t('french')}</SelectItem>
+            <SelectItem value="en">{t('english')}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
@@ -176,44 +207,44 @@ export default function Auth() {
               <Fish className="h-6 w-6 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">PisciManager</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t('app_title')}</CardTitle>
           <CardDescription>
-            Gestion intelligente de votre ferme piscicole
+            {t('app_description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Connexion</TabsTrigger>
-              <TabsTrigger value="signup">Inscription</TabsTrigger>
+              <TabsTrigger value="signin">{t('signin')}</TabsTrigger>
+              <TabsTrigger value="signup">{t('signup')}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email">{t('email')}</Label>
                   <Input
                     id="signin-email"
                     type="email"
-                    placeholder="votre@email.com"
+                    placeholder={t('email_placeholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Mot de passe</Label>
+                  <Label htmlFor="signin-password">{t('password')}</Label>
                   <Input
                     id="signin-password"
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={t('password_placeholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Connexion..." : "Se connecter"}
+                  {loading ? t('signing_in') : t('signin_button')}
                 </Button>
                 <Button 
                   type="button" 
@@ -221,7 +252,7 @@ export default function Auth() {
                   className="w-full text-sm" 
                   onClick={() => setShowReset(true)}
                 >
-                  Mot de passe oublié ?
+                  {t('forgot_password')}
                 </Button>
               </form>
             </TabsContent>
@@ -229,22 +260,22 @@ export default function Auth() {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email">{t('email')}</Label>
                   <Input
                     id="signup-email"
                     type="email"
-                    placeholder="votre@email.com"
+                    placeholder={t('email_placeholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mot de passe</Label>
+                  <Label htmlFor="signup-password">{t('password')}</Label>
                   <Input
                     id="signup-password"
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={t('password_placeholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -252,7 +283,7 @@ export default function Auth() {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Inscription..." : "S'inscrire"}
+                  {loading ? t('signing_up') : t('signup_button')}
                 </Button>
               </form>
             </TabsContent>
