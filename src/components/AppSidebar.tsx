@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useFarm } from "@/contexts/FarmContext";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -34,30 +35,30 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const menuItems = [
-  { title: "Tableau de bord", url: "/", icon: Home },
-  { title: "Cages", url: "/cages", icon: Fish },
-  { title: "Alimentation", url: "/feeding", icon: Coffee },
-  { title: "Qualité eau", url: "/water-quality", icon: Droplets },
-  { title: "Santé", url: "/health", icon: Heart },
-  { title: "Stocks", url: "/inventory", icon: Package },
-  { title: "Ventes", url: "/sales", icon: ShoppingCart },
-  { title: "Finance", url: "/finance", icon: Euro },
-  { title: "CRM", url: "/crm", icon: Users },
+const getMenuItems = (translate: (key: string) => string) => [
+  { title: translate('dashboard'), url: "/", icon: Home },
+  { title: translate('cages'), url: "/cages", icon: Fish },
+  { title: translate('feeding'), url: "/feeding", icon: Coffee },
+  { title: translate('water_quality'), url: "/water-quality", icon: Droplets },
+  { title: translate('health'), url: "/health", icon: Heart },
+  { title: translate('inventory'), url: "/inventory", icon: Package },
+  { title: translate('sales'), url: "/sales", icon: ShoppingCart },
+  { title: translate('finance'), url: "/finance", icon: Euro },
+  { title: translate('crm'), url: "/crm", icon: Users },
 ];
 
-const analyticsItems = [
-  { title: "Rapports", url: "/reports", icon: BarChart3 },
-  { title: "Rapports Avancés", url: "/advanced-reports", icon: FileText },
-  { title: "Notifications IA", url: "/smart-notifications", icon: Bell },
-  { title: "Recommandations IA", url: "/smart-recommendations", icon: Brain },
-  { title: "Performance", url: "/performance", icon: TrendingUp },
-  { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
-  { title: "Alertes", url: "/alerts", icon: Bell },
+const getAnalyticsItems = (translate: (key: string) => string) => [
+  { title: translate('reports'), url: "/reports", icon: BarChart3 },
+  { title: translate('advanced_analytics'), url: "/advanced-reports", icon: FileText },
+  { title: translate('smart_notifications'), url: "/smart-notifications", icon: Bell },
+  { title: translate('smart_recommendations'), url: "/smart-recommendations", icon: Brain },
+  { title: translate('performance'), url: "/performance", icon: TrendingUp },
+  { title: translate('analytics'), url: "/advanced-analytics", icon: Brain },
+  { title: translate('alerts'), url: "/alerts", icon: Bell },
 ];
 
-const dashboardItems = [
-  { title: "Dashboards", url: "/custom-dashboards", icon: LayoutDashboard },
+const getDashboardItems = (translate: (key: string) => string) => [
+  { title: translate('dashboard'), url: "/custom-dashboards", icon: LayoutDashboard },
 ];
 
 export function AppSidebar() {
@@ -66,6 +67,11 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
+  const { translate } = useFarm();
+  
+  const menuItems = getMenuItems(translate);
+  const analyticsItems = getAnalyticsItems(translate);
+  const dashboardItems = getDashboardItems(translate);
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = (path: string) =>
@@ -100,7 +106,7 @@ export function AppSidebar() {
         {/* Navigation principale */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2">
-            {!collapsed && "Navigation"}
+            {!collapsed && translate('navigation')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -126,7 +132,7 @@ export function AppSidebar() {
         {/* Section Analytics */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2 mt-4">
-            {!collapsed && "Analytics"}
+            {!collapsed && translate('analytics')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -152,7 +158,7 @@ export function AppSidebar() {
         {/* Section Dashboards */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2 mt-4">
-            {!collapsed && "Dashboards"}
+            {!collapsed && translate('dashboard')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">

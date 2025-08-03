@@ -35,6 +35,11 @@ const translations = {
     'inventory': 'Inventaire',
     'finance': 'Finance',
     'settings': 'Paramètres',
+    'analytics': 'Analytics',
+    'reports': 'Rapports',
+    'crm': 'CRM',
+    'advanced_analytics': 'Analyses avancées',
+    'predictions': 'Prédictions',
     
     // Common
     'save': 'Enregistrer',
@@ -46,9 +51,37 @@ const translations = {
     'loading': 'Chargement...',
     'error': 'Erreur',
     'success': 'Succès',
+    'last_update': 'Dernière mise à jour',
+    'view': 'Voir',
+    'create': 'Créer',
+    'update': 'Mettre à jour',
+    'name': 'Nom',
+    'status': 'Statut',
+    'date': 'Date',
+    'total': 'Total',
+    'actions': 'Actions',
+    
+    // User Management
+    'user_management': 'Gestion des utilisateurs',
+    'users': 'Utilisateurs',
+    'invite_user': 'Inviter un utilisateur',
+    'first_name': 'Prénom',
+    'last_name': 'Nom',
+    'email': 'Email',
+    'role': 'Rôle',
+    'preferred_language': 'Langue préférée',
+    'pending_invitations': 'Invitations en attente',
+    'active_users': 'Utilisateurs actifs',
+    'send_invitation': 'Envoyer l\'invitation',
+    'invitation_sent': 'Invitation envoyée',
+    'invitation_error': 'Erreur lors de l\'envoi',
+    'admin': 'Administrateur',
+    'manager': 'Gestionnaire',
+    'technician': 'Technicien',
+    'supervisor': 'Superviseur',
+    'viewer': 'Observateur',
     
     // Reports
-    'reports': 'Rapports & Performance',
     'reports_description': 'Analyses et indicateurs de performance de votre ferme',
     
     // Farm setup
@@ -59,6 +92,41 @@ const translations = {
     'fish_species': 'Espèces élevées',
     'initial_setup': 'Configuration initiale',
     'setup_description': 'Configurez votre ferme piscicole pour commencer',
+    'general_settings': 'Paramètres généraux',
+    'basic_information': 'Informations de base',
+    'regional_settings': 'Paramètres régionaux',
+    
+    // Basin types
+    'floating_cage': 'Cage flottante',
+    'fixed_cage': 'Cage fixe',
+    'concrete_basin': 'Bassin béton',
+    'earth_pond': 'Étang',
+    'raceway': 'Raceway',
+    'reservoir': 'Réservoir',
+    'offshore_basin': 'Bac hors-sol',
+    'greenhouse': 'Serre aquacole',
+    
+    // Fish species
+    'tilapia': 'Tilapia',
+    'catfish': 'Silure',
+    'carp': 'Carpe',
+    'trout': 'Truite',
+    'bass': 'Bar',
+    'salmon': 'Saumon',
+    'other': 'Autre',
+    
+    // Languages
+    'french': 'Français',
+    'english': 'Anglais',
+    'arabic': 'Arabe',
+    
+    // Currencies
+    'fcfa': 'Franc CFA (FCFA)',
+    'usd': 'Dollar américain ($)',
+    'eur': 'Euro (€)',
+    'mad': 'Dirham marocain (MAD)',
+    'dza': 'Dinar algérien (DZD)',
+    'tnd': 'Dinar tunisien (TND)',
     
     // Dashboard
     'overview': 'Vue d\'ensemble de votre ferme piscicole',
@@ -78,6 +146,10 @@ const translations = {
     'configuring': 'Configuration en cours...',
     'validate_config': 'Configurer ma ferme',
     'go_to_user_management': 'Passer à l\'ajout des utilisateurs',
+    'navigation': 'Navigation',
+    'smart_notifications': 'Notifications IA',
+    'smart_recommendations': 'Recommandations IA',
+    'performance': 'Performance',
   },
   en: {
     // Navigation  
@@ -90,6 +162,11 @@ const translations = {
     'inventory': 'Inventory',
     'finance': 'Finance',
     'settings': 'Settings',
+    'analytics': 'Analytics',
+    'reports': 'Reports',
+    'crm': 'CRM',
+    'advanced_analytics': 'Advanced Analytics',
+    'predictions': 'Predictions',
     
     // Common
     'save': 'Save',
@@ -101,9 +178,37 @@ const translations = {
     'loading': 'Loading...',
     'error': 'Error',
     'success': 'Success',
+    'last_update': 'Last update',
+    'view': 'View',
+    'create': 'Create',
+    'update': 'Update',
+    'name': 'Name',
+    'status': 'Status',
+    'date': 'Date',
+    'total': 'Total',
+    'actions': 'Actions',
+    
+    // User Management
+    'user_management': 'User Management',
+    'users': 'Users',
+    'invite_user': 'Invite User',
+    'first_name': 'First Name',
+    'last_name': 'Last Name',
+    'email': 'Email',
+    'role': 'Role',
+    'preferred_language': 'Preferred Language',
+    'pending_invitations': 'Pending Invitations',
+    'active_users': 'Active Users',
+    'send_invitation': 'Send Invitation',
+    'invitation_sent': 'Invitation sent',
+    'invitation_error': 'Invitation error',
+    'admin': 'Administrator',
+    'manager': 'Manager',
+    'technician': 'Technician',
+    'supervisor': 'Supervisor',
+    'viewer': 'Viewer',
     
     // Reports  
-    'reports': 'Reports & Performance',
     'reports_description': 'Analyses and performance indicators for your farm',
     
     // Farm setup
@@ -114,6 +219,41 @@ const translations = {
     'fish_species': 'Fish Species',
     'initial_setup': 'Initial Setup',
     'setup_description': 'Configure your fish farm to get started',
+    'general_settings': 'General Settings',
+    'basic_information': 'Basic Information',
+    'regional_settings': 'Regional Settings',
+    
+    // Basin types
+    'floating_cage': 'Floating Cage',
+    'fixed_cage': 'Fixed Cage',
+    'concrete_basin': 'Concrete Basin',
+    'earth_pond': 'Earth Pond',
+    'raceway': 'Raceway',
+    'reservoir': 'Reservoir',
+    'offshore_basin': 'Offshore Basin',
+    'greenhouse': 'Greenhouse',
+    
+    // Fish species
+    'tilapia': 'Tilapia',
+    'catfish': 'Catfish',
+    'carp': 'Carp',
+    'trout': 'Trout',
+    'bass': 'Bass',
+    'salmon': 'Salmon',
+    'other': 'Other',
+    
+    // Languages
+    'french': 'French',
+    'english': 'English',
+    'arabic': 'Arabic',
+    
+    // Currencies
+    'fcfa': 'CFA Franc (FCFA)',
+    'usd': 'US Dollar ($)',
+    'eur': 'Euro (€)',
+    'mad': 'Moroccan Dirham (MAD)',
+    'dza': 'Algerian Dinar (DZD)',
+    'tnd': 'Tunisian Dinar (TND)',
     
     // Dashboard
     'overview': 'Overview of your fish farm',
@@ -133,6 +273,10 @@ const translations = {
     'configuring': 'Configuring...',
     'validate_config': 'Configure my farm',
     'go_to_user_management': 'Go to user management',
+    'navigation': 'Navigation',
+    'smart_notifications': 'AI Notifications',
+    'smart_recommendations': 'AI Recommendations',
+    'performance': 'Performance',
   }
 };
 

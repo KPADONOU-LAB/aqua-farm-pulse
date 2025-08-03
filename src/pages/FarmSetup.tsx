@@ -153,8 +153,8 @@ const FarmSetup = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fr">Français</SelectItem>
-                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="fr">{translate('french')}</SelectItem>
+                    <SelectItem value="en">{translate('english')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -171,9 +171,9 @@ const FarmSetup = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fcfa">FCFA</SelectItem>
-                    <SelectItem value="eur">Euro (€)</SelectItem>
-                    <SelectItem value="usd">Dollar ($)</SelectItem>
+                    <SelectItem value="fcfa">{translate('fcfa')}</SelectItem>
+                    <SelectItem value="eur">{translate('eur')}</SelectItem>
+                    <SelectItem value="usd">{translate('usd')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
