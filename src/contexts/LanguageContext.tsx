@@ -50,6 +50,37 @@ const authTranslations = {
     'language_selector': 'Langue',
     'french': 'Français',
     'english': 'Anglais',
+    
+    // Farm Setup
+    'initial_setup': 'Configuration initiale',
+    'setup_description': 'Configurez votre ferme piscicole pour commencer',
+    'farm_name': 'Nom de la ferme',
+    'farm_name_placeholder': 'Ex: Ferme Aquacole des Palmiers',
+    'language': 'Langue',
+    'currency': 'Devise',
+    'basin_types': 'Types de bassins',
+    'fish_species': 'Espèces élevées',
+    'other_species': 'Autre espèce...',
+    'add': 'Ajouter',
+    'validate_config': 'Configurer ma ferme',
+    'go_to_user_management': 'Passer à l\'ajout des utilisateurs',
+    'configuring': 'Configuration...',
+    'fcfa': 'FCFA',
+    'eur': 'Euro (€)',
+    'usd': 'Dollar américain ($)',
+    'error': 'Erreur',
+    'fill_required_fields': 'Veuillez remplir tous les champs obligatoires',
+    'config_saved': 'Configuration sauvegardée',
+    'farm_configured_success': 'Votre ferme a été configurée avec succès',
+    'config_save_error': 'Erreur lors de la sauvegarde de la configuration',
+    // Basin types
+    'floating': 'Flottante',
+    'fixed': 'Fixe',
+    'above_ground': 'Hors-sol',
+    // Fish species
+    'tilapia': 'Tilapia',
+    'catfish': 'Silure',
+    'carp': 'Carpe',
   },
   en: {
     // Auth page
@@ -90,6 +121,37 @@ const authTranslations = {
     'language_selector': 'Language',
     'french': 'French',
     'english': 'English',
+    
+    // Farm Setup
+    'initial_setup': 'Initial Setup',
+    'setup_description': 'Configure your fish farm to get started',
+    'farm_name': 'Farm Name',
+    'farm_name_placeholder': 'Ex: Palmiers Fish Farm',
+    'language': 'Language',
+    'currency': 'Currency',
+    'basin_types': 'Basin Types',
+    'fish_species': 'Raised Species',
+    'other_species': 'Other species...',
+    'add': 'Add',
+    'validate_config': 'Configure my farm',
+    'go_to_user_management': 'Go to user management',
+    'configuring': 'Configuring...',
+    'fcfa': 'FCFA',
+    'eur': 'Euro (€)',
+    'usd': 'US Dollar ($)',
+    'error': 'Error',
+    'fill_required_fields': 'Please fill in all required fields',
+    'config_saved': 'Configuration saved',
+    'farm_configured_success': 'Your farm has been configured successfully',
+    'config_save_error': 'Error saving configuration',
+    // Basin types
+    'floating': 'Floating',
+    'fixed': 'Fixed',
+    'above_ground': 'Above ground',
+    // Fish species
+    'tilapia': 'Tilapia',
+    'catfish': 'Catfish',
+    'carp': 'Carp',
   }
 };
 

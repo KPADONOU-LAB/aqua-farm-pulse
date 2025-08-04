@@ -7,18 +7,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useFarm } from '@/contexts/FarmContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Globe, DollarSign, Fish, Waves, UserPlus } from 'lucide-react';
 
 const FarmSetup = () => {
-  const { updateFarmSettings, translate } = useFarm();
+  const { updateFarmSettings } = useFarm();
+  const { t: translate, language } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     farm_name: '',
-    language: 'en' as 'fr' | 'en',
+    language: language,
     currency: 'usd' as 'fcfa' | 'eur' | 'usd',
     basin_types: [] as string[],
     fish_species: [] as string[],
@@ -26,15 +28,15 @@ const FarmSetup = () => {
   });
 
   const basinOptions = [
-    { value: 'flottante', label: { fr: 'Flottante', en: 'Floating' } },
-    { value: 'fixe', label: { fr: 'Fixe', en: 'Fixed' } },
-    { value: 'hors_sol', label: { fr: 'Hors-sol', en: 'Above ground' } }
+    { value: 'flottante', labelKey: 'floating' },
+    { value: 'fixe', labelKey: 'fixed' },
+    { value: 'hors_sol', labelKey: 'above_ground' }
   ];
 
   const speciesOptions = [
-    { value: 'tilapia', label: { fr: 'Tilapia', en: 'Tilapia' } },
-    { value: 'silure', label: { fr: 'Silure', en: 'Catfish' } },
-    { value: 'carpe', label: { fr: 'Carpe', en: 'Carp' } }
+    { value: 'tilapia', labelKey: 'tilapia' },
+    { value: 'silure', labelKey: 'catfish' },
+    { value: 'carpe', labelKey: 'carp' }
   ];
 
   const handleBasinTypeChange = (basinType: string, checked: boolean) => {
@@ -194,7 +196,7 @@ const FarmSetup = () => {
                       onCheckedChange={(checked) => handleBasinTypeChange(basin.value, checked as boolean)}
                     />
                     <Label htmlFor={basin.value} className="text-sm">
-                      {basin.label[formData.language]}
+                      {translate(basin.labelKey)}
                     </Label>
                   </div>
                 ))}
@@ -216,7 +218,7 @@ const FarmSetup = () => {
                       onCheckedChange={(checked) => handleSpeciesChange(species.value, checked as boolean)}
                     />
                     <Label htmlFor={species.value} className="text-sm">
-                      {species.label[formData.language]}
+                      {translate(species.labelKey)}
                     </Label>
                   </div>
                 ))}
