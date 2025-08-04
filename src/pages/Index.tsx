@@ -7,10 +7,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertsPanel } from "@/components/AlertsPanel";
 import { FarmHeader } from "@/components/FarmHeader";
 import { useFarm } from "@/contexts/FarmContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
   const { stats, croissanceData, ventesData, loading } = useDashboardData();
   const { formatCurrency } = useFarm();
+  const { t } = useLanguage();
 
   if (loading) {
     return (
@@ -36,67 +38,62 @@ const Index = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-ocean-700">Cages actives</CardTitle>
+            <CardTitle className="text-sm font-medium text-ocean-700">{t('active_cages')}</CardTitle>
             <Fish className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-ocean-800">{stats.cagesActives}</div>
-            <p className="text-xs text-ocean-600 mt-1">{stats.cagesVides} vides</p>
+            <p className="text-xs text-ocean-600 mt-1">{stats.cagesVides} {t('empty_cages')}</p>
           </CardContent>
         </Card>
 
         <Card className="stat-card aqua-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-aqua-700">Total poissons</CardTitle>
-            <Fish className="h-5 w-5 text-aqua-600" />
+            <CardTitle className="text-sm font-medium text-aqua-700">{t('total_fish')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-aqua-800">{stats.totalPoissons.toLocaleString()}</div>
-            <p className="text-xs text-aqua-600 mt-1">Poids moy: {stats.croissanceMoyenne.toFixed(1)}kg</p>
+            <p className="text-xs text-aqua-600 mt-1">{t('avg_weight')}: {stats.croissanceMoyenne.toFixed(1)}kg</p>
           </CardContent>
         </Card>
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Aliment consommé</CardTitle>
-            <Package className="h-5 w-5 text-amber-600" />
+            <CardTitle className="text-sm font-medium text-gray-700">{t('consumed_feed')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{stats.alimentConsommeJour.toFixed(1)}kg</div>
-            <p className="text-xs text-amber-600 mt-1">Aujourd'hui</p>
+            <p className="text-xs text-amber-600 mt-1">{t('today_dashboard')}</p>
           </CardContent>
         </Card>
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Alertes</CardTitle>
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <CardTitle className="text-sm font-medium text-gray-700">{t('alerts_dashboard')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{stats.alertes}</div>
-            <p className="text-xs text-red-600 mt-1">Attention requise</p>
+            <p className="text-xs text-red-600 mt-1">{t('attention_required')}</p>
           </CardContent>
         </Card>
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Croissance moy.</CardTitle>
-            <TrendingUp className="h-5 w-5 text-green-600" />
+            <CardTitle className="text-sm font-medium text-gray-700">{t('avg_growth')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{stats.croissanceMoyenne.toFixed(1)}kg</div>
-            <p className="text-xs text-green-600 mt-1">Poids moyen</p>
+            <p className="text-xs text-green-600 mt-1">{t('avg_weight_full')}</p>
           </CardContent>
         </Card>
 
         <Card className="stat-card bg-white/90">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-700">Ventes aujourd'hui</CardTitle>
-            <ShoppingCart className="h-5 w-5 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gray-700">{t('sales_today')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-gray-800">{stats.ventesJour.toFixed(1)}kg</div>
-            <p className="text-xs text-blue-600 mt-1">{formatCurrency(stats.revenusJour)} revenus</p>
+            <p className="text-xs text-blue-600 mt-1">{formatCurrency(stats.revenusJour)} {t('revenue')}</p>
           </CardContent>
         </Card>
       </div>
@@ -107,7 +104,7 @@ const Index = () => {
           <CardHeader>
             <CardTitle className="text-foreground flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
-              Croissance moyenne (6 mois)
+              {t('avg_growth_6months')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -140,7 +137,7 @@ const Index = () => {
           <CardHeader>
             <CardTitle className="text-foreground flex items-center gap-2">
               <ShoppingCart className="h-5 w-5" />
-              Ventes hebdomadaires (tonnes)
+              {t('weekly_sales_tons')}
             </CardTitle>
           </CardHeader>
           <CardContent>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFarm } from '@/contexts/FarmContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FarmHeaderProps {
   title?: string;
@@ -7,7 +8,8 @@ interface FarmHeaderProps {
 }
 
 export const FarmHeader = ({ title, subtitle }: FarmHeaderProps) => {
-  const { farmSettings, translate } = useFarm();
+  const { farmSettings } = useFarm();
+  const { t } = useLanguage();
 
   return (
     <div className="mb-8">
@@ -20,17 +22,17 @@ export const FarmHeader = ({ title, subtitle }: FarmHeaderProps) => {
       )}
       {title && (
         <h1 className="text-4xl font-bold text-black mb-2">
-          {translate(title) || title}
+          {t(title) || title}
         </h1>
       )}
       {subtitle && (
         <p className="text-black/80 text-lg">
-          {translate(subtitle) || subtitle}
+          {t(subtitle) || subtitle}
         </p>
       )}
       <div className="flex items-center gap-2 mt-2 text-white/60">
         <div className="w-2 h-2 bg-aqua-400 rounded-full animate-pulse"></div>
-        <span className="text-sm">{translate('last_update')}: temps réel</span>
+        <span className="text-sm">{t('last_update')}: {t('real_time')}</span>
       </div>
     </div>
   );

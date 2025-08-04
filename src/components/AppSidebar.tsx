@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useFarm } from "@/contexts/FarmContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -67,7 +67,7 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
-  const { translate } = useFarm();
+  const { t: translate } = useLanguage();
   
   const menuItems = getMenuItems(translate);
   const analyticsItems = getAnalyticsItems(translate);
@@ -90,7 +90,7 @@ export function AppSidebar() {
               </div>
               <div>
                 <h2 className="font-bold text-lg text-white">PisciManager</h2>
-                <p className="text-xs text-white/70">Ferme moderne</p>
+                <p className="text-xs text-white/70">{translate('modern_farm')}</p>
               </div>
             </>
           )}
@@ -197,10 +197,10 @@ export function AppSidebar() {
             size="sm"
             onClick={signOut}
             className={`${collapsed ? "w-full" : "flex-1"} p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-white`}
-            title="Déconnexion"
+            title={translate('logout')}
           >
             <LogOut className="h-4 w-4" />
-            {!collapsed && <span className="ml-1 text-xs">Déconnexion</span>}
+            {!collapsed && <span className="ml-1 text-xs">{translate('logout')}</span>}
           </Button>
         </div>
       </div>

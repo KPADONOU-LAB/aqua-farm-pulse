@@ -12,25 +12,29 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 
-const menuItems = [
-  { title: "Tableau de bord", url: "/", icon: Home },
-  { title: "Cages", url: "/cages", icon: Fish },
-  { title: "Alimentation", url: "/feeding", icon: Coffee },
-  { title: "Qualité eau", url: "/water-quality", icon: Droplets },
-  { title: "Santé", url: "/health", icon: Heart },
-  { title: "Stocks", url: "/inventory", icon: Package },
-  { title: "Ventes", url: "/sales", icon: ShoppingCart },
-  { title: "Rapports", url: "/reports", icon: BarChart3 },
+const getMenuItems = (t: (key: string) => string) => [
+  { title: t("dashboard"), url: "/", icon: Home },
+  { title: t("cages"), url: "/cages", icon: Fish },
+  { title: t("feeding"), url: "/feeding", icon: Coffee },
+  { title: t("water_quality"), url: "/water-quality", icon: Droplets },
+  { title: t("health"), url: "/health", icon: Heart },
+  { title: t("inventory"), url: "/inventory", icon: Package },
+  { title: t("sales"), url: "/sales", icon: ShoppingCart },
+  { title: t("reports"), url: "/reports", icon: BarChart3 },
 ];
 
 export function TopNavigation() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
+  const { t } = useLanguage();
   const { toggleSidebar } = useSidebar();
+  
+  const menuItems = getMenuItems(t);
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = (path: string) =>
@@ -57,7 +61,7 @@ export function TopNavigation() {
             </div>
             <div>
               <h1 className="font-bold text-lg text-white">PisciManager</h1>
-              <p className="text-xs text-white/70">Ferme moderne</p>
+              <p className="text-xs text-white/70">{t('modern_farm')}</p>
             </div>
           </div>
         </div>
@@ -102,7 +106,7 @@ export function TopNavigation() {
             size="sm"
             onClick={signOut}
             className="p-2 text-white hover:bg-white/20"
-            title="Déconnexion"
+            title={t('logout')}
           >
             <LogOut className="h-4 w-4" />
           </Button>
