@@ -117,7 +117,16 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
   // Translation function
   const t = (key: string): string => {
-    return authTranslations[language][key] || key;
+    try {
+      const translations = authTranslations[language];
+      if (translations && translations[key]) {
+        return translations[key];
+      }
+      return key;
+    } catch (error) {
+      console.error('Translation error for key:', key, error);
+      return key;
+    }
   };
 
   return (
