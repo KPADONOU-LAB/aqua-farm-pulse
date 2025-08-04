@@ -134,6 +134,12 @@ const authTranslations = {
     'required': 'requise',
     'last_update': 'Dernière mise à jour',
     'real_time': 'temps réel',
+    
+    // Sidebar navigation
+    'operations': 'Opérations',
+    'management': 'Gestion',
+    'cage_history': 'Historique Cages',
+    'settings': 'Paramètres',
   },
   en: {
     // Auth page
@@ -258,6 +264,12 @@ const authTranslations = {
     'required': 'required',
     'last_update': 'Last update',
     'real_time': 'real-time',
+    
+    // Sidebar navigation
+    'operations': 'Operations',
+    'management': 'Management',
+    'cage_history': 'Cage History',
+    'settings': 'Settings',
   }
 };
 

@@ -8,8 +8,6 @@ import { AppSidebarOptimized } from "@/components/AppSidebarOptimized";
 import { TopNavigationOptimized } from "@/components/TopNavigationOptimized";
 import { IntelligentDashboard } from "@/components/IntelligentDashboard";
 import { HelpSystem } from "@/components/HelpSystem";
-import { AuthProvider } from "@/hooks/useAuth";
-import { FarmProvider } from "@/contexts/FarmContext";
 import { FarmSetupWrapper } from "@/components/FarmSetupWrapper";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -49,10 +47,8 @@ export default function App() {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-          <AuthProvider>
-            <FarmProvider>
-              <NotificationProvider>
-                <Routes>
+        <NotificationProvider>
+          <Routes>
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/*" element={
                   <ProtectedRoute>
@@ -95,10 +91,8 @@ export default function App() {
                     </FarmSetupWrapper>
                   </ProtectedRoute>
                 } />
-                </Routes>
-              </NotificationProvider>
-            </FarmProvider>
-          </AuthProvider>
+          </Routes>
+        </NotificationProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
