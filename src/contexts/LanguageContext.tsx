@@ -182,6 +182,9 @@ const authTranslations = {
     'quick_access': 'Accès Rapide',
     'active_alerts': 'Alertes Actives',
     'ready_harvest': 'Prêt Récolte',
+    
+    // Advanced tools menu
+    'advanced_tools': 'Outils Avancés',
   },
   en: {
     // Auth page
@@ -354,6 +357,9 @@ const authTranslations = {
     'quick_access': 'Quick Access',
     'active_alerts': 'Active Alerts',
     'ready_harvest': 'Ready Harvest',
+    
+    // Advanced tools menu
+    'advanced_tools': 'Advanced Tools',
   }
 };
 

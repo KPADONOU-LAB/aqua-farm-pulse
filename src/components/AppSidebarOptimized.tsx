@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -42,40 +43,40 @@ import {
 import { useState } from "react";
 
 // Navigation principale - workflow quotidien
-const coreOperations = [
-  { title: "Tableau de bord", url: "/", icon: Home },
-  { title: "Cages", url: "/cages", icon: Fish },
-  { title: "Historique Cages", url: "/cage-history", icon: BarChart3 },
-  { title: "Alimentation", url: "/feeding", icon: Coffee },
-  { title: "Santé", url: "/health", icon: Heart },
-  { title: "Ventes", url: "/sales", icon: ShoppingCart },
+const getCoreOperations = (t: (key: string) => string) => [
+  { title: t("dashboard_title"), url: "/", icon: Home },
+  { title: t("cages_title"), url: "/cages", icon: Fish },
+  { title: t("cage_history"), url: "/cage-history", icon: BarChart3 },
+  { title: t("feeding_title"), url: "/feeding", icon: Coffee },
+  { title: t("health_title"), url: "/health", icon: Heart },
+  { title: t("sales_title"), url: "/sales", icon: ShoppingCart },
 ];
 
 // Gestion & Qualité
-const managementItems = [
-  { title: "Qualité eau", url: "/water-quality", icon: Droplets },
-  { title: "Stocks", url: "/inventory", icon: Package },
-  { title: "Finance", url: "/finance", icon: Euro },
-  { title: "CRM", url: "/crm", icon: Users },
-  { title: "Paramètres", url: "/settings", icon: Settings },
+const getManagementItems = (t: (key: string) => string) => [
+  { title: t("water_quality_title"), url: "/water-quality", icon: Droplets },
+  { title: t("inventory_title"), url: "/inventory", icon: Package },
+  { title: t("finance_title"), url: "/finance", icon: Euro },
+  { title: t("crm_title"), url: "/crm", icon: Users },
+  { title: t("settings"), url: "/settings", icon: Settings },
 ];
 
 // Analytics & Intelligence
-const analyticsItems = [
-  { title: "Rapports", url: "/reports", icon: BarChart3 },
-  { title: "Performance", url: "/performance", icon: TrendingUp },
-  { title: "Prédictions IA", url: "/predictions", icon: Brain },
-  { title: "Alertes", url: "/alerts", icon: Bell },
+const getAnalyticsItems = (t: (key: string) => string) => [
+  { title: t("reports_title"), url: "/reports", icon: BarChart3 },
+  { title: t("performance_title"), url: "/performance", icon: TrendingUp },
+  { title: t("predictions_ai_title"), url: "/predictions", icon: Brain },
+  { title: t("alerts_title"), url: "/alerts", icon: Bell },
 ];
 
 // Outils avancés - regroupés
-const advancedTools = [
-  { title: "Dashboards Personnalisés", url: "/custom-dashboards", icon: LayoutDashboard },
-  { title: "Recommandations IA", url: "/smart-recommendations", icon: Zap },
-  { title: "Notifications IA", url: "/smart-notifications", icon: Bell },
-  { title: "Rapports Avancés", url: "/advanced-reports", icon: BarChart3 },
-  { title: "Analytics IA", url: "/advanced-analytics", icon: Brain },
-  { title: "Alertes IA", url: "/smart-alerts", icon: Target },
+const getAdvancedTools = (t: (key: string) => string) => [
+  { title: t("custom_dashboards_title"), url: "/custom-dashboards", icon: LayoutDashboard },
+  { title: t("smart_recommendations_title"), url: "/smart-recommendations", icon: Zap },
+  { title: t("smart_notifications_title"), url: "/smart-notifications", icon: Bell },
+  { title: t("advanced_reports_title"), url: "/advanced-reports", icon: BarChart3 },
+  { title: t("advanced_analytics_title"), url: "/advanced-analytics", icon: Brain },
+  { title: t("smart_alerts_title"), url: "/smart-alerts", icon: Target },
 ];
 
 export function AppSidebarOptimized() {
@@ -84,9 +85,16 @@ export function AppSidebarOptimized() {
   const location = useLocation();
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
+  const { t } = useLanguage();
   
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+
+  // Get translated menu items
+  const coreOperations = getCoreOperations(t);
+  const managementItems = getManagementItems(t);
+  const analyticsItems = getAnalyticsItems(t);
+  const advancedTools = getAdvancedTools(t);
 
   const isActive = (path: string) => currentPath === path;
   const isActiveGroup = (items: typeof coreOperations) => 
@@ -113,7 +121,7 @@ export function AppSidebarOptimized() {
               </div>
               <div>
                 <h2 className="font-bold text-lg text-white">PisciManager</h2>
-                <p className="text-xs text-white/70">Gestion intelligente</p>
+              <p className="text-xs text-white/70">{t('smart_management')}</p>
               </div>
             </>
           )}
@@ -130,7 +138,7 @@ export function AppSidebarOptimized() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/90 font-semibold px-2 mb-3 flex items-center gap-2">
             <Zap className="h-4 w-4" />
-            {!collapsed && "Opérations"}
+            {!collapsed && t('operations')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -157,7 +165,7 @@ export function AppSidebarOptimized() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-white/90 font-semibold px-2 mb-3 mt-6 flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            {!collapsed && "Gestion"}
+            {!collapsed && t('management')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -187,7 +195,7 @@ export function AppSidebarOptimized() {
               <CollapsibleTrigger asChild>
                 <SidebarGroupLabel className={`text-white/90 font-semibold px-2 mb-2 mt-6 flex items-center gap-2 cursor-pointer rounded-lg p-2 transition-colors ${getGroupClass(analyticsItems)}`}>
                   <BarChart3 className="h-4 w-4" />
-                  <span>Analytics</span>
+                  <span>{t('analytics_group')}</span>
                   <div className="ml-auto">
                     {analyticsOpen ? "−" : "+"}
                   </div>
@@ -223,7 +231,7 @@ export function AppSidebarOptimized() {
               <CollapsibleTrigger asChild>
                 <SidebarGroupLabel className={`text-white/90 font-semibold px-2 mb-2 mt-4 flex items-center gap-2 cursor-pointer rounded-lg p-2 transition-colors ${getGroupClass(advancedTools)}`}>
                   <Brain className="h-4 w-4" />
-                  <span>Outils Avancés</span>
+                  <span>{t('advanced_group')}</span>
                   <div className="ml-auto">
                     {advancedOpen ? "−" : "+"}
                   </div>
@@ -293,10 +301,10 @@ export function AppSidebarOptimized() {
             size="sm"
             onClick={signOut}
             className={`${collapsed ? "w-full" : "flex-1"} p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white hover:text-white`}
-            title="Déconnexion"
+            title={t('logout_title')}
           >
             <LogOut className="h-4 w-4" />
-            {!collapsed && <span className="ml-1 text-xs">Déconnexion</span>}
+            {!collapsed && <span className="ml-1 text-xs">{t('logout_title')}</span>}
           </Button>
         </div>
       </div>
