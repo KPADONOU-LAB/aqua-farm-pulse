@@ -22,6 +22,7 @@ import {
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -86,6 +87,7 @@ export function AppSidebarOptimized() {
   const currentPath = location.pathname;
   const { signOut, user } = useAuth();
   const { t } = useLanguage();
+  useSyncedLanguage(); // Ensure language synchronization
   
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);

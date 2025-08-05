@@ -185,6 +185,15 @@ const authTranslations = {
     
     // Advanced tools menu
     'advanced_tools': 'Outils Avancés',
+    
+    // Dashboard tasks and recommendations
+    'daily_tasks': 'Tâches Quotidiennes',
+    'daily_feeding': 'Alimentation Quotidienne',
+    'feeding_management': 'Gérer l\'alimentation de 6 cages actives',
+    'health_monitoring': 'Contrôle Santé',
+    'health_record': 'Enregistrer les observations quotidiennes',
+    'ai_recommendations': 'Recommandations IA',
+    'optimization_recommendations': 'Optimisations personnalisées basées sur vos données',
   },
   en: {
     // Auth page
@@ -360,6 +369,15 @@ const authTranslations = {
     
     // Advanced tools menu
     'advanced_tools': 'Advanced Tools',
+    
+    // Dashboard tasks and recommendations
+    'daily_tasks': 'Daily Tasks',
+    'daily_feeding': 'Daily Feeding',
+    'feeding_management': 'Manage feeding for 6 active cages',
+    'health_monitoring': 'Health Monitoring',
+    'health_record': 'Record daily observations',
+    'ai_recommendations': 'AI Recommendations',
+    'optimization_recommendations': 'Personalized optimizations based on your data',
   }
 };
 

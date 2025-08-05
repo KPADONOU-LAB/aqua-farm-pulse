@@ -3,6 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useFarm } from "@/contexts/FarmContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -105,6 +106,7 @@ export function TopNavigationOptimized() {
     farmSettings
   } = useFarm();
   const { t } = useLanguage();
+  useSyncedLanguage(); // Ensure language synchronization
   const {
     toggleSidebar
   } = useSidebar();

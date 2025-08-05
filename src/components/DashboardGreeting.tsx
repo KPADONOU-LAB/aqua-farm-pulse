@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 
 interface DashboardGreetingProps {
   userName?: string;
@@ -7,6 +8,7 @@ interface DashboardGreetingProps {
 
 export const DashboardGreeting = ({ userName }: DashboardGreetingProps) => {
   const { t } = useLanguage();
+  useSyncedLanguage(); // Ensure language synchronization
   
   const getGreeting = () => {
     const hour = new Date().getHours();

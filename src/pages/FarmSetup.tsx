@@ -8,12 +8,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useFarm } from '@/contexts/FarmContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Globe, DollarSign, Fish, Waves, UserPlus } from 'lucide-react';
 
 const FarmSetup = () => {
   const { updateFarmSettings } = useFarm();
   const { t: translate, language } = useLanguage();
+  const { updateLanguage } = useSyncedLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -149,8 +151,10 @@ const FarmSetup = () => {
                   <Globe className="h-4 w-4" />
                   {translate('language')}
                 </Label>
-                <Select value={formData.language} onValueChange={(value: 'fr' | 'en') => 
-                  setFormData(prev => ({ ...prev, language: value }))}>
+                <Select value={formData.language} onValueChange={(value: 'fr' | 'en') => {
+                  setFormData(prev => ({ ...prev, language: value }));
+                  updateLanguage(value); // Update language immediately
+                }}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

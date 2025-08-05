@@ -7,15 +7,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertsPanel } from "@/components/AlertsPanel";
 import { DashboardGreeting } from "@/components/DashboardGreeting";
 import { DashboardQuickAccess } from "@/components/DashboardQuickAccess";
+import { DashboardTasksPanel } from "@/components/DashboardTasksPanel";
 import { useFarm } from "@/contexts/FarmContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/hooks/useAuth";
+import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
 
 const Index = () => {
   const { stats, croissanceData, ventesData, loading } = useDashboardData();
   const { formatCurrency } = useFarm();
   const { t } = useLanguage();
   const { user } = useAuth();
+  useSyncedLanguage(); // Ensure language synchronization
 
   if (loading) {
     return (
@@ -102,67 +105,75 @@ const Index = () => {
         </Card>
       </div>
 
-      {/* Graphiques */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-foreground flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              {t('avg_growth_6months')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={croissanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="mois" stroke="hsl(var(--foreground))" />
-                <YAxis stroke="hsl(var(--foreground))" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))', 
-                    borderRadius: '8px',
-                    color: 'hsl(var(--foreground))'
-                  }} 
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="poids" 
-                  stroke="hsl(var(--primary))" 
-                  strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+      {/* Contenu principal */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Tâches quotidiennes et recommandations */}
+        <div className="lg:col-span-1">
+          <DashboardTasksPanel />
+        </div>
 
-        <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-foreground flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              {t('weekly_sales_tons')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={ventesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="jour" stroke="hsl(var(--foreground))" />
-                <YAxis stroke="hsl(var(--foreground))" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))', 
-                    borderRadius: '8px',
-                    color: 'hsl(var(--foreground))'
-                  }} 
-                />
-                <Bar dataKey="ventes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {/* Graphiques */}
+        <div className="lg:col-span-2 grid grid-cols-1 gap-6">
+          <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                {t('avg_growth_6months')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={croissanceData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="mois" stroke="hsl(var(--foreground))" />
+                  <YAxis stroke="hsl(var(--foreground))" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))', 
+                      borderRadius: '8px',
+                      color: 'hsl(var(--foreground))'
+                    }} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="poids" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={3}
+                    dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card/80 backdrop-blur-md border-border/20 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5" />
+                {t('weekly_sales_tons')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={ventesData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="jour" stroke="hsl(var(--foreground))" />
+                  <YAxis stroke="hsl(var(--foreground))" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))', 
+                      borderRadius: '8px',
+                      color: 'hsl(var(--foreground))'
+                    }} 
+                  />
+                  <Bar dataKey="ventes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Alertes récentes */}
