@@ -5,14 +5,17 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertsPanel } from "@/components/AlertsPanel";
-import { FarmHeader } from "@/components/FarmHeader";
+import { DashboardGreeting } from "@/components/DashboardGreeting";
+import { DashboardQuickAccess } from "@/components/DashboardQuickAccess";
 import { useFarm } from "@/contexts/FarmContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
   const { stats, croissanceData, ventesData, loading } = useDashboardData();
   const { formatCurrency } = useFarm();
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   if (loading) {
     return (
@@ -32,7 +35,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen p-6 animate-fade-in" style={{backgroundColor: '#C8E9F6'}}>
-      <FarmHeader title="dashboard" subtitle="overview" />
+      <DashboardGreeting userName={user?.email} />
+      <DashboardQuickAccess />
 
       {/* Stats principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">

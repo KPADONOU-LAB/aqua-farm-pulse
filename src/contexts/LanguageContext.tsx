@@ -140,6 +140,48 @@ const authTranslations = {
     'management': 'Gestion',
     'cage_history': 'Historique Cages',
     'settings': 'Paramètres',
+    
+    // TopNavigation - Menu items
+    'dashboard_title': 'Tableau de bord',
+    'cages_title': 'Cages',
+    'feeding_title': 'Alimentation',
+    'health_title': 'Santé',
+    'sales_title': 'Ventes',
+    'water_quality_title': 'Qualité eau',
+    'inventory_title': 'Stocks',
+    'reports_title': 'Rapports',
+    'performance_title': 'Performance',
+    'predictions_ai_title': 'Prédictions IA',
+    'finance_title': 'Finance',
+    'crm_title': 'CRM',
+    'alerts_title': 'Alertes',
+    'custom_dashboards_title': 'Dashboards',
+    'smart_recommendations_title': 'Recommandations IA',
+    'smart_notifications_title': 'Notifications IA',
+    'advanced_reports_title': 'Rapports Avancés',
+    'advanced_analytics_title': 'Analytics IA',
+    'smart_alerts_title': 'Alertes IA',
+    
+    // Menu groups
+    'quality_group': 'Qualité',
+    'analytics_group': 'Analytics',
+    'management_group': 'Gestion',
+    'advanced_group': 'Avancé',
+    'more_menu': 'Plus',
+    
+    // User section
+    'logout_title': 'Déconnexion',
+    'smart_management': 'Gestion intelligente',
+    
+    // Messages and greetings
+    'good_evening': 'Bonsoir',
+    'good_morning': 'Bonjour',
+    'good_afternoon': 'Bonne après-midi',
+    'good_night': 'Bonne nuit',
+    'recommended_actions': 'Voici vos actions recommandées pour aujourd\'hui',
+    'quick_access': 'Accès Rapide',
+    'active_alerts': 'Alertes Actives',
+    'ready_harvest': 'Prêt Récolte',
   },
   en: {
     // Auth page
@@ -270,6 +312,48 @@ const authTranslations = {
     'management': 'Management',
     'cage_history': 'Cage History',
     'settings': 'Settings',
+    
+    // TopNavigation - Menu items
+    'dashboard_title': 'Dashboard',
+    'cages_title': 'Cages',
+    'feeding_title': 'Feeding',
+    'health_title': 'Health',
+    'sales_title': 'Sales',
+    'water_quality_title': 'Water Quality',
+    'inventory_title': 'Inventory',
+    'reports_title': 'Reports',
+    'performance_title': 'Performance',
+    'predictions_ai_title': 'AI Predictions',
+    'finance_title': 'Finance',
+    'crm_title': 'CRM',
+    'alerts_title': 'Alerts',
+    'custom_dashboards_title': 'Dashboards',
+    'smart_recommendations_title': 'AI Recommendations',
+    'smart_notifications_title': 'AI Notifications',
+    'advanced_reports_title': 'Advanced Reports',
+    'advanced_analytics_title': 'AI Analytics',
+    'smart_alerts_title': 'AI Alerts',
+    
+    // Menu groups
+    'quality_group': 'Quality',
+    'analytics_group': 'Analytics',
+    'management_group': 'Management',
+    'advanced_group': 'Advanced',
+    'more_menu': 'More',
+    
+    // User section
+    'logout_title': 'Logout',
+    'smart_management': 'Smart management',
+    
+    // Messages and greetings
+    'good_evening': 'Good evening',
+    'good_morning': 'Good morning',
+    'good_afternoon': 'Good afternoon',
+    'good_night': 'Good night',
+    'recommended_actions': 'Here are your recommended actions for today',
+    'quick_access': 'Quick Access',
+    'active_alerts': 'Active Alerts',
+    'ready_harvest': 'Ready Harvest',
   }
 };
 
