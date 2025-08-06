@@ -6,6 +6,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewFeedingModal from "@/components/modals/NewFeedingModal";
 import { useFeedingData } from "@/hooks/useFeedingData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
     case 'excellent':
@@ -27,6 +29,8 @@ const getAlimentTypeColor = (type: string) => {
   return 'bg-gray-500 text-white';
 };
 const Feeding = () => {
+  const { t } = useLanguage();
+  const { language } = useSyncedLanguage();
   const {
     feedingSessions,
     weeklyData,
@@ -55,9 +59,9 @@ const Feeding = () => {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Suivi alimentaire</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('feeding_tracking')}</h1>
             <p className="text-muted-foreground">
-              Gestion et suivi des sessions d'alimentation
+              {t('feeding_tracking_description')}
             </p>
           </div>
           <div className="flex gap-3">
@@ -70,7 +74,7 @@ const Feeding = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-ocean-700">Sessions aujourd'hui</CardTitle>
+            <CardTitle className="text-sm font-medium text-ocean-700">{t('sessions_today')}</CardTitle>
             <Coffee className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
@@ -80,7 +84,7 @@ const Feeding = () => {
 
         <Card className="stat-card aqua-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-aqua-700">Quantité totale</CardTitle>
+            <CardTitle className="text-sm font-medium text-aqua-700">{t('total_quantity')}</CardTitle>
             <TrendingUp className="h-5 w-5 text-aqua-600" />
           </CardHeader>
           <CardContent>
@@ -90,7 +94,7 @@ const Feeding = () => {
 
         <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-foreground">Prochaine session</CardTitle>
+            <CardTitle className="text-sm font-medium text-foreground">{t('next_session')}</CardTitle>
             <Clock className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -101,7 +105,7 @@ const Feeding = () => {
 
         <Card className="stat-card bg-card/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-foreground">Alertes</CardTitle>
+            <CardTitle className="text-sm font-medium text-foreground">{t('alerts')}</CardTitle>
             <AlertCircle className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -120,10 +124,10 @@ const Feeding = () => {
                 <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-lg">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
-                Consommation hebdomadaire (kg)
+                {t('weekly_consumption')} (kg)
               </CardTitle>
               <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-white/90 text-sm font-medium">Cette semaine</span>
+                <span className="text-white/90 text-sm font-medium">{t('this_week')}</span>
               </div>
             </div>
           </CardHeader>
@@ -173,7 +177,7 @@ const Feeding = () => {
               <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg shadow-lg">
                 <Coffee className="h-6 w-6 text-white" />
               </div>
-              Recommandations
+              {t('recommendations')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -183,9 +187,9 @@ const Feeding = () => {
                   <span className="text-white text-lg">💡</span>
                 </div>
                 <div>
-                  <h4 className="text-white font-bold mb-2 text-lg">Optimisation FCR</h4>
+                  <h4 className="text-white font-bold mb-2 text-lg">{t('fcr_optimization')}</h4>
                   <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-emerald-500/20">
-                    Réduire la quantité de 5% pour les cages avec FCR &gt; 2.0
+                    {t('fcr_recommendation')}
                   </p>
                 </div>
               </div>
@@ -197,9 +201,9 @@ const Feeding = () => {
                   <span className="text-white text-lg">📊</span>
                 </div>
                 <div>
-                  <h4 className="text-white font-bold mb-2 text-lg">Suivi température</h4>
+                  <h4 className="text-white font-bold mb-2 text-lg">{t('temperature_monitoring')}</h4>
                   <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-blue-500/20">
-                    Ajuster les horaires selon la température de l'eau
+                    {t('temperature_recommendation')}
                   </p>
                 </div>
               </div>
@@ -211,9 +215,9 @@ const Feeding = () => {
                   <span className="text-white text-lg">⚠️</span>
                 </div>
                 <div>
-                  <h4 className="text-white font-bold mb-2 text-lg">Surveillance</h4>
+                  <h4 className="text-white font-bold mb-2 text-lg">{t('monitoring')}</h4>
                   <p className="text-white/90 text-sm font-medium bg-slate-800/40 p-3 rounded-lg border border-amber-500/20">
-                    Cage #003 montre un appétit réduit - vérifier la qualité de l'eau
+                    {t('monitoring_alert')}
                   </p>
                 </div>
               </div>
@@ -237,11 +241,11 @@ const Feeding = () => {
                 </div>
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-400 rounded-full animate-pulse shadow-lg"></div>
               </div>
-              Sessions d'aujourd'hui
+              {t('todays_sessions')}
             </CardTitle>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-              <span className="text-white/90 text-sm font-medium">En temps réel</span>
+              <span className="text-white/90 text-sm font-medium">{t('real_time')}</span>
             </div>
           </div>
           <div className="mt-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
@@ -255,8 +259,8 @@ const Feeding = () => {
                   <div className="p-4 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                     <Coffee className="h-8 w-8 text-cyan-400" />
                   </div>
-                  <p className="text-white/80 text-lg font-medium">Aucune session d'alimentation aujourd'hui</p>
-                  <p className="text-white/60 text-sm mt-2">Ajoutez une nouvelle session pour commencer le suivi</p>
+                  <p className="text-white/80 text-lg font-medium">{t('no_feeding_sessions_today')}</p>
+                  <p className="text-white/60 text-sm mt-2">{t('add_session_to_start')}</p>
                 </div>
               </div> : feedingSessions.map((feeding, index) => <div key={feeding.id} className="group relative p-6 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl border border-white/20 hover:from-white/15 hover:to-white/10 transition-all duration-300 hover-scale shadow-xl backdrop-blur-sm overflow-hidden">
                   {/* Effet de lueur sur hover */}
@@ -306,7 +310,7 @@ const Feeding = () => {
                     {feeding.observations && <div className="mt-6 pt-6 border-t border-gradient-to-r from-transparent via-white/20 to-transparent">
                         <div className="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-sm p-4 rounded-xl border border-blue-400/30 shadow-lg">
                           <p className="text-white/95 text-sm leading-relaxed">
-                            <span className="font-bold text-blue-300 text-base">💬 Observations:</span> 
+                            <span className="font-bold text-blue-300 text-base">💬 {t('observations')}:</span> 
                             <span className="ml-2 font-medium">{feeding.observations}</span>
                           </p>
                         </div>

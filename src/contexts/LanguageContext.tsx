@@ -98,6 +98,27 @@ const authTranslations = {
     'sales_today': 'Ventes aujourd\'hui',
     'revenue': 'revenus',
     'avg_growth_6months': 'Croissance moyenne (6 mois)',
+    
+    // Feeding page
+    'feeding_tracking': 'Suivi alimentaire',
+    'feeding_tracking_description': 'Gestion et suivi des sessions d\'alimentation',
+    'sessions_today': 'Sessions aujourd\'hui',
+    'total_quantity': 'Quantité totale',
+    'next_session': 'Prochaine session',
+    'weekly_consumption': 'Consommation hebdomadaire',
+    'this_week': 'Cette semaine',
+    'recommendations': 'Recommandations',
+    'fcr_optimization': 'Optimisation FCR',
+    'fcr_recommendation': 'Réduire la quantité de 5% pour les cages avec FCR > 2.0',
+    'temperature_monitoring': 'Suivi température',
+    'temperature_recommendation': 'Ajuster les horaires selon la température de l\'eau',
+    'monitoring': 'Surveillance',
+    'monitoring_alert': 'Cage #003 montre un appétit réduit - vérifier la qualité de l\'eau',
+    'todays_sessions': 'Sessions d\'aujourd\'hui',
+    'real_time': 'En temps réel',
+    'no_feeding_sessions_today': 'Aucune session d\'alimentation aujourd\'hui',
+    'add_session_to_start': 'Ajoutez une nouvelle session pour commencer le suivi',
+    'observations': 'Observations',
     'weekly_sales_tons': 'Ventes hebdomadaires (tonnes)',
     'recent_alerts': 'Alertes récentes',
     
@@ -133,7 +154,6 @@ const authTranslations = {
     'attention': 'Attention',
     'required': 'requise',
     'last_update': 'Dernière mise à jour',
-    'real_time': 'temps réel',
     
     // Sidebar navigation
     'operations': 'Opérations',
@@ -321,6 +341,27 @@ const authTranslations = {
     'sales_today': 'Sales Today',
     'revenue': 'revenue',
     'avg_growth_6months': 'Average Growth (6 months)',
+    
+    // Feeding page
+    'feeding_tracking': 'Feeding Management',
+    'feeding_tracking_description': 'Track and manage feeding sessions',
+    'sessions_today': 'Sessions today',
+    'total_quantity': 'Total quantity',
+    'next_session': 'Next session',
+    'weekly_consumption': 'Weekly consumption',
+    'this_week': 'This week',
+    'recommendations': 'Recommendations',
+    'fcr_optimization': 'FCR Optimization',
+    'fcr_recommendation': 'Reduce quantity by 5% for cages with FCR > 2.0',
+    'temperature_monitoring': 'Temperature Monitoring',
+    'temperature_recommendation': 'Adjust schedules according to water temperature',
+    'monitoring': 'Monitoring',
+    'monitoring_alert': 'Cage #003 shows reduced appetite - check water quality',
+    'todays_sessions': 'Today\'s sessions',
+    'real_time': 'Real-time',
+    'no_feeding_sessions_today': 'No feeding sessions today',
+    'add_session_to_start': 'Add a new session to start tracking',
+    'observations': 'Observations',
     'weekly_sales_tons': 'Weekly Sales (tons)',
     'recent_alerts': 'Recent Alerts',
     
@@ -356,7 +397,6 @@ const authTranslations = {
     'attention': 'Attention',
     'required': 'required',
     'last_update': 'Last update',
-    'real_time': 'real-time',
     
     // Sidebar navigation
     'operations': 'Operations',
