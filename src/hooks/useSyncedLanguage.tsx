@@ -4,39 +4,32 @@ import { useFarm } from '@/contexts/FarmContext';
 
 /**
  * Hook to synchronize language between LanguageContext and FarmContext
- * This ensures that when farm settings change the language, it's reflected everywhere
+ * This prioritizes LanguageContext as the source of truth for UI
  */
 export const useSyncedLanguage = () => {
   const { language, setLanguage } = useLanguage();
   const { farmSettings, updateFarmSettings, loading } = useFarm();
 
-  // Sync language from farm settings to language context
+  // Update farm settings when language context changes
   useEffect(() => {
-    if (!loading && farmSettings?.language && farmSettings.language !== language) {
-      console.log('Syncing language from farm settings:', farmSettings.language);
-      setLanguage(farmSettings.language as 'fr' | 'en');
+    if (!loading && farmSettings && farmSettings.language !== language) {
+      console.log('Updating farm settings language to match UI:', language);
+      updateFarmSettings({ language }).catch(error => {
+        console.error('Error updating farm language settings:', error);
+      });
     }
-  }, [farmSettings?.language, language, setLanguage, loading]);
+  }, [language, farmSettings?.language, updateFarmSettings, loading]);
 
   // Function to update language in both contexts
   const updateLanguage = async (newLanguage: 'fr' | 'en') => {
     // Update language context immediately for UI responsiveness
     setLanguage(newLanguage);
     
-    // Update farm settings if available
-    if (farmSettings && updateFarmSettings) {
-      try {
-        await updateFarmSettings({ language: newLanguage });
-      } catch (error) {
-        console.error('Error updating farm language settings:', error);
-        // Revert language context if farm update fails
-        setLanguage(language);
-      }
-    }
+    // Farm settings will be updated through the useEffect above
   };
 
   return {
-    language: farmSettings?.language || language,
+    language,
     updateLanguage,
     isLoading: loading
   };

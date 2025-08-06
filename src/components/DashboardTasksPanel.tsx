@@ -6,8 +6,8 @@ import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { Badge } from "@/components/ui/badge";
 
 export const DashboardTasksPanel = () => {
+  const { language } = useSyncedLanguage(); // Use synced language
   const { t } = useLanguage();
-  useSyncedLanguage();
 
   const dailyTasks = [
     {

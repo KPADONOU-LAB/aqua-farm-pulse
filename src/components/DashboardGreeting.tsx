@@ -7,8 +7,8 @@ interface DashboardGreetingProps {
 }
 
 export const DashboardGreeting = ({ userName }: DashboardGreetingProps) => {
+  const { language } = useSyncedLanguage(); // Use synced language
   const { t } = useLanguage();
-  useSyncedLanguage(); // Ensure language synchronization
   
   const getGreeting = () => {
     const hour = new Date().getHours();
