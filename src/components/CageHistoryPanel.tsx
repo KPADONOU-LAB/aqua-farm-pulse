@@ -7,25 +7,30 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCageHistory } from '@/hooks/useCageHistory';
 import { useOptimizedCages } from '@/hooks/useOptimizedData';
-import { Calendar, TrendingUp, DollarSign, Fish, Scale } from 'lucide-react';
+import { useFarm } from '@/contexts/FarmContext';
+import { Calendar, TrendingUp, DollarSign, Fish, Scale, FileDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
 
 export function CageHistoryPanel() {
   const { toast } = useToast();
+  const { formatCurrency } = useFarm();
   const { cages } = useOptimizedCages();
-  const {
-    loading,
-    feedingHistory,
-    salesHistory,
-    getFeedingHistory,
+  const { 
+    loading, 
+    feedingHistory, 
+    salesHistory, 
+    getFeedingHistory, 
     getSalesHistory,
     formatFeedingHistoryForDisplay,
-    formatSalesHistoryForDisplay
+    formatSalesHistoryForDisplay,
+    getCageSummaryStats
   } = useCageHistory();
 
   const [selectedCage, setSelectedCage] = useState<string>('');
   const [feedingPeriod, setFeedingPeriod] = useState<'day' | 'week' | 'month'>('week');
   const [salesPeriod, setSalesPeriod] = useState<'day' | 'week' | 'month'>('month');
+  const [exportLoading, setExportLoading] = useState(false);
 
   useEffect(() => {
     if (cages.length > 0 && !selectedCage) {
@@ -67,6 +72,137 @@ export function CageHistoryPanel() {
     }
   };
 
+  const exportCompleteHistory = async () => {
+    if (!selectedCage) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez sélectionner une cage",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setExportLoading(true);
+    try {
+      const cage = cages.find(c => c.id === selectedCage);
+      if (!cage) return;
+
+      // Récupérer toutes les données
+      const [feedingData, salesData, cageStats] = await Promise.all([
+        getFeedingHistory(selectedCage, 'day'),
+        getSalesHistory('day', selectedCage),
+        getCageSummaryStats(selectedCage)
+      ]);
+
+      // Créer le workbook Excel
+      const wb = XLSX.utils.book_new();
+
+      // Feuille 1: Résumé de la cage
+      const summaryData = [
+        ['RÉSUMÉ DE LA CAGE', ''],
+        ['Nom de la cage', cage.nom],
+        ['Espèce', cage.espece],
+        ['Statut', cage.statut],
+        ['Date d\'introduction', cage.date_introduction || 'N/A'],
+        ['Nombre de poissons', cage.nombre_poissons],
+        ['Poids moyen (kg)', cage.poids_moyen],
+        ['FCR', (cageStats as any)?.fcr || cage.fcr || 0],
+        ['Taux de mortalité (%)', cage.taux_mortalite || 0],
+        ['Taux de croissance (%)', cage.croissance || '0%'],
+        ['Coût par kg', 'N/A'], // Sera calculé via les coûts tracking
+        [''],
+        ['MÉTRIQUES CALCULÉES', ''],
+        ['Alimentation totale (kg)', feedingData?.reduce((sum, item) => sum + (item.quantite_totale || 0), 0) || 0],
+        ['Nombre total de sessions d\'alimentation', feedingData?.length || 0],
+        ['Chiffre d\'affaires total', salesData?.reduce((sum, item) => sum + (item.chiffre_affaires || 0), 0) || 0],
+        ['Quantité vendue totale (kg)', salesData?.reduce((sum, item) => sum + (item.quantite_totale_kg || 0), 0) || 0],
+        ['Prix moyen de vente par kg', salesData?.length > 0 ? 
+          formatCurrency(salesData.reduce((sum, item) => sum + (item.prix_moyen_kg || 0), 0) / salesData.length) : 'N/A']
+      ];
+
+      const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, summarySheet, 'Résumé');
+
+      // Feuille 2: Historique d'alimentation détaillé
+      if (feedingData && feedingData.length > 0) {
+        const feedingFormatted = feedingData.map(item => ({
+          'Période': item.periode,
+          'Date début': item.date_debut,
+          'Date fin': item.date_fin,
+          'Quantité totale (kg)': item.quantite_totale,
+          'Nombre de sessions': item.nombre_sessions,
+          'Quantité moyenne (kg)': item.quantite_moyenne?.toFixed(2),
+          'FCR calculé': item.fcr_calcule?.toFixed(2) || 'N/A',
+          'Poids début (kg)': item.poids_debut?.toFixed(2) || 'N/A',
+          'Poids fin (kg)': item.poids_fin?.toFixed(2) || 'N/A',
+          'Gain de poids (kg)': item.gain_poids?.toFixed(2) || 'N/A'
+        }));
+
+        const feedingSheet = XLSX.utils.json_to_sheet(feedingFormatted);
+        XLSX.utils.book_append_sheet(wb, feedingSheet, 'Historique Alimentation');
+      }
+
+      // Feuille 3: Historique des ventes détaillé
+      if (salesData && salesData.length > 0) {
+        const salesFormatted = salesData.map(item => ({
+          'Période': item.periode,
+          'Date début': item.date_debut,
+          'Date fin': item.date_fin,
+          'Nombre de ventes': item.nombre_ventes,
+          'Quantité totale (kg)': item.quantite_totale_kg,
+          'Chiffre d\'affaires': formatCurrency(item.chiffre_affaires),
+          'Prix moyen par kg': formatCurrency(item.prix_moyen_kg),
+          'Clients distincts': item.clients_distincts,
+          'Cage': item.cage_nom
+        }));
+
+        const salesSheet = XLSX.utils.json_to_sheet(salesFormatted);
+        XLSX.utils.book_append_sheet(wb, salesSheet, 'Historique Ventes');
+      }
+
+      // Ajuster la largeur des colonnes pour une meilleure lisibilité
+      Object.keys(wb.Sheets).forEach(sheetName => {
+        const sheet = wb.Sheets[sheetName];
+        const range = XLSX.utils.decode_range(sheet['!ref'] || 'A1');
+        const columnWidths: any[] = [];
+        
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          let maxWidth = 10;
+          for (let R = range.s.r; R <= range.e.r; ++R) {
+            const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+            const cell = sheet[cellAddress];
+            if (cell && cell.v) {
+              const cellLength = cell.v.toString().length;
+              maxWidth = Math.max(maxWidth, cellLength);
+            }
+          }
+          columnWidths.push({ width: Math.min(maxWidth + 2, 50) });
+        }
+        sheet['!cols'] = columnWidths;
+      });
+
+      // Générer le nom de fichier avec la date
+      const fileName = `historique_cage_${cage.nom.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
+      
+      // Exporter le fichier
+      XLSX.writeFile(wb, fileName);
+
+      toast({
+        title: "Export réussi ✅",
+        description: `L'historique complet a été exporté vers ${fileName}`,
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'export:', error);
+      toast({
+        title: "Erreur d'export",
+        description: "Une erreur est survenue lors de l'export Excel",
+        variant: "destructive"
+      });
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   const formattedFeedingHistory = formatFeedingHistoryForDisplay(feedingHistory);
   const formattedSalesHistory = formatSalesHistoryForDisplay(salesHistory);
 
@@ -88,6 +224,16 @@ export function CageHistoryPanel() {
               ))}
             </SelectContent>
           </Select>
+          
+          <Button 
+            onClick={exportCompleteHistory}
+            disabled={!selectedCage || exportLoading}
+            className="flex items-center gap-2"
+            variant="outline"
+          >
+            <FileDown className="h-4 w-4" />
+            {exportLoading ? 'Export en cours...' : 'Exporter tout en Excel'}
+          </Button>
         </div>
       </div>
 
