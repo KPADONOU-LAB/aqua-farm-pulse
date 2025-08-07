@@ -7,11 +7,11 @@ const SmartRecommendations = () => {
     <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+        <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
           <Brain className="h-8 w-8 text-purple-400" />
           Recommandations Intelligentes
         </h1>
-        <p className="text-white/80 text-lg">
+        <p className="text-muted-foreground text-lg">
           Conseils personnalisés basés sur l'IA pour optimiser vos performances aquacoles
         </p>
       </div>
