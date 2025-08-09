@@ -166,8 +166,8 @@ const Health = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={mortalityData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="jour" stroke="#fff" />
-                <YAxis stroke="#fff" />
+                <XAxis dataKey="jour" stroke="hsl(var(--foreground))" />
+                <YAxis stroke="hsl(var(--foreground))" />
                 <Tooltip contentStyle={{
                 backgroundColor: 'rgba(255,255,255,0.9)',
                 border: 'none',
@@ -190,8 +190,8 @@ const Health = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={survivalData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="semaine" stroke="#fff" />
-                <YAxis stroke="#fff" domain={[94, 99]} />
+                <XAxis dataKey="semaine" stroke="hsl(var(--foreground))" />
+                <YAxis stroke="hsl(var(--foreground))" domain={[94, 99]} />
                 <Tooltip contentStyle={{
                 backgroundColor: 'rgba(255,255,255,0.9)',
                 border: 'none',
@@ -225,8 +225,8 @@ const Health = () => {
                       <Heart className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-white font-medium">{record.cage}</h4>
-                      <p className="text-white/70 text-sm">{new Date(record.date).toLocaleDateString('fr-FR')}</p>
+                      <h4 className="text-foreground font-medium">{record.cage}</h4>
+                      <p className="text-muted-foreground text-sm">{new Date(record.date).toLocaleDateString('fr-FR')}</p>
                     </div>
                   </div>
                   
@@ -235,19 +235,19 @@ const Health = () => {
                       {record.statut}
                     </Badge>
                     <div className="text-right">
-                      <div className="text-white font-semibold">{record.mortalite} décès</div>
-                      <div className="text-white/70 text-sm">mortalité</div>
+                      <div className="text-foreground font-semibold">{record.mortalite} décès</div>
+                      <div className="text-muted-foreground text-sm">mortalité</div>
                     </div>
                   </div>
                 </div>
                 
                 {record.causePresumee && <div className="mb-3">
-                    <span className="text-white/70 text-sm">Cause présumée: </span>
-                    <span className="text-white font-medium">{record.causePresumee}</span>
+                    <span className="text-muted-foreground text-sm">Cause présumée: </span>
+                    <span className="text-foreground font-medium">{record.causePresumee}</span>
                   </div>}
                 
                 {record.traitements.length > 0 && <div className="mb-3">
-                    <span className="text-white/70 text-sm">Traitements: </span>
+                    <span className="text-muted-foreground text-sm">Traitements: </span>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {record.traitements.map((traitement, idx) => <Badge key={idx} className="bg-blue-100/10 text-blue-300 border-blue-200/20">
                           <Pill className="h-3 w-3 mr-1" />
@@ -257,7 +257,7 @@ const Health = () => {
                   </div>}
                 
                 <div className="pt-3 border-t border-white/10">
-                  <p className="text-white/80 text-sm">
+                  <p className="text-foreground text-sm">
                     <strong>Observations:</strong> {record.observations}
                   </p>
                 </div>
