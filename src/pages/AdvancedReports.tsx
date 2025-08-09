@@ -6,41 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useAdvancedReports } from "@/hooks/useAdvancedReports";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  TrendingUp, 
-  Download, 
-  Calendar, 
-  Euro, 
-  BarChart3, 
-  Clock,
-  Play,
-  Settings,
-  FileText,
-  Target,
-  AlertCircle,
-  CheckCircle,
-  Users
-} from "lucide-react";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  LineChart, 
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  ComposedChart,
-  Area,
-  AreaChart
-} from "recharts";
+import { TrendingUp, Download, Calendar, Euro, BarChart3, Clock, Play, Settings, FileText, Target, AlertCircle, CheckCircle, Users } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, ComposedChart, Area, AreaChart } from "recharts";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-
 const AdvancedReports = () => {
   const {
     financialReports,
@@ -51,66 +20,55 @@ const AdvancedReports = () => {
     scheduleAutomatedReport,
     exportToExcel
   } = useAdvancedReports();
-  
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [selectedTab, setSelectedTab] = useState("financial");
-
   const handleGenerateReport = async (configId: string) => {
     try {
       const report = await generateAutomatedReport(configId);
       const config = automatedConfigs.find(c => c.id === configId);
-      
       if (report && config) {
         await scheduleAutomatedReport(config);
         toast({
           title: "Rapport généré",
-          description: `${config.name} a été généré avec succès.`,
+          description: `${config.name} a été généré avec succès.`
         });
       }
     } catch (error) {
       toast({
         title: "Erreur",
         description: "Erreur lors de la génération du rapport.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const handleExport = async (type: 'financial' | 'cycles') => {
     try {
       await exportToExcel(type);
       toast({
         title: "Export réussi",
-        description: `Les données ${type === 'financial' ? 'financières' : 'de cycles'} ont été exportées.`,
+        description: `Les données ${type === 'financial' ? 'financières' : 'de cycles'} ont été exportées.`
       });
     } catch (error) {
       toast({
         title: "Erreur d'export",
         description: "Impossible d'exporter les données.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const totalRevenue = financialReports.reduce((sum, report) => sum + report.revenue, 0);
   const totalProfit = financialReports.reduce((sum, report) => sum + report.profit, 0);
-  const avgProfitMargin = financialReports.length > 0 
-    ? financialReports.reduce((sum, report) => sum + report.profitMargin, 0) / financialReports.length 
-    : 0;
-
+  const avgProfitMargin = financialReports.length > 0 ? financialReports.reduce((sum, report) => sum + report.profitMargin, 0) / financialReports.length : 0;
   const activeCycles = cycleAnalyses.filter(c => c.status === 'active').length;
-  const avgROI = cycleAnalyses.length > 0 
-    ? cycleAnalyses.reduce((sum, cycle) => sum + cycle.roi, 0) / cycleAnalyses.length 
-    : 0;
-
+  const avgROI = cycleAnalyses.length > 0 ? cycleAnalyses.reduce((sum, cycle) => sum + cycle.roi, 0) / cycleAnalyses.length : 0;
   const colors = ['#10b981', '#0ea5e9', '#f59e0b', '#8b5cf6', '#ef4444'];
-
-  return (
-    <div className="min-h-screen p-6 animate-fade-in">
+  return <div className="min-h-screen p-6 animate-fade-in bg-neutral-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold mb-2 text-black">
             Rapports Automatisés Avancés
           </h1>
           <p className="text-white/80 text-lg">
@@ -118,11 +76,7 @@ const AdvancedReports = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button 
-            variant="outline" 
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-            onClick={() => setSelectedTab('automation')}
-          >
+          <Button variant="outline" onClick={() => setSelectedTab('automation')} className="bg-white/10 border-white/20 hover:bg-white/20 text-black">
             <Settings className="mr-2 h-4 w-4" />
             Configuration
           </Button>
@@ -182,15 +136,15 @@ const AdvancedReports = () => {
             <Euro className="mr-2 h-4 w-4" />
             Financier
           </TabsTrigger>
-          <TabsTrigger value="cycles" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="cycles" className="data-[state=active]:bg-white/20 text-black">
             <Target className="mr-2 h-4 w-4" />
             Cycles
           </TabsTrigger>
-          <TabsTrigger value="performance" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="performance" className="data-[state=active]:bg-white/20 text-black">
             <TrendingUp className="mr-2 h-4 w-4" />
             Performance
           </TabsTrigger>
-          <TabsTrigger value="automation" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="automation" className="data-[state=active]:bg-white/20 text-black">
             <Settings className="mr-2 h-4 w-4" />
             Automatisation
           </TabsTrigger>
@@ -199,11 +153,8 @@ const AdvancedReports = () => {
         {/* Onglet Financier */}
         <TabsContent value="financial" className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-white">Analyses Financières</h2>
-            <Button 
-              onClick={() => handleExport('financial')}
-              className="bg-aqua-gradient hover:bg-aqua-600 text-white"
-            >
+            <h2 className="text-2xl font-bold text-black">Analyses Financières</h2>
+            <Button onClick={() => handleExport('financial')} className="bg-aqua-gradient hover:bg-aqua-600 text-white">
               <Download className="mr-2 h-4 w-4" />
               Exporter
             </Button>
@@ -224,18 +175,11 @@ const AdvancedReports = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                     <XAxis dataKey="period" stroke="#666" />
                     <YAxis stroke="#666" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px' 
-                      }}
-                      formatter={(value, name) => [
-                        `€${Number(value).toLocaleString()}`, 
-                        name === 'revenue' ? 'Revenus' : 
-                        name === 'costs' ? 'Coûts' : 'Profit'
-                      ]}
-                    />
+                    <Tooltip contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e0e0e0',
+                    borderRadius: '8px'
+                  }} formatter={(value, name) => [`€${Number(value).toLocaleString()}`, name === 'revenue' ? 'Revenus' : name === 'costs' ? 'Coûts' : 'Profit']} />
                     <Area type="monotone" dataKey="revenue" fill="#10b981" fillOpacity={0.3} />
                     <Bar dataKey="costs" fill="#ef4444" />
                     <Line type="monotone" dataKey="profit" stroke="#0ea5e9" strokeWidth={3} />
@@ -255,46 +199,33 @@ const AdvancedReports = () => {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
-                    <Pie
-                      data={[
-                        { 
-                          name: 'Alimentation', 
-                          value: financialReports.reduce((sum, r) => sum + r.costBreakdown.feeding, 0) / financialReports.length || 0,
-                          color: colors[0]
-                        },
-                        { 
-                          name: 'Personnel', 
-                          value: financialReports.reduce((sum, r) => sum + r.costBreakdown.labor, 0) / financialReports.length || 0,
-                          color: colors[1]
-                        },
-                        { 
-                          name: 'Vétérinaire', 
-                          value: financialReports.reduce((sum, r) => sum + r.costBreakdown.veterinary, 0) / financialReports.length || 0,
-                          color: colors[2]
-                        },
-                        { 
-                          name: 'Équipement', 
-                          value: financialReports.reduce((sum, r) => sum + r.costBreakdown.equipment, 0) / financialReports.length || 0,
-                          color: colors[3]
-                        },
-                        { 
-                          name: 'Autres', 
-                          value: financialReports.reduce((sum, r) => sum + r.costBreakdown.other, 0) / financialReports.length || 0,
-                          color: colors[4]
-                        }
-                      ].filter(item => item.value > 0)}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {financialReports.length > 0 && [0,1,2,3,4].map((index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]} />
-                      ))}
+                    <Pie data={[{
+                    name: 'Alimentation',
+                    value: financialReports.reduce((sum, r) => sum + r.costBreakdown.feeding, 0) / financialReports.length || 0,
+                    color: colors[0]
+                  }, {
+                    name: 'Personnel',
+                    value: financialReports.reduce((sum, r) => sum + r.costBreakdown.labor, 0) / financialReports.length || 0,
+                    color: colors[1]
+                  }, {
+                    name: 'Vétérinaire',
+                    value: financialReports.reduce((sum, r) => sum + r.costBreakdown.veterinary, 0) / financialReports.length || 0,
+                    color: colors[2]
+                  }, {
+                    name: 'Équipement',
+                    value: financialReports.reduce((sum, r) => sum + r.costBreakdown.equipment, 0) / financialReports.length || 0,
+                    color: colors[3]
+                  }, {
+                    name: 'Autres',
+                    value: financialReports.reduce((sum, r) => sum + r.costBreakdown.other, 0) / financialReports.length || 0,
+                    color: colors[4]
+                  }].filter(item => item.value > 0)} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({
+                    name,
+                    percent
+                  }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                      {financialReports.length > 0 && [0, 1, 2, 3, 4].map(index => <Cell key={`cell-${index}`} fill={colors[index]} />)}
                     </Pie>
-                    <Tooltip formatter={(value) => [`€${Number(value).toLocaleString()}`, 'Coût moyen']} />
+                    <Tooltip formatter={value => [`€${Number(value).toLocaleString()}`, 'Coût moyen']} />
                   </PieChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -319,8 +250,7 @@ const AdvancedReports = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {financialReports.slice(-6).map((report, index) => (
-                      <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                    {financialReports.slice(-6).map((report, index) => <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                         <td className="p-2 font-medium">{report.period}</td>
                         <td className="p-2 text-right">€{report.revenue.toLocaleString()}</td>
                         <td className="p-2 text-right text-red-600">€{report.costs.toLocaleString()}</td>
@@ -330,8 +260,7 @@ const AdvancedReports = () => {
                             {report.profitMargin.toFixed(1)}%
                           </Badge>
                         </td>
-                      </tr>
-                    ))}
+                      </tr>)}
                   </tbody>
                 </table>
               </div>
@@ -343,10 +272,7 @@ const AdvancedReports = () => {
         <TabsContent value="cycles" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-white">Analyses par Cycle de Production</h2>
-            <Button 
-              onClick={() => handleExport('cycles')}
-              className="bg-aqua-gradient hover:bg-aqua-600 text-white"
-            >
+            <Button onClick={() => handleExport('cycles')} className="bg-aqua-gradient hover:bg-aqua-600 text-white">
               <Download className="mr-2 h-4 w-4" />
               Exporter
             </Button>
@@ -367,15 +293,8 @@ const AdvancedReports = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="cageName" stroke="#666" />
                     <YAxis stroke="#666" />
-                    <Tooltip 
-                      formatter={(value) => [`${Number(value).toFixed(1)}%`, 'ROI']}
-                      labelFormatter={(label) => `Cage: ${label}`}
-                    />
-                    <Bar 
-                      dataKey="roi" 
-                      fill="#0ea5e9"
-                      radius={[4, 4, 0, 0]}
-                    />
+                    <Tooltip formatter={value => [`${Number(value).toFixed(1)}%`, 'ROI']} labelFormatter={label => `Cage: ${label}`} />
+                    <Bar dataKey="roi" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -397,22 +316,8 @@ const AdvancedReports = () => {
                     <YAxis yAxisId="fcr" orientation="left" stroke="#ef4444" />
                     <YAxis yAxisId="survival" orientation="right" stroke="#10b981" />
                     <Tooltip />
-                    <Line 
-                      yAxisId="fcr"
-                      type="monotone" 
-                      dataKey="fcr" 
-                      stroke="#ef4444" 
-                      strokeWidth={2}
-                      name="FCR"
-                    />
-                    <Line 
-                      yAxisId="survival"
-                      type="monotone" 
-                      dataKey="survivalRate" 
-                      stroke="#10b981" 
-                      strokeWidth={2}
-                      name="Survie %"
-                    />
+                    <Line yAxisId="fcr" type="monotone" dataKey="fcr" stroke="#ef4444" strokeWidth={2} name="FCR" />
+                    <Line yAxisId="survival" type="monotone" dataKey="survivalRate" stroke="#10b981" strokeWidth={2} name="Survie %" />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -426,8 +331,7 @@ const AdvancedReports = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {cycleAnalyses.slice(-5).map((cycle, index) => (
-                  <div key={index} className="p-4 bg-gray-50 rounded-lg border">
+                {cycleAnalyses.slice(-5).map((cycle, index) => <div key={index} className="p-4 bg-gray-50 rounded-lg border">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-bold text-lg">{cycle.cageName}</h4>
@@ -435,15 +339,8 @@ const AdvancedReports = () => {
                           {cycle.startDate} - {cycle.endDate || 'En cours'}
                         </p>
                       </div>
-                      <Badge 
-                        variant={cycle.status === 'active' ? 'default' : 'secondary'}
-                        className="flex items-center gap-1"
-                      >
-                        {cycle.status === 'active' ? (
-                          <Play className="h-3 w-3" />
-                        ) : (
-                          <CheckCircle className="h-3 w-3" />
-                        )}
+                      <Badge variant={cycle.status === 'active' ? 'default' : 'secondary'} className="flex items-center gap-1">
+                        {cycle.status === 'active' ? <Play className="h-3 w-3" /> : <CheckCircle className="h-3 w-3" />}
                         {cycle.status === 'active' ? 'Actif' : 'Terminé'}
                       </Badge>
                     </div>
@@ -466,8 +363,7 @@ const AdvancedReports = () => {
                         <div className="font-bold text-lg">€{cycle.profit.toLocaleString()}</div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -478,8 +374,7 @@ const AdvancedReports = () => {
           <h2 className="text-2xl font-bold text-white">Configuration des Rapports Automatisés</h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {automatedConfigs.map((config, index) => (
-              <Card key={config.id} className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
+            {automatedConfigs.map((config, index) => <Card key={config.id} className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
@@ -488,21 +383,17 @@ const AdvancedReports = () => {
                         {config.type}
                       </Badge>
                     </div>
-                    <Switch 
-                      checked={config.enabled}
-                      disabled // Pour la démo
-                    />
+                    <Switch checked={config.enabled} disabled // Pour la démo
+                />
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
                     <div className="text-sm text-gray-600 mb-2">Sections incluses:</div>
                     <div className="flex flex-wrap gap-1">
-                      {config.sections.map((section, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs">
+                      {config.sections.map((section, idx) => <Badge key={idx} variant="secondary" className="text-xs">
                           {section}
-                        </Badge>
-                      ))}
+                        </Badge>)}
                     </div>
                   </div>
                   
@@ -518,16 +409,14 @@ const AdvancedReports = () => {
                     <div className="text-sm text-gray-600 mb-1">Prochaine génération:</div>
                     <div className="flex items-center gap-1 text-sm">
                       <Clock className="h-3 w-3" />
-                      {format(new Date(config.nextGeneration), 'dd/MM/yyyy à HH:mm', { locale: fr })}
+                      {format(new Date(config.nextGeneration), 'dd/MM/yyyy à HH:mm', {
+                    locale: fr
+                  })}
                     </div>
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
-                      onClick={() => handleGenerateReport(config.id)}
-                      className="flex-1"
-                    >
+                    <Button size="sm" onClick={() => handleGenerateReport(config.id)} className="flex-1">
                       <Play className="mr-1 h-3 w-3" />
                       Générer
                     </Button>
@@ -537,13 +426,10 @@ const AdvancedReports = () => {
                     </Button>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
-
 export default AdvancedReports;
