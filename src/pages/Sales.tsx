@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,51 +9,76 @@ import NewSaleModal from "@/components/modals/NewSaleModal";
 import { useSalesData } from "@/hooks/useSalesData";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-
-
-const monthlyRevenue = [
-  { mois: 'Jan', revenus: 25400 },
-  { mois: 'Fév', revenus: 28200 },
-  { mois: 'Mar', revenus: 31800 },
-  { mois: 'Avr', revenus: 29600 },
-  { mois: 'Mai', revenus: 35200 },
-  { mois: 'Jun', revenus: 32800 },
-];
-
-const weeklyQuantity = [
-  { jour: 'Lun', quantite: 180 },
-  { jour: 'Mar', quantite: 220 },
-  { jour: 'Mer', quantite: 195 },
-  { jour: 'Jeu', quantite: 165 },
-  { jour: 'Ven', quantite: 285 },
-  { jour: 'Sam', quantite: 240 },
-  { jour: 'Dim', quantite: 125 },
-];
-
+const monthlyRevenue = [{
+  mois: 'Jan',
+  revenus: 25400
+}, {
+  mois: 'Fév',
+  revenus: 28200
+}, {
+  mois: 'Mar',
+  revenus: 31800
+}, {
+  mois: 'Avr',
+  revenus: 29600
+}, {
+  mois: 'Mai',
+  revenus: 35200
+}, {
+  mois: 'Jun',
+  revenus: 32800
+}];
+const weeklyQuantity = [{
+  jour: 'Lun',
+  quantite: 180
+}, {
+  jour: 'Mar',
+  quantite: 220
+}, {
+  jour: 'Mer',
+  quantite: 195
+}, {
+  jour: 'Jeu',
+  quantite: 165
+}, {
+  jour: 'Ven',
+  quantite: 285
+}, {
+  jour: 'Sam',
+  quantite: 240
+}, {
+  jour: 'Dim',
+  quantite: 125
+}];
 const getStatutColor = (statut: string) => {
   switch (statut) {
-    case 'livré': return 'bg-green-100 text-green-800 border-green-200';
-    case 'confirmé': return 'bg-blue-100 text-blue-800 border-blue-200';
-    case 'en_cours': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'annulé': return 'bg-red-100 text-red-800 border-red-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'livré':
+      return 'bg-green-100 text-green-800 border-green-200';
+    case 'confirmé':
+      return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'en_cours':
+      return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'annulé':
+      return 'bg-red-100 text-red-800 border-red-200';
+    default:
+      return 'bg-gray-100 text-gray-800 border-gray-200';
   }
 };
-
 const Sales = () => {
-  const { sales, loading, generateInvoice } = useSalesData();
-  
+  const {
+    sales,
+    loading,
+    generateInvoice
+  } = useSalesData();
+
   // Calculer les données du jour
   const today = new Date().toISOString().split('T')[0];
   const todaySales = sales.filter(sale => sale.date_vente === today);
-  
   const revenusJour = todaySales.reduce((acc, sale) => acc + sale.prix_total, 0);
   const quantiteJour = todaySales.reduce((acc, sale) => acc + sale.quantite_kg, 0);
   const nombreClientsJour = new Set(todaySales.map(sale => sale.client)).size;
   const prixMoyenKg = quantiteJour > 0 ? revenusJour / quantiteJour : 0;
-
-  return (
-    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -144,32 +168,27 @@ const Sales = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Euro className="h-5 w-5" />
                   Évolution revenus mensuels (€)
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="bg-gray-400">
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={monthlyRevenue}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                     <XAxis dataKey="mois" stroke="#fff" />
                     <YAxis stroke="#fff" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(255,255,255,0.9)', 
-                        border: 'none', 
-                        borderRadius: '8px' 
-                      }}
-                      formatter={(value) => [`€${value.toLocaleString()}`, 'Revenus']}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="revenus" 
-                      stroke="#10b981" 
-                      strokeWidth={3}
-                      dot={{ fill: '#10b981', strokeWidth: 2, r: 6 }}
-                    />
+                    <Tooltip contentStyle={{
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    border: 'none',
+                    borderRadius: '8px'
+                  }} formatter={value => [`€${value.toLocaleString()}`, 'Revenus']} />
+                    <Line type="monotone" dataKey="revenus" stroke="#10b981" strokeWidth={3} dot={{
+                    fill: '#10b981',
+                    strokeWidth: 2,
+                    r: 6
+                  }} />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -177,25 +196,22 @@ const Sales = () => {
 
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Fish className="h-5 w-5" />
                   Quantités vendues hebdomadaires (kg)
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="bg-gray-400">
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={weeklyQuantity}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                     <XAxis dataKey="jour" stroke="#fff" />
                     <YAxis stroke="#fff" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(255,255,255,0.9)', 
-                        border: 'none', 
-                        borderRadius: '8px' 
-                      }}
-                      formatter={(value) => [`${value}kg`, 'Quantité']}
-                    />
+                    <Tooltip contentStyle={{
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    border: 'none',
+                    borderRadius: '8px'
+                  }} formatter={value => [`${value}kg`, 'Quantité']} />
                     <Bar dataKey="quantite" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -224,30 +240,24 @@ const Sales = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {loading ? (
-                    <TableRow>
+                  {loading ? <TableRow>
                       <TableCell colSpan={4} className="text-gray-600 text-center py-8">
                         Chargement des ventes...
                       </TableCell>
-                    </TableRow>
-                  ) : todaySales.length === 0 ? (
-                    <TableRow>
+                    </TableRow> : todaySales.length === 0 ? <TableRow>
                       <TableCell colSpan={4} className="text-gray-600 text-center py-8">
                         Aucune vente aujourd'hui
                       </TableCell>
-                    </TableRow>
-                  ) : (
-                    todaySales.map((sale) => (
-                      <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
+                    </TableRow> : todaySales.map(sale => <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
                         <TableCell className="text-gray-900 font-medium">{sale.client}</TableCell>
                         <TableCell className="text-gray-700">{sale.quantite_kg}kg</TableCell>
                         <TableCell className="text-gray-700">{sale.cage?.nom || 'N/A'}</TableCell>
                         <TableCell className="text-gray-700">
-                          {format(new Date(sale.date_vente), 'HH:mm', { locale: fr })}
+                          {format(new Date(sale.date_vente), 'HH:mm', {
+                      locale: fr
+                    })}
                         </TableCell>
-                      </TableRow>
-                    ))
-                  )}
+                      </TableRow>)}
                 </TableBody>
               </Table>
             </CardContent>
@@ -277,23 +287,19 @@ const Sales = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {loading ? (
-                    <TableRow>
+                  {loading ? <TableRow>
                       <TableCell colSpan={7} className="text-gray-600 text-center py-8">
                         Chargement des ventes...
                       </TableCell>
-                    </TableRow>
-                  ) : todaySales.length === 0 ? (
-                    <TableRow>
+                    </TableRow> : todaySales.length === 0 ? <TableRow>
                       <TableCell colSpan={7} className="text-gray-600 text-center py-8">
                         Aucune vente aujourd'hui
                       </TableCell>
-                    </TableRow>
-                  ) : (
-                    todaySales.map((sale) => (
-                      <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
+                    </TableRow> : todaySales.map(sale => <TableRow key={sale.id} className="border-gray-100 hover:bg-blue-50">
                         <TableCell className="text-gray-900">
-                          {format(new Date(sale.date_vente), 'dd/MM/yyyy', { locale: fr })}
+                          {format(new Date(sale.date_vente), 'dd/MM/yyyy', {
+                      locale: fr
+                    })}
                         </TableCell>
                         <TableCell className="text-gray-900 font-medium">{sale.client}</TableCell>
                         <TableCell className="text-gray-700">{sale.cage?.nom || 'N/A'}</TableCell>
@@ -301,19 +307,12 @@ const Sales = () => {
                         <TableCell className="text-gray-700">€{sale.prix_par_kg.toFixed(2)}</TableCell>
                         <TableCell className="text-green-700 font-bold text-lg">€{sale.prix_total.toFixed(2)}</TableCell>
                         <TableCell>
-                          <Button 
-                            size="sm" 
-                            variant="default" 
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => generateInvoice(sale)}
-                          >
+                          <Button size="sm" variant="default" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => generateInvoice(sale)}>
                             <Printer className="h-4 w-4 mr-1" />
                             Facture
                           </Button>
                         </TableCell>
-                      </TableRow>
-                    ))
-                  )}
+                      </TableRow>)}
                 </TableBody>
               </Table>
             </CardContent>
@@ -424,19 +423,16 @@ const Sales = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="mois" stroke="#fff" />
                   <YAxis stroke="#fff" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255,255,255,0.9)', 
-                      border: 'none', 
-                      borderRadius: '8px' 
-                    }}
-                    formatter={(value) => [`€${value.toLocaleString()}`, 'Revenus']}
-                  />
+                  <Tooltip contentStyle={{
+                  backgroundColor: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  borderRadius: '8px'
+                }} formatter={value => [`€${value.toLocaleString()}`, 'Revenus']} />
                   <Bar dataKey="revenus" fill="url(#colorGradient)" radius={[4, 4, 0, 0]} />
                   <defs>
                     <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.3}/>
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.3} />
                     </linearGradient>
                   </defs>
                 </BarChart>
@@ -445,8 +441,6 @@ const Sales = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
-
 export default Sales;
