@@ -9,56 +9,64 @@ import { AlertTriangle, Bell, BellOff, CheckCircle, Droplets, Package, Heart, Co
 import { useAlerts } from "@/hooks/useAlerts";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import * as XLSX from "xlsx";
-
 const getAlertIcon = (type: string) => {
   switch (type) {
-    case 'water': return Droplets;
-    case 'stock': return Package;
-    case 'health': return Heart;
-    case 'feeding': return Coffee;
-    default: return AlertTriangle;
+    case 'water':
+      return Droplets;
+    case 'stock':
+      return Package;
+    case 'health':
+      return Heart;
+    case 'feeding':
+      return Coffee;
+    default:
+      return AlertTriangle;
   }
 };
-
 const getSeverityColor = (severity: string) => {
   switch (severity) {
-    case 'critical': return 'bg-destructive/20 text-destructive border-destructive/30';
-    case 'high': return 'bg-orange-500/20 text-orange-300 border-orange-500/30';
-    case 'medium': return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
-    case 'low': return 'bg-primary/20 text-primary border-primary/30';
-    default: return 'bg-muted/20 text-muted-foreground border-muted/30';
+    case 'critical':
+      return 'bg-destructive/20 text-destructive border-destructive/30';
+    case 'high':
+      return 'bg-orange-500/20 text-orange-300 border-orange-500/30';
+    case 'medium':
+      return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
+    case 'low':
+      return 'bg-primary/20 text-primary border-primary/30';
+    default:
+      return 'bg-muted/20 text-muted-foreground border-muted/30';
   }
 };
-
 const getSeverityBgColor = (severity: string) => {
   switch (severity) {
-    case 'critical': return 'bg-destructive/10 border-destructive/20 backdrop-blur-sm';
-    case 'high': return 'bg-orange-500/10 border-orange-500/20 backdrop-blur-sm';
-    case 'medium': return 'bg-yellow-500/10 border-yellow-500/20 backdrop-blur-sm';
-    case 'low': return 'bg-primary/10 border-primary/20 backdrop-blur-sm';
-    default: return 'bg-card/50 border-border backdrop-blur-sm';
+    case 'critical':
+      return 'bg-destructive/10 border-destructive/20 backdrop-blur-sm';
+    case 'high':
+      return 'bg-orange-500/10 border-orange-500/20 backdrop-blur-sm';
+    case 'medium':
+      return 'bg-yellow-500/10 border-yellow-500/20 backdrop-blur-sm';
+    case 'low':
+      return 'bg-primary/10 border-primary/20 backdrop-blur-sm';
+    default:
+      return 'bg-card/50 border-border backdrop-blur-sm';
   }
 };
-
 const Alerts = () => {
-  const { alerts, acknowledgeAlert } = useAlerts();
+  const {
+    alerts,
+    acknowledgeAlert
+  } = useAlerts();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterSeverity, setFilterSeverity] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
-
   const filteredAlerts = alerts.filter(alert => {
-    const matchesSearch = alert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         alert.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = alert.title.toLowerCase().includes(searchQuery.toLowerCase()) || alert.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === "all" || alert.type === filterType;
     const matchesSeverity = filterSeverity === "all" || alert.severity === filterSeverity;
-    const matchesStatus = filterStatus === "all" || 
-                         (filterStatus === "acknowledged" && alert.acknowledged) ||
-                         (filterStatus === "unacknowledged" && !alert.acknowledged);
-    
+    const matchesStatus = filterStatus === "all" || filterStatus === "acknowledged" && alert.acknowledged || filterStatus === "unacknowledged" && !alert.acknowledged;
     return matchesSearch && matchesType && matchesSeverity && matchesStatus;
   });
-
   const exportToExcel = () => {
     const exportData = filteredAlerts.map(alert => ({
       'ID': alert.id,
@@ -70,17 +78,13 @@ const Alerts = () => {
       'Statut': alert.acknowledged ? 'Lu' : 'Non lu',
       'Date de création': new Date(alert.created_at).toLocaleString('fr-FR')
     }));
-
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Alertes");
-    
     const fileName = `alertes_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, fileName);
   };
-
-  return (
-    <div className="container mx-auto p-6">
+  return <div className="container mx-auto p-6 bg-neutral-50">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-foreground mb-2">Alertes et notifications</h1>
         <p className="text-muted-foreground">Gérez vos alertes et configurez vos notifications en temps réel</p>
@@ -111,12 +115,7 @@ const Alerts = () => {
                 <div className="lg:col-span-2">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                    <Input
-                      placeholder="Rechercher dans les alertes..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
+                    <Input placeholder="Rechercher dans les alertes..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10" />
                   </div>
                 </div>
                 
@@ -169,22 +168,13 @@ const Alerts = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {filteredAlerts.length === 0 ? (
-                  <div className="text-center py-8">
+                {filteredAlerts.length === 0 ? <div className="text-center py-8">
                     <BellOff className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
                     <p className="text-muted-foreground text-lg">Aucune alerte trouvée</p>
                     <p className="text-muted-foreground/80 text-sm">Ajustez vos filtres pour voir plus d'alertes</p>
-                  </div>
-                ) : (
-                  filteredAlerts.map((alert) => {
-                    const IconComponent = getAlertIcon(alert.type);
-                    return (
-                      <div
-                        key={alert.id}
-                        className={`p-4 rounded-lg border ${getSeverityBgColor(alert.severity)} ${
-                          alert.acknowledged ? 'opacity-60' : ''
-                        }`}
-                      >
+                  </div> : filteredAlerts.map(alert => {
+                const IconComponent = getAlertIcon(alert.type);
+                return <div key={alert.id} className={`p-4 rounded-lg border ${getSeverityBgColor(alert.severity)} ${alert.acknowledged ? 'opacity-60' : ''}`}>
                         <div className="flex items-start gap-4">
                           <div className="p-2 bg-primary/20 rounded-lg">
                             <IconComponent className="h-5 w-5 text-primary" />
@@ -196,11 +186,9 @@ const Alerts = () => {
                               <Badge className={getSeverityColor(alert.severity)}>
                                 {alert.severity}
                               </Badge>
-                              {alert.acknowledged && (
-                                <Badge variant="outline" className="text-xs">
+                              {alert.acknowledged && <Badge variant="outline" className="text-xs">
                                   Lu
-                                </Badge>
-                              )}
+                                </Badge>}
                             </div>
                             
                             <p className="text-muted-foreground text-sm mb-3">{alert.description}</p>
@@ -212,24 +200,15 @@ const Alerts = () => {
                                 <span>{new Date(alert.created_at).toLocaleString('fr-FR')}</span>
                               </div>
                               
-                              {!alert.acknowledged && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => acknowledgeAlert(alert.id)}
-                                  className="h-8 px-3 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
-                                >
+                              {!alert.acknowledged && <Button size="sm" variant="outline" onClick={() => acknowledgeAlert(alert.id)} className="h-8 px-3 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20">
                                   <CheckCircle className="h-3 w-3 mr-1" />
                                   Marquer comme lu
-                                </Button>
-                              )}
+                                </Button>}
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
-                )}
+                      </div>;
+              })}
               </div>
             </CardContent>
           </Card>
@@ -239,8 +218,6 @@ const Alerts = () => {
           <NotificationCenter />
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 };
-
 export default Alerts;
