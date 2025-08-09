@@ -168,7 +168,7 @@ const SmartNotifications = () => {
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-sm">
-          <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="dashboard" className="data-[state=active]:bg-white/20 text-black">
             <AlertTriangle className="mr-2 h-4 w-4" />
             Tableau de Bord
           </TabsTrigger>
