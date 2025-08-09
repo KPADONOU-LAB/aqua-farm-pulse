@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,41 +6,52 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewInventoryModal from "@/components/modals/NewInventoryModal";
 import { useInventoryData } from "@/hooks/useInventoryData";
 import { Skeleton } from "@/components/ui/skeleton";
-
-
 const getStatutColor = (statut: string) => {
   switch (statut) {
-    case 'normal': return 'bg-emerald-500 text-white border-emerald-600 shadow-lg shadow-emerald-500/25';
-    case 'faible': return 'bg-amber-500 text-white border-amber-600 shadow-lg shadow-amber-500/25';
-    case 'critique': return 'bg-red-500 text-white border-red-600 shadow-lg shadow-red-500/25';
-    default: return 'bg-gray-500 text-white border-gray-600 shadow-lg shadow-gray-500/25';
+    case 'normal':
+      return 'bg-emerald-500 text-white border-emerald-600 shadow-lg shadow-emerald-500/25';
+    case 'faible':
+      return 'bg-amber-500 text-white border-amber-600 shadow-lg shadow-amber-500/25';
+    case 'critique':
+      return 'bg-red-500 text-white border-red-600 shadow-lg shadow-red-500/25';
+    default:
+      return 'bg-gray-500 text-white border-gray-600 shadow-lg shadow-gray-500/25';
   }
 };
-
 const getCategoryColor = (categorie: string) => {
   switch (categorie) {
-    case 'aliment': return 'bg-green-500 text-white';
-    case 'veterinaire': return 'bg-blue-500 text-white';
-    case 'materiel': return 'bg-purple-500 text-white';
-    default: return 'bg-gray-500 text-white';
+    case 'aliment':
+      return 'bg-green-500 text-white';
+    case 'veterinaire':
+      return 'bg-blue-500 text-white';
+    case 'materiel':
+      return 'bg-purple-500 text-white';
+    default:
+      return 'bg-gray-500 text-white';
   }
 };
-
 const getCategoryIcon = (categorie: string) => {
   switch (categorie) {
-    case 'aliment': return Coffee;
-    case 'veterinaire': return Pill;
-    case 'materiel': return Wrench;
-    default: return Package;
+    case 'aliment':
+      return Coffee;
+    case 'veterinaire':
+      return Pill;
+    case 'materiel':
+      return Wrench;
+    default:
+      return Package;
   }
 };
-
 const Inventory = () => {
-  const { inventory, consumptionData, categoryData, stats, loading } = useInventoryData();
-
+  const {
+    inventory,
+    consumptionData,
+    categoryData,
+    stats,
+    loading
+  } = useInventoryData();
   if (loading) {
-    return (
-      <div className="min-h-screen p-6 animate-fade-in">
+    return <div className="min-h-screen p-6 animate-fade-in">
         <div className="flex justify-between items-center mb-8">
           <div>
             <Skeleton className="h-10 w-64 mb-2" />
@@ -50,16 +60,13 @@ const Inventory = () => {
           <Skeleton className="h-10 w-32" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-32" />
-          ))}
+          {Array.from({
+          length: 4
+        }).map((_, i) => <Skeleton key={i} className="h-32" />)}
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -158,48 +165,47 @@ const Inventory = () => {
           <CardContent className="pt-2 relative z-10">
             <div className="bg-gradient-to-br from-slate-900/40 to-slate-800/60 rounded-2xl p-6 border border-emerald-500/20 backdrop-blur-sm shadow-inner">
               <ResponsiveContainer width="100%" height={320}>
-                <BarChart data={consumptionData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <BarChart data={consumptionData} margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5
+              }}>
                   <defs>
                     <linearGradient id="alimentGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor="#059669" stopOpacity={0.6}/>
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#059669" stopOpacity={0.6} />
                     </linearGradient>
                     <linearGradient id="veterinaireGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor="#0284c7" stopOpacity={0.6}/>
+                      <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#0284c7" stopOpacity={0.6} />
                     </linearGradient>
                     <linearGradient id="materielGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor="#d97706" stopOpacity={0.6}/>
+                      <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#d97706" stopOpacity={0.6} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.15)" />
-                  <XAxis 
-                    dataKey="mois" 
-                    stroke="#fff" 
-                    fontSize={12}
-                    fontWeight="600"
-                    tick={{ fill: '#e5e7eb', fontWeight: '600' }}
-                  />
-                  <YAxis 
-                    stroke="#fff" 
-                    fontSize={12}
-                    fontWeight="600"
-                    tick={{ fill: '#e5e7eb', fontWeight: '600' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(15, 23, 42, 0.95)', 
-                      border: '2px solid rgba(16, 185, 129, 0.3)', 
-                      borderRadius: '16px',
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                      color: '#fff',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      backdropFilter: 'blur(16px)'
-                    }} 
-                    cursor={{ fill: 'rgba(16, 185, 129, 0.1)' }}
-                  />
+                  <XAxis dataKey="mois" stroke="#fff" fontSize={12} fontWeight="600" tick={{
+                  fill: '#e5e7eb',
+                  fontWeight: '600'
+                }} />
+                  <YAxis stroke="#fff" fontSize={12} fontWeight="600" tick={{
+                  fill: '#e5e7eb',
+                  fontWeight: '600'
+                }} />
+                  <Tooltip contentStyle={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                  border: '2px solid rgba(16, 185, 129, 0.3)',
+                  borderRadius: '16px',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                  color: '#fff',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  backdropFilter: 'blur(16px)'
+                }} cursor={{
+                  fill: 'rgba(16, 185, 129, 0.1)'
+                }} />
                   <Bar dataKey="aliment" fill="url(#alimentGradient)" radius={[6, 6, 0, 0]} stroke="rgba(16, 185, 129, 0.4)" strokeWidth={1} />
                   <Bar dataKey="veterinaire" fill="url(#veterinaireGradient)" radius={[6, 6, 0, 0]} stroke="rgba(14, 165, 233, 0.4)" strokeWidth={1} />
                   <Bar dataKey="materiel" fill="url(#materielGradient)" radius={[6, 6, 0, 0]} stroke="rgba(245, 158, 11, 0.4)" strokeWidth={1} />
@@ -238,45 +244,29 @@ const Inventory = () => {
                 <PieChart>
                   <defs>
                     <filter id="glow">
-                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
                       <feMerge> 
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
                       </feMerge>
                     </filter>
                   </defs>
-                  <Pie
-                    data={categoryData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    innerRadius={40}
-                    paddingAngle={3}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                    style={{ filter: 'url(#glow)' }}
-                  >
-                    {categoryData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.color} 
-                        stroke="rgba(255,255,255,0.2)" 
-                        strokeWidth={2}
-                      />
-                    ))}
+                  <Pie data={categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} innerRadius={40} paddingAngle={3} label={({
+                  name,
+                  percent
+                }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} style={{
+                  filter: 'url(#glow)'
+                }}>
+                    {categoryData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} stroke="rgba(255,255,255,0.2)" strokeWidth={2} />)}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(15, 23, 42, 0.95)', 
-                      border: '2px solid rgba(147, 51, 234, 0.3)', 
-                      borderRadius: '16px',
-                      color: '#fff',
-                      fontWeight: '600',
-                      backdropFilter: 'blur(16px)'
-                    }} 
-                  />
+                  <Tooltip contentStyle={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                  border: '2px solid rgba(147, 51, 234, 0.3)',
+                  borderRadius: '16px',
+                  color: '#fff',
+                  fontWeight: '600',
+                  backdropFilter: 'blur(16px)'
+                }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -292,7 +282,7 @@ const Inventory = () => {
         
         <CardHeader className="relative z-10 pb-6">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white flex items-center gap-4 text-2xl font-bold">
+            <CardTitle className="flex items-center gap-4 text-2xl font-bold text-black">
               <div className="relative">
                 <div className="p-3 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-xl">
                   <Package className="h-7 w-7 text-white" />
@@ -311,8 +301,7 @@ const Inventory = () => {
         
         <CardContent className="relative z-10">
           <div className="space-y-6">
-            {inventory.length === 0 ? (
-              <div className="text-center py-12 relative">
+            {inventory.length === 0 ? <div className="text-center py-12 relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 to-slate-900/20 rounded-2xl border border-white/10"></div>
                 <div className="relative z-10">
                   <div className="p-4 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
@@ -321,16 +310,11 @@ const Inventory = () => {
                   <p className="text-white/80 text-lg font-medium">Aucun article en stock</p>
                   <p className="text-white/60 text-sm mt-2">Ajoutez des articles à votre inventaire</p>
                 </div>
-              </div>
-            ) : (
-              inventory.map((item, index) => {
-                const IconComponent = getCategoryIcon(item.categorie);
-                const stockPercentage = (item.stock_actuel / (item.stock_min * 3)) * 100; // Assume 3x min is full
-                const stockStatus = item.stock_actuel <= item.stock_min ? 'critique' : 
-                                  item.stock_actuel <= item.stock_min * 2 ? 'faible' : 'normal';
-                
-                return (
-                  <div key={item.id} className="group relative p-8 bg-gradient-to-br from-white/15 to-white/5 rounded-3xl border-2 border-white/30 hover:from-white/20 hover:to-white/10 transition-all duration-500 hover-scale shadow-2xl backdrop-blur-lg overflow-hidden">
+              </div> : inventory.map((item, index) => {
+            const IconComponent = getCategoryIcon(item.categorie);
+            const stockPercentage = item.stock_actuel / (item.stock_min * 3) * 100; // Assume 3x min is full
+            const stockStatus = item.stock_actuel <= item.stock_min ? 'critique' : item.stock_actuel <= item.stock_min * 2 ? 'faible' : 'normal';
+            return <div key={item.id} className="group relative p-8 bg-gradient-to-br from-white/15 to-white/5 rounded-3xl border-2 border-white/30 hover:from-white/20 hover:to-white/10 transition-all duration-500 hover-scale shadow-2xl backdrop-blur-lg overflow-hidden">
                     {/* Effet de particules animées */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                       <div className="absolute top-4 left-4 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
@@ -339,18 +323,10 @@ const Inventory = () => {
                     </div>
                     
                     {/* Lueur de fond dynamique */}
-                    <div className={`absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500 ${
-                      stockStatus === 'critique' ? 'bg-gradient-to-br from-red-500/20 to-pink-500/20' :
-                      stockStatus === 'faible' ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20' :
-                      'bg-gradient-to-br from-emerald-500/20 to-teal-500/20'
-                    }`}></div>
+                    <div className={`absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500 ${stockStatus === 'critique' ? 'bg-gradient-to-br from-red-500/20 to-pink-500/20' : stockStatus === 'faible' ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20' : 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20'}`}></div>
                     
                     {/* Barre de statut en haut */}
-                    <div className={`absolute top-0 left-0 w-full h-2 ${
-                      stockStatus === 'critique' ? 'bg-gradient-to-r from-red-400 to-pink-500' :
-                      stockStatus === 'faible' ? 'bg-gradient-to-r from-amber-400 to-orange-500' :
-                      'bg-gradient-to-r from-emerald-400 to-teal-500'
-                    } animate-pulse`}></div>
+                    <div className={`absolute top-0 left-0 w-full h-2 ${stockStatus === 'critique' ? 'bg-gradient-to-r from-red-400 to-pink-500' : stockStatus === 'faible' ? 'bg-gradient-to-r from-amber-400 to-orange-500' : 'bg-gradient-to-r from-emerald-400 to-teal-500'} animate-pulse`}></div>
                     
                     {/* Badge de priorité flottant */}
                     <div className="absolute top-4 right-4 flex flex-col gap-2">
@@ -377,10 +353,10 @@ const Inventory = () => {
                             </div>
                           </div>
                           <div>
-                            <h4 className="text-white font-bold text-2xl mb-2 group-hover:text-cyan-300 transition-colors duration-300">
+                            <h4 className="font-bold text-2xl mb-2 transition-colors duration-300 text-black">
                               {item.nom}
                             </h4>
-                            <p className="text-white/80 text-base font-medium flex items-center gap-2">
+                            <p className="text-base font-medium flex items-center gap-2 text-black">
                               <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
                               {item.fournisseur || 'Fournisseur non spécifié'}
                             </p>
@@ -397,16 +373,11 @@ const Inventory = () => {
                           
                           {/* Barre de progression du stock */}
                           <div className="mt-3 w-32 h-3 bg-black/30 rounded-full overflow-hidden backdrop-blur-sm border border-white/20">
-                            <div 
-                              className={`h-full transition-all duration-1000 ${
-                                stockStatus === 'critique' ? 'bg-gradient-to-r from-red-500 to-pink-500' :
-                                stockStatus === 'faible' ? 'bg-gradient-to-r from-amber-500 to-orange-500' :
-                                'bg-gradient-to-r from-emerald-500 to-teal-500'
-                              } shadow-lg`}
-                              style={{ width: `${Math.min(stockPercentage, 100)}%` }}
-                            ></div>
+                            <div className={`h-full transition-all duration-1000 ${stockStatus === 'critique' ? 'bg-gradient-to-r from-red-500 to-pink-500' : stockStatus === 'faible' ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-gradient-to-r from-emerald-500 to-teal-500'} shadow-lg`} style={{
+                        width: `${Math.min(stockPercentage, 100)}%`
+                      }}></div>
                           </div>
-                          <div className="text-xs text-white/70 mt-1 font-medium">
+                          <div className="text-xs text-white/70 mt-1 font-medium bg-slate-700">
                             {stockPercentage.toFixed(0)}% de capacité
                           </div>
                         </div>
@@ -449,23 +420,16 @@ const Inventory = () => {
                             <span className="text-amber-300 text-sm font-bold">Expiration</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-amber-300 transition-colors">
-                            {item.date_expiration 
-                              ? new Date(item.date_expiration).toLocaleDateString('fr-FR')
-                              : 'N/A'
-                            }
+                            {item.date_expiration ? new Date(item.date_expiration).toLocaleDateString('fr-FR') : 'N/A'}
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  </div>;
+          })}
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default Inventory;
