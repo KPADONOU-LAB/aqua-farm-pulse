@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,54 +11,108 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useToast } from "@/hooks/use-toast";
 import { useFarm } from "@/contexts/FarmContext";
 import type { DateRange } from "react-day-picker";
-
-
-const performanceData = [
-  { cage: 'Cage #001', fcr: 1.8, survie: 96.5, croissance: 2.3, revenus: 12450 },
-  { cage: 'Cage #002', fcr: 2.1, survie: 94.2, croissance: 1.9, revenus: 8750 },
-  { cage: 'Cage #003', fcr: 1.9, survie: 95.8, croissance: 2.1, revenus: 11200 },
-  { cage: 'Cage #004', fcr: 0, survie: 0, croissance: 0, revenus: 0 },
-];
-
-const monthlyProfit = [
-  { mois: 'Jan', revenus: 28400, couts: 18200, profit: 10200 },
-  { mois: 'Fév', revenus: 31200, couts: 19800, profit: 11400 },
-  { mois: 'Mar', revenus: 34800, couts: 21500, profit: 13300 },
-  { mois: 'Avr', revenus: 29600, couts: 18900, profit: 10700 },
-  { mois: 'Mai', revenus: 37200, couts: 23100, profit: 14100 },
-  { mois: 'Jun', revenus: 35600, couts: 22400, profit: 13200 },
-];
-
-const costBreakdown = [
-  { name: 'Alimentation', value: 58, color: '#10b981' },
-  { name: 'Main d\'œuvre', value: 25, color: '#0ea5e9' },
-  { name: 'Vétérinaire', value: 8, color: '#f59e0b' },
-  { name: 'Équipement', value: 6, color: '#8b5cf6' },
-  { name: 'Autres', value: 3, color: '#ef4444' },
-];
-
+const performanceData = [{
+  cage: 'Cage #001',
+  fcr: 1.8,
+  survie: 96.5,
+  croissance: 2.3,
+  revenus: 12450
+}, {
+  cage: 'Cage #002',
+  fcr: 2.1,
+  survie: 94.2,
+  croissance: 1.9,
+  revenus: 8750
+}, {
+  cage: 'Cage #003',
+  fcr: 1.9,
+  survie: 95.8,
+  croissance: 2.1,
+  revenus: 11200
+}, {
+  cage: 'Cage #004',
+  fcr: 0,
+  survie: 0,
+  croissance: 0,
+  revenus: 0
+}];
+const monthlyProfit = [{
+  mois: 'Jan',
+  revenus: 28400,
+  couts: 18200,
+  profit: 10200
+}, {
+  mois: 'Fév',
+  revenus: 31200,
+  couts: 19800,
+  profit: 11400
+}, {
+  mois: 'Mar',
+  revenus: 34800,
+  couts: 21500,
+  profit: 13300
+}, {
+  mois: 'Avr',
+  revenus: 29600,
+  couts: 18900,
+  profit: 10700
+}, {
+  mois: 'Mai',
+  revenus: 37200,
+  couts: 23100,
+  profit: 14100
+}, {
+  mois: 'Jun',
+  revenus: 35600,
+  couts: 22400,
+  profit: 13200
+}];
+const costBreakdown = [{
+  name: 'Alimentation',
+  value: 58,
+  color: '#10b981'
+}, {
+  name: 'Main d\'œuvre',
+  value: 25,
+  color: '#0ea5e9'
+}, {
+  name: 'Vétérinaire',
+  value: 8,
+  color: '#f59e0b'
+}, {
+  name: 'Équipement',
+  value: 6,
+  color: '#8b5cf6'
+}, {
+  name: 'Autres',
+  value: 3,
+  color: '#ef4444'
+}];
 const Reports = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), new Date().getMonth() - 5, 1),
     to: new Date()
   });
-  const { toast } = useToast();
-  const { formatCurrency, translate } = useFarm();
-
+  const {
+    toast
+  } = useToast();
+  const {
+    formatCurrency,
+    translate
+  } = useFarm();
   const totalProfit = monthlyProfit.reduce((acc, month) => acc + month.profit, 0);
-  const avgFCR = performanceData.filter(c => c.fcr > 0).reduce((acc, cage) => acc + cage.fcr, 0) / 
-                 performanceData.filter(c => c.fcr > 0).length;
-  const avgSurvival = performanceData.filter(c => c.survie > 0).reduce((acc, cage) => acc + cage.survie, 0) / 
-                     performanceData.filter(c => c.survie > 0).length;
+  const avgFCR = performanceData.filter(c => c.fcr > 0).reduce((acc, cage) => acc + cage.fcr, 0) / performanceData.filter(c => c.fcr > 0).length;
+  const avgSurvival = performanceData.filter(c => c.survie > 0).reduce((acc, cage) => acc + cage.survie, 0) / performanceData.filter(c => c.survie > 0).length;
   const totalRevenue = monthlyProfit.reduce((acc, month) => acc + month.revenus, 0);
-
   const handleExportPDF = () => {
     // Créer le contenu HTML pour le PDF
     const printContent = document.createElement('div');
     printContent.innerHTML = `
       <html>
         <head>
-          <title>Rapport de Performance - ${format(new Date(), 'dd/MM/yyyy', { locale: fr })}</title>
+          <title>Rapport de Performance - ${format(new Date(), 'dd/MM/yyyy', {
+      locale: fr
+    })}</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             .header { text-align: center; margin-bottom: 30px; }
@@ -73,15 +126,21 @@ const Reports = () => {
         <body>
           <div class="header">
             <h1>Rapport de Performance</h1>
-            <p>Période: ${dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy', { locale: fr }) : 'N/A'} - ${dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy', { locale: fr }) : 'N/A'}</p>
-            <p>Généré le ${format(new Date(), 'dd/MM/yyyy à HH:mm', { locale: fr })}</p>
+            <p>Période: ${dateRange?.from ? format(dateRange.from, 'dd/MM/yyyy', {
+      locale: fr
+    }) : 'N/A'} - ${dateRange?.to ? format(dateRange.to, 'dd/MM/yyyy', {
+      locale: fr
+    }) : 'N/A'}</p>
+            <p>Généré le ${format(new Date(), 'dd/MM/yyyy à HH:mm', {
+      locale: fr
+    })}</p>
           </div>
           
           <h2>Indicateurs Clés</h2>
           <div class="kpi-grid">
             <div class="kpi-card">
               <h3>Profit Total</h3>
-              <p>${formatCurrency((totalProfit * 1000) / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
+              <p>${formatCurrency(totalProfit * 1000 / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
             </div>
             <div class="kpi-card">
               <h3>FCR Moyen</h3>
@@ -93,7 +152,7 @@ const Reports = () => {
             </div>
             <div class="kpi-card">
               <h3>CA Total</h3>
-              <p>${formatCurrency((totalRevenue * 1000) / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
+              <p>${formatCurrency(totalRevenue * 1000 / 1000).replace(/\s/g, '').slice(0, -3)}k</p>
             </div>
           </div>
           
@@ -131,63 +190,48 @@ const Reports = () => {
       printWindow.document.close();
       printWindow.focus();
       printWindow.print();
-      
       toast({
         title: "Export PDF",
-        description: "Le rapport a été ouvert dans une nouvelle fenêtre pour impression/sauvegarde PDF.",
+        description: "Le rapport a été ouvert dans une nouvelle fenêtre pour impression/sauvegarde PDF."
       });
     } else {
       toast({
         title: "Erreur",
         description: "Impossible d'ouvrir la fenêtre d'impression. Vérifiez les paramètres de votre navigateur.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
-  return (
-    <div className="min-h-screen p-6 animate-fade-in">
+  return <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold mb-2 text-black">
             {translate('reports')}
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-lg text-black">
             {translate('reports_description') || 'Analyses et indicateurs de performance de votre ferme'}
           </p>
         </div>
         <div className="flex gap-3">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-black">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange?.from && dateRange?.to ? (
-                  <>
-                    {format(dateRange.from, "dd/MM/yy", { locale: fr })} - {format(dateRange.to, "dd/MM/yy", { locale: fr })}
-                  </>
-                ) : (
-                  "Période"
-                )}
+                {dateRange?.from && dateRange?.to ? <>
+                    {format(dateRange.from, "dd/MM/yy", {
+                  locale: fr
+                })} - {format(dateRange.to, "dd/MM/yy", {
+                  locale: fr
+                })}
+                  </> : "Période"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={dateRange.from}
-                selected={dateRange}
-                onSelect={setDateRange}
-                numberOfMonths={2}
-                className="pointer-events-auto"
-                locale={fr}
-              />
+              <Calendar initialFocus mode="range" defaultMonth={dateRange.from} selected={dateRange} onSelect={setDateRange} numberOfMonths={2} className="pointer-events-auto" locale={fr} />
             </PopoverContent>
           </Popover>
-          <Button 
-            className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg"
-            onClick={handleExportPDF}
-          >
+          <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg" onClick={handleExportPDF}>
             <Download className="mr-2 h-4 w-4" />
             Exporter PDF
           </Button>
@@ -256,17 +300,11 @@ const Reports = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="mois" stroke="#fff" />
                 <YAxis stroke="#fff" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
-                  }}
-                  formatter={(value, name) => [formatCurrency(Number(value)), 
-                    name === 'revenus' ? 'Revenus' : 
-                    name === 'couts' ? 'Coûts' : 'Profit'
-                  ]}
-                />
+                <Tooltip contentStyle={{
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                border: 'none',
+                borderRadius: '8px'
+              }} formatter={(value, name) => [formatCurrency(Number(value)), name === 'revenus' ? 'Revenus' : name === 'couts' ? 'Coûts' : 'Profit']} />
                 <Bar dataKey="revenus" fill="#10b981" radius={[2, 2, 0, 0]} />
                 <Bar dataKey="couts" fill="#ef4444" radius={[2, 2, 0, 0]} />
                 <Bar dataKey="profit" fill="#0ea5e9" radius={[2, 2, 0, 0]} />
@@ -285,27 +323,17 @@ const Reports = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie
-                  data={costBreakdown}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {costBreakdown.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                <Pie data={costBreakdown} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({
+                name,
+                percent
+              }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                  {costBreakdown.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255,255,255,0.9)', 
-                    border: 'none', 
-                    borderRadius: '8px' 
-                  }}
-                  formatter={(value) => [`${value}%`, 'Pourcentage']}
-                />
+                <Tooltip contentStyle={{
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                border: 'none',
+                borderRadius: '8px'
+              }} formatter={value => [`${value}%`, 'Pourcentage']} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -322,15 +350,10 @@ const Reports = () => {
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
-            {performanceData.filter(cage => cage.fcr > 0).map((cage, index) => (
-              <div key={cage.cage} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+            {performanceData.filter(cage => cage.fcr > 0).map((cage, index) => <div key={cage.cage} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-gray-800 font-bold text-lg">{cage.cage}</h4>
-                  <Badge className={`${
-                    cage.fcr <= 2 ? 'bg-green-100 text-green-800 border-green-200' : 
-                    cage.fcr <= 2.5 ? 'bg-blue-100 text-blue-800 border-blue-200' : 
-                    'bg-amber-100 text-amber-800 border-amber-200'
-                  } font-medium`}>
+                  <Badge className={`${cage.fcr <= 2 ? 'bg-green-100 text-green-800 border-green-200' : cage.fcr <= 2.5 ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-amber-100 text-amber-800 border-amber-200'} font-medium`}>
                     Performance: {cage.fcr <= 2 ? 'Excellente' : cage.fcr <= 2.5 ? 'Bonne' : 'À améliorer'}
                   </Badge>
                 </div>
@@ -356,8 +379,7 @@ const Reports = () => {
                     <div className="text-gray-900 font-bold text-2xl">{formatCurrency(cage.revenus)}</div>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </CardContent>
       </Card>
@@ -393,8 +415,6 @@ const Reports = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default Reports;
