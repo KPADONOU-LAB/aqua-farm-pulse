@@ -82,7 +82,7 @@ const Predictions = () => {
       </div>
 
       {/* Contrôles */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 bg-sky-700">
         <Select value={selectedCage} onValueChange={setSelectedCage}>
           <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white">
             <SelectValue placeholder="Toutes les cages" />
