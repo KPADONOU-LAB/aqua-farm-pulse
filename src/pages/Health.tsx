@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Plus, AlertTriangle, TrendingDown, Activity, Pill } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import NewHealthObservationModal from "@/components/modals/NewHealthObservationModal";
+import { useOptimizedHealthData } from "@/hooks/useOptimizedHealthData";
 const mockHealthRecords = [{
   id: 1,
   cage: "Cage #001",
@@ -86,7 +87,21 @@ const getStatutColor = (statut: string) => {
   }
 };
 const Health = () => {
-  const totalMortaliteJour = mockHealthRecords.reduce((acc, record) => acc + record.mortalite, 0);
+  const { healthObservations } = useOptimizedHealthData();
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const yesterdayStr = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+  const totalMortaliteJour = (healthObservations || [])
+    .filter((o) => o.date_observation === todayStr)
+    .reduce((acc, o) => acc + (o.mortalite || 0), 0);
+
+  const yesterdayMortality = (healthObservations || [])
+    .filter((o) => o.date_observation === yesterdayStr)
+    .reduce((acc, o) => acc + (o.mortalite || 0), 0);
+
+  const deltaVsHier = totalMortaliteJour - yesterdayMortality;
+
   const cagesAlerte = mockHealthRecords.filter(r => r.statut === 'alerte').length;
   const cagesSurveillance = mockHealthRecords.filter(r => r.statut === 'surveillance').length;
   const tauxSurvieGlobal = survivalData[survivalData.length - 1]?.taux || 0;
@@ -115,7 +130,7 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{totalMortaliteJour}</div>
-            <p className="text-xs text-muted-foreground">+4 vs hier</p>
+            <p className="text-xs text-muted-foreground">{deltaVsHier >= 0 ? `+${deltaVsHier}` : deltaVsHier} vs hier</p>
           </CardContent>
         </Card>
 
