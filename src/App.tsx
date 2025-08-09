@@ -33,32 +33,31 @@ import CustomDashboards from "./pages/CustomDashboards";
 import CageHistory from "./pages/CageHistory";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-
 const queryClient = new QueryClient();
-
-function NotificationProvider({ children }: { children: React.ReactNode }) {
+function NotificationProvider({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   useRealtimeNotifications();
   return <>{children}</>;
 }
-
 export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
+  return <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <NotificationProvider>
           <Routes>
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/*" element={
-                  <ProtectedRoute>
+                <Route path="/*" element={<ProtectedRoute>
                     <FarmSetupWrapper>
                       <SidebarProvider>
                       <div className="flex h-screen bg-background">
                         <AppSidebarOptimized />
                         <div className="flex-1 flex flex-col overflow-hidden">
                           <TopNavigationOptimized />
-                          <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800">
+                          <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 bg-neutral-50">
                             <Routes>
                               <Route path="/" element={<IntelligentDashboard />} />
                               <Route path="/cages" element={<Cages />} />
@@ -89,11 +88,9 @@ export default function App() {
                       <HelpSystem />
                       </SidebarProvider>
                     </FarmSetupWrapper>
-                  </ProtectedRoute>
-                } />
+                  </ProtectedRoute>} />
           </Routes>
         </NotificationProvider>
       </TooltipProvider>
-    </QueryClientProvider>
-  );
+    </QueryClientProvider>;
 }
