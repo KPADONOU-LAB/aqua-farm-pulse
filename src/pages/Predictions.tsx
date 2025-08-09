@@ -72,7 +72,7 @@ const Predictions = () => {
         <h1 className="text-4xl font-bold mb-2 text-black">
           Prédictions de Production
         </h1>
-        <p className="text-lg text-black">
+        <p className="text-lg text-black bg-neutral-50">
           Analyse prédictive et optimisation des cycles
         </p>
         <div className="flex items-center gap-2 mt-2 text-white/60">
@@ -88,7 +88,7 @@ const Predictions = () => {
             <SelectValue placeholder="Toutes les cages" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Toutes les cages</SelectItem>
+            <SelectItem value="all" className="bg-ocean-700">Toutes les cages</SelectItem>
             {cages.map(cage => <SelectItem key={cage.id} value={cage.id}>
                 {cage.nom} - {cage.espece}
               </SelectItem>)}
