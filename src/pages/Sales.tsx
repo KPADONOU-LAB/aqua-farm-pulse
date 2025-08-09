@@ -324,7 +324,7 @@ const Sales = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <TrendingUp className="h-5 w-5" />
                   Performances mensuelles
                 </CardTitle>
@@ -332,20 +332,20 @@ const Sales = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Chiffre d'affaires:</span>
-                    <span className="text-white font-semibold">€182,200</span>
+                    <span className="text-black">Chiffre d'affaires:</span>
+                    <span className="font-semibold text-black">€182,200</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Croissance:</span>
+                    <span className="text-black">Croissance:</span>
                     <span className="text-green-400 font-semibold">+24.5%</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Ventes totales:</span>
-                    <span className="text-white font-semibold">1,247kg</span>
+                    <span className="text-black">Ventes totales:</span>
+                    <span className="font-semibold text-black">1,247kg</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Clients uniques:</span>
-                    <span className="text-white font-semibold">47</span>
+                    <span className="text-black">Clients uniques:</span>
+                    <span className="font-semibold text-black">47</span>
                   </div>
                 </div>
               </CardContent>
@@ -353,7 +353,7 @@ const Sales = () => {
 
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Fish className="h-5 w-5" />
                   Top espèces vendues
                 </CardTitle>
@@ -361,20 +361,20 @@ const Sales = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Tilapia:</span>
-                    <span className="text-white font-semibold">425kg</span>
+                    <span className="text-black">Tilapia:</span>
+                    <span className="font-semibold text-black">425kg</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Dorade:</span>
-                    <span className="text-white font-semibold">385kg</span>
+                    <span className="text-black">Dorade:</span>
+                    <span className="font-semibold text-black">385kg</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Bar:</span>
-                    <span className="text-white font-semibold">287kg</span>
+                    <span className="text-black">Bar:</span>
+                    <span className="font-semibold text-black">287kg</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Loup:</span>
-                    <span className="text-white font-semibold">150kg</span>
+                    <span className="text-black">Loup:</span>
+                    <span className="font-semibold text-black">150kg</span>
                   </div>
                 </div>
               </CardContent>
@@ -382,7 +382,7 @@ const Sales = () => {
 
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Users className="h-5 w-5" />
                   Top clients
                 </CardTitle>
@@ -390,20 +390,20 @@ const Sales = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Restaurant Le Neptune:</span>
-                    <span className="text-white font-semibold">€8,450</span>
+                    <span className="text-black">Restaurant Le Neptune:</span>
+                    <span className="font-semibold text-black">€8,450</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Grossiste AquaFrais:</span>
-                    <span className="text-white font-semibold">€6,240</span>
+                    <span className="text-black">Grossiste AquaFrais:</span>
+                    <span className="font-semibold text-black">€6,240</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Marché Central:</span>
-                    <span className="text-white font-semibold">€4,875</span>
+                    <span className="text-black">Marché Central:</span>
+                    <span className="font-semibold text-black">€4,875</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Poissonnerie du Port:</span>
-                    <span className="text-white font-semibold">€3,690</span>
+                    <span className="text-black">Poissonnerie du Port:</span>
+                    <span className="font-semibold text-black">€3,690</span>
                   </div>
                 </div>
               </CardContent>
@@ -412,12 +412,12 @@ const Sales = () => {
 
           <Card className="glass-effect">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-black">
                 <BarChart3 className="h-5 w-5" />
                 Analyse détaillée des revenus
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-zinc-400">
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={monthlyRevenue}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
