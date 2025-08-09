@@ -246,7 +246,7 @@ const Reports = () => {
             <Euro className="h-5 w-5 text-ocean-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-ocean-800 bg-neutral-50">{formatCurrency(totalProfit).replace(/\s/g, '').slice(0, -3)}k</div>
+            <div className="text-3xl font-bold text-ocean-800 bg-sky-100">{formatCurrency(totalProfit).replace(/\s/g, '').slice(0, -3)}k</div>
             <p className="text-xs text-ocean-600">+12% vs période précédente</p>
           </CardContent>
         </Card>
