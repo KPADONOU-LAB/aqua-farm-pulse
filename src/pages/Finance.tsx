@@ -7,53 +7,34 @@ import { Progress } from "@/components/ui/progress";
 import { useFinanceData } from "@/hooks/useFinanceData";
 import { NewFinancialEntryModal } from "@/components/modals/NewFinancialEntryModal";
 import { BudgetManagementModal } from "@/components/modals/BudgetManagementModal";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Target, 
-  Calculator,
-  PieChart,
-  BarChart3,
-  AlertTriangle
-} from "lucide-react";
-
+import { TrendingUp, TrendingDown, DollarSign, Target, Calculator, PieChart, BarChart3, AlertTriangle } from "lucide-react";
 const Finance = () => {
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
-  const { 
-    financialData, 
-    budgets, 
-    kpis, 
-    loading, 
-    refreshData 
+  const {
+    financialData,
+    budgets,
+    kpis,
+    loading,
+    refreshData
   } = useFinanceData();
-
   const handleNewEntry = () => {
     setShowNewEntryModal(false);
     refreshData();
   };
-
   const handleBudgetUpdate = () => {
     setShowBudgetModal(false);
     refreshData();
   };
-
   if (loading) {
-    return (
-      <div className="container mx-auto p-6 space-y-6">
+    return <div className="container mx-auto p-6 space-y-6">
         <div className="h-8 bg-muted rounded animate-pulse"></div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-muted rounded animate-pulse"></div>
-          ))}
+          {[...Array(4)].map((_, i) => <div key={i} className="h-32 bg-muted rounded animate-pulse"></div>)}
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -88,11 +69,7 @@ const Finance = () => {
               {kpis.totalRevenue.toLocaleString('fr-FR')} €
             </div>
             <div className="flex items-center justify-center mt-2">
-              {kpis.revenueGrowth >= 0 ? (
-                <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
-              ) : (
-                <TrendingDown className="w-4 h-4 text-red-600 mr-1" />
-              )}
+              {kpis.revenueGrowth >= 0 ? <TrendingUp className="w-4 h-4 text-green-600 mr-1" /> : <TrendingDown className="w-4 h-4 text-red-600 mr-1" />}
               <span className={`text-sm ${kpis.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {kpis.revenueGrowth.toFixed(1)}% vs mois dernier
               </span>
@@ -110,11 +87,7 @@ const Finance = () => {
               {kpis.totalCosts.toLocaleString('fr-FR')} €
             </div>
             <div className="flex items-center justify-center mt-2">
-              {kpis.costGrowth <= 0 ? (
-                <TrendingDown className="w-4 h-4 text-green-600 mr-1" />
-              ) : (
-                <TrendingUp className="w-4 h-4 text-red-600 mr-1" />
-              )}
+              {kpis.costGrowth <= 0 ? <TrendingDown className="w-4 h-4 text-green-600 mr-1" /> : <TrendingUp className="w-4 h-4 text-red-600 mr-1" />}
               <span className={`text-sm ${kpis.costGrowth <= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {Math.abs(kpis.costGrowth).toFixed(1)}% vs mois dernier
               </span>
@@ -175,12 +148,9 @@ const Finance = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {financialData.slice(0, 10).map((transaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
+                {financialData.slice(0, 10).map(transaction => <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
-                      <div className={`w-3 h-3 rounded-full ${
-                        transaction.type_transaction === 'income' ? 'bg-green-500' : 'bg-red-500'
-                      }`}></div>
+                      <div className={`w-3 h-3 rounded-full ${transaction.type_transaction === 'income' ? 'bg-green-500' : 'bg-red-500'}`}></div>
                       <div>
                         <p className="font-medium">{transaction.description}</p>
                         <p className="text-sm text-muted-foreground">
@@ -188,14 +158,11 @@ const Finance = () => {
                         </p>
                       </div>
                     </div>
-                    <div className={`font-bold ${
-                      transaction.type_transaction === 'income' ? 'text-green-600' : 'text-red-600'
-                    }`}>
+                    <div className={`font-bold ${transaction.type_transaction === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                       {transaction.type_transaction === 'income' ? '+' : '-'}
                       {transaction.montant.toLocaleString('fr-FR')} €
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -203,8 +170,7 @@ const Finance = () => {
 
         <TabsContent value="budgets" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {budgets.map((budget) => (
-              <Card key={budget.id}>
+            {budgets.map(budget => <Card key={budget.id}>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     {budget.nom_budget}
@@ -223,25 +189,24 @@ const Finance = () => {
                       <span>Aliments</span>
                       <span>{budget.reel_aliments}/{budget.budget_aliments}€</span>
                     </div>
-                    <Progress value={(budget.reel_aliments / budget.budget_aliments) * 100} />
+                    <Progress value={budget.reel_aliments / budget.budget_aliments * 100} />
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Médicaments</span>
                       <span>{budget.reel_medicaments}/{budget.budget_medicaments}€</span>
                     </div>
-                    <Progress value={(budget.reel_medicaments / budget.budget_medicaments) * 100} />
+                    <Progress value={budget.reel_medicaments / budget.budget_medicaments * 100} />
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Équipements</span>
                       <span>{budget.reel_equipements}/{budget.budget_equipements}€</span>
                     </div>
-                    <Progress value={(budget.reel_equipements / budget.budget_equipements) * 100} />
+                    <Progress value={budget.reel_equipements / budget.budget_equipements * 100} />
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </TabsContent>
 
@@ -354,19 +319,9 @@ const Finance = () => {
       </Tabs>
 
       {/* Modals */}
-      <NewFinancialEntryModal
-        open={showNewEntryModal}
-        onOpenChange={setShowNewEntryModal}
-        onSuccess={handleNewEntry}
-      />
+      <NewFinancialEntryModal open={showNewEntryModal} onOpenChange={setShowNewEntryModal} onSuccess={handleNewEntry} />
       
-      <BudgetManagementModal
-        open={showBudgetModal}
-        onOpenChange={setShowBudgetModal}
-        onSuccess={handleBudgetUpdate}
-      />
-    </div>
-  );
+      <BudgetManagementModal open={showBudgetModal} onOpenChange={setShowBudgetModal} onSuccess={handleBudgetUpdate} />
+    </div>;
 };
-
 export default Finance;
