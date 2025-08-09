@@ -76,14 +76,14 @@ const SmartNotifications = () => {
   const activeAlerts = alerts.filter(alert => alert.status === 'active');
   const criticalAlerts = alerts.filter(alert => alert.severity === 'critical');
   const predictiveAlerts = alerts.filter(alert => alert.type === 'predictive');
-  return <div className="min-h-screen p-6 animate-fade-in bg-[#747448]">
+  return <div className="min-h-screen p-6 animate-fade-in bg-neutral-50">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold mb-2 text-black">
             Notifications & Alertes Intelligentes
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-lg text-black">
             Système avancé de surveillance et prédictions IA
           </p>
         </div>
@@ -172,15 +172,15 @@ const SmartNotifications = () => {
             <AlertTriangle className="mr-2 h-4 w-4" />
             Tableau de Bord
           </TabsTrigger>
-          <TabsTrigger value="alerts" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="alerts" className="data-[state=active]:bg-white/20 text-black">
             <Bell className="mr-2 h-4 w-4" />
             Alertes
           </TabsTrigger>
-          <TabsTrigger value="config" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="config" className="data-[state=active]:bg-white/20 text-black">
             <Settings className="mr-2 h-4 w-4" />
             Configuration
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="text-white data-[state=active]:bg-white/20">
+          <TabsTrigger value="preferences" className="data-[state=active]:bg-white/20 text-black">
             <Smartphone className="mr-2 h-4 w-4" />
             Préférences
           </TabsTrigger>
