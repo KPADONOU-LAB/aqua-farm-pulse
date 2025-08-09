@@ -3,42 +3,31 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Brain, 
-  Cloud, 
-  BarChart3, 
-  Sparkles,
-  TrendingUp,
-  Settings,
-  Info
-} from 'lucide-react';
+import { Brain, Cloud, BarChart3, Sparkles, TrendingUp, Settings, Info } from 'lucide-react';
 import { AIPredictionsPanel } from '@/components/AIPredictionsPanel';
 import { WeatherImpactPanel } from '@/components/WeatherImpactPanel';
 import { ComparativeAnalysisPanel } from '@/components/ComparativeAnalysisPanel';
 import { useCageMetrics } from '@/hooks/useCageMetrics';
-
 const AdvancedAnalytics = () => {
   const [selectedCage, setSelectedCage] = useState<string>('');
-  const { cages } = useCageMetrics();
-
+  const {
+    cages
+  } = useCageMetrics();
   const activeCages = cages.filter(cage => cage.statut === 'actif' || cage.statut === 'en_production');
-
-  return (
-    <div className="min-h-screen p-6 animate-fade-in">
+  return <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+        <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 text-black">
           <Sparkles className="h-8 w-8 text-purple-400" />
           Analytics Avancées
         </h1>
-        <p className="text-white/80 text-lg">
+        <p className="text-lg text-black">
           IA, météo, comparaisons et prédictions avancées pour optimiser vos performances
         </p>
       </div>
 
       {/* Sélecteur de cage pour l'IA */}
-      {activeCages.length > 0 && (
-        <Card className="mb-6">
+      {activeCages.length > 0 && <Card className="mb-6">
           <CardContent className="p-4">
             <div className="flex items-center gap-4">
               <Settings className="h-5 w-5 text-muted-foreground" />
@@ -49,18 +38,15 @@ const AdvancedAnalytics = () => {
                     <SelectValue placeholder="Choisir une cage active..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {activeCages.map((cage) => (
-                      <SelectItem key={cage.id} value={cage.id}>
+                    {activeCages.map(cage => <SelectItem key={cage.id} value={cage.id}>
                         {cage.nom} ({cage.espece}) - {cage.nombre_poissons} poissons
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card>}
 
       {/* Onglets principaux */}
       <Tabs defaultValue="ai-predictions" className="space-y-6">
@@ -81,29 +67,20 @@ const AdvancedAnalytics = () => {
 
         {/* Prédictions IA */}
         <TabsContent value="ai-predictions" className="space-y-6">
-          {selectedCage ? (
-            <AIPredictionsPanel 
-              cageId={selectedCage} 
-              cageName={activeCages.find(c => c.id === selectedCage)?.nom || 'Cage sélectionnée'}
-            />
-          ) : (
-            <Card>
+          {selectedCage ? <AIPredictionsPanel cageId={selectedCage} cageName={activeCages.find(c => c.id === selectedCage)?.nom || 'Cage sélectionnée'} /> : <Card>
               <CardContent className="p-8 text-center">
                 <Brain className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Sélectionnez une cage</h3>
                 <p className="text-muted-foreground">
                   Choisissez une cage active dans le menu déroulant ci-dessus pour commencer l'analyse IA.
                 </p>
-                {activeCages.length === 0 && (
-                  <div className="mt-4 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                {activeCages.length === 0 && <div className="mt-4 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
                     <p className="text-orange-400 text-sm">
                       Aucune cage active trouvée. Créez et activez des cages dans la section "Cages" pour utiliser cette fonctionnalité.
                     </p>
-                  </div>
-                )}
+                  </div>}
               </CardContent>
-            </Card>
-          )}
+            </Card>}
         </TabsContent>
 
         {/* Impact météo */}
@@ -162,8 +139,6 @@ const AdvancedAnalytics = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default AdvancedAnalytics;
