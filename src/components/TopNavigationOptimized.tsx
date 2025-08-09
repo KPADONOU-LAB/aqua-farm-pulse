@@ -41,7 +41,6 @@ const getQualityMenuItems = (t: (key: string) => string) => [{
   url: "/inventory",
   icon: Package
 }];
-
 const getAnalyticsMenuItems = (t: (key: string) => string) => [{
   title: t("reports_title"),
   url: "/reports",
@@ -55,7 +54,6 @@ const getAnalyticsMenuItems = (t: (key: string) => string) => [{
   url: "/predictions",
   icon: Brain
 }];
-
 const getManagementMenuItems = (t: (key: string) => string) => [{
   title: t("finance_title"),
   url: "/finance",
@@ -69,7 +67,6 @@ const getManagementMenuItems = (t: (key: string) => string) => [{
   url: "/alerts",
   icon: Bell
 }];
-
 const getAdvancedMenuItems = (t: (key: string) => string) => [{
   title: t("custom_dashboards_title"),
   url: "/custom-dashboards",
@@ -105,12 +102,14 @@ export function TopNavigationOptimized() {
   const {
     farmSettings
   } = useFarm();
-  const { t } = useLanguage();
+  const {
+    t
+  } = useLanguage();
   useSyncedLanguage(); // Ensure language synchronization
   const {
     toggleSidebar
   } = useSidebar();
-  
+
   // Get translated menu items
   const primaryMenuItems = getPrimaryMenuItems(t);
   const qualityMenuItems = getQualityMenuItems(t);
@@ -122,9 +121,9 @@ export function TopNavigationOptimized() {
   const getNavClass = (path: string) => isActive(path) ? "bg-white/20 text-white font-medium border-b-2 border-white" : "text-white/80 hover:text-white hover:bg-white/10 transition-colors";
   const getDropdownClass = (items: typeof primaryMenuItems) => isActiveGroup(items) ? "bg-white/20 text-white font-medium border-b-2 border-white" : "text-white/80 hover:text-white hover:bg-white/10 transition-colors";
   return <header className="bg-ocean-gradient border-b border-white/20 backdrop-blur-md">
-      <div className="flex items-center justify-between px-4 py-3 bg-sky-500">
+      <div className="flex items-center justify-between px-4 py-3 bg-ocean-700">
         {/* Logo et menu burger */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 bg-sky-700">
           <Button variant="ghost" size="sm" onClick={toggleSidebar} className="p-2 text-white hover:bg-white/20">
             <Menu className="h-5 w-5" />
           </Button>
