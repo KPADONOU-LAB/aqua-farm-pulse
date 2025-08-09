@@ -29,8 +29,12 @@ const getAlimentTypeColor = (type: string) => {
   return 'bg-gray-500 text-white';
 };
 const Feeding = () => {
-  const { t } = useLanguage();
-  const { language } = useSyncedLanguage();
+  const {
+    t
+  } = useLanguage();
+  const {
+    language
+  } = useSyncedLanguage();
   const {
     feedingSessions,
     weeklyData,
@@ -53,8 +57,7 @@ const Feeding = () => {
         </div>
       </div>;
   }
-  return (
-    <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-background">
+  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -116,18 +119,18 @@ const Feeding = () => {
       </div>
 
       {/* Graphique consommation hebdomadaire */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 bg-gray-200">
         <Card className="glass-effect border-2 border-white/20 shadow-2xl backdrop-blur-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-white flex items-center gap-3 text-xl font-bold">
+              <CardTitle className="flex items-center gap-3 text-xl font-bold text-black">
                 <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg shadow-lg">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
                 {t('weekly_consumption')} (kg)
               </CardTitle>
               <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-white/90 text-sm font-medium">{t('this_week')}</span>
+                <span className="text-sm font-medium text-black">{t('this_week')}</span>
               </div>
             </div>
           </CardHeader>
@@ -173,7 +176,7 @@ const Feeding = () => {
 
         <Card className="glass-effect border-2 border-white/20 shadow-2xl backdrop-blur-lg">
           <CardHeader className="pb-4">
-            <CardTitle className="text-white flex items-center gap-3 text-xl font-bold">
+            <CardTitle className="flex items-center gap-3 text-xl font-bold text-black">
               <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg shadow-lg">
                 <Coffee className="h-6 w-6 text-white" />
               </div>
@@ -320,7 +323,6 @@ const Feeding = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
 export default Feeding;
