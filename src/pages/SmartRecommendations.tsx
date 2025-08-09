@@ -1,10 +1,8 @@
 import { SmartRecommendationsPanel } from '@/components/SmartRecommendationsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, Sparkles, Target, TrendingUp } from 'lucide-react';
-
 const SmartRecommendations = () => {
-  return (
-    <div className="min-h-screen p-6 animate-fade-in">
+  return <div className="min-h-screen p-6 animate-fade-in bg-neutral-50">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
@@ -64,8 +62,6 @@ const SmartRecommendations = () => {
 
       {/* Panel principal */}
       <SmartRecommendationsPanel />
-    </div>
-  );
+    </div>;
 };
-
 export default SmartRecommendations;
