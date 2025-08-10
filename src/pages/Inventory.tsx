@@ -51,7 +51,9 @@ const Inventory = () => {
     stats,
     loading
   } = useInventoryData();
-  const { formatCurrency } = useFarm();
+  const {
+    formatCurrency
+  } = useFarm();
   if (loading) {
     return <div className="min-h-screen p-6 animate-fade-in">
         <div className="flex justify-between items-center mb-8">
@@ -224,7 +226,7 @@ const Inventory = () => {
           <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
           
           <CardHeader className="pb-4 relative z-10">
-            <CardTitle className="text-white flex items-center gap-4 text-xl font-bold">
+            <CardTitle className="flex items-center gap-4 text-xl font-bold text-black">
               <div className="relative">
                 <div className="p-3 bg-gradient-to-br from-purple-500 via-pink-600 to-blue-600 rounded-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
                   <Package className="h-6 w-6 text-white" />
@@ -295,7 +297,7 @@ const Inventory = () => {
             </CardTitle>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-              <span className="text-white/90 text-sm font-medium">Temps réel</span>
+              <span className="text-sm font-medium text-black">Temps réel</span>
             </div>
           </div>
           <div className="mt-4 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
@@ -389,7 +391,7 @@ const Inventory = () => {
                         <div className="group/card bg-gradient-to-br from-blue-600/30 to-indigo-600/30 p-5 rounded-2xl border-2 border-blue-400/40 hover:border-blue-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl">
                           <div className="flex items-center gap-3 mb-2">
                             <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-                            <span className="text-blue-300 text-sm font-bold">Prix unitaire</span>
+                            <span className="text-sm font-bold text-slate-50">Prix unitaire</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-blue-300 transition-colors">
                             {formatCurrency(item.prix_unitaire)}
@@ -399,7 +401,7 @@ const Inventory = () => {
                         <div className="group/card bg-gradient-to-br from-emerald-600/30 to-teal-600/30 p-5 rounded-2xl border-2 border-emerald-400/40 hover:border-emerald-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl">
                           <div className="flex items-center gap-3 mb-2">
                             <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-                            <span className="text-emerald-300 text-sm font-bold">Valeur stock</span>
+                            <span className="text-sm font-bold text-slate-50">Valeur stock</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-emerald-300 transition-colors">
                             {formatCurrency(item.stock_actuel * item.prix_unitaire)}
@@ -409,7 +411,7 @@ const Inventory = () => {
                         <div className="group/card bg-gradient-to-br from-purple-600/30 to-pink-600/30 p-5 rounded-2xl border-2 border-purple-400/40 hover:border-purple-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl">
                           <div className="flex items-center gap-3 mb-2">
                             <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
-                            <span className="text-purple-300 text-sm font-bold">Catégorie</span>
+                            <span className="text-sm font-bold text-slate-50">Catégorie</span>
                           </div>
                           <div className="text-white font-bold text-xl capitalize group-hover/card:text-purple-300 transition-colors">
                             {item.categorie}
@@ -419,7 +421,7 @@ const Inventory = () => {
                         <div className="group/card bg-gradient-to-br from-amber-600/30 to-orange-600/30 p-5 rounded-2xl border-2 border-amber-400/40 hover:border-amber-300/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm shadow-xl">
                           <div className="flex items-center gap-3 mb-2">
                             <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse"></div>
-                            <span className="text-amber-300 text-sm font-bold">Expiration</span>
+                            <span className="text-sm font-bold text-slate-50">Expiration</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-amber-300 transition-colors">
                             {item.date_expiration ? new Date(item.date_expiration).toLocaleDateString('fr-FR') : 'N/A'}
