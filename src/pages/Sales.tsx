@@ -7,6 +7,7 @@ import { ShoppingCart, Plus, TrendingUp, Users, Euro, Fish, History, BarChart3, 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import NewSaleModal from "@/components/modals/NewSaleModal";
 import { useSalesData } from "@/hooks/useSalesData";
+import { useFarm } from "@/contexts/FarmContext";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 const monthlyRevenue = [{
@@ -70,6 +71,7 @@ const Sales = () => {
     loading,
     generateInvoice
   } = useSalesData();
+  const { formatCurrency } = useFarm();
 
   // Calculer les données du jour
   const today = new Date().toISOString().split('T')[0];
@@ -125,7 +127,7 @@ const Sales = () => {
                 <Euro className="h-5 w-5 text-ocean-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-ocean-800">€{revenusJour.toLocaleString()}</div>
+                <div className="text-3xl font-bold text-ocean-800">{formatCurrency(revenusJour)}</div>
                 <p className="text-xs text-ocean-600">+18% vs hier</p>
               </CardContent>
             </Card>
@@ -158,7 +160,7 @@ const Sales = () => {
                 <TrendingUp className="h-5 w-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-foreground">€{prixMoyenKg.toFixed(2)}</div>
+                <div className="text-3xl font-bold text-foreground">{formatCurrency(prixMoyenKg)}</div>
                 <p className="text-xs text-muted-foreground">+5% ce mois</p>
               </CardContent>
             </Card>
@@ -168,9 +170,9 @@ const Sales = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="glass-effect">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-black">
+                  <CardTitle className="flex items-center gap-2 text-black">
                   <Euro className="h-5 w-5" />
-                  Évolution revenus mensuels (€)
+                  Évolution revenus mensuels
                 </CardTitle>
               </CardHeader>
               <CardContent className="bg-gray-400">
@@ -183,7 +185,7 @@ const Sales = () => {
                     backgroundColor: 'rgba(255,255,255,0.9)',
                     border: 'none',
                     borderRadius: '8px'
-                  }} formatter={value => [`€${value.toLocaleString()}`, 'Revenus']} />
+                  }} formatter={(value) => [formatCurrency(Number(value)), 'Revenus']} />
                     <Line type="monotone" dataKey="revenus" stroke="#10b981" strokeWidth={3} dot={{
                     fill: '#10b981',
                     strokeWidth: 2,
@@ -304,8 +306,8 @@ const Sales = () => {
                         <TableCell className="text-gray-900 font-medium">{sale.client}</TableCell>
                         <TableCell className="text-gray-700">{sale.cage?.nom || 'N/A'}</TableCell>
                         <TableCell className="text-gray-700">{sale.quantite_kg}kg</TableCell>
-                        <TableCell className="text-gray-700">€{sale.prix_par_kg.toFixed(2)}</TableCell>
-                        <TableCell className="text-green-700 font-bold text-lg">€{sale.prix_total.toFixed(2)}</TableCell>
+                        <TableCell className="text-gray-700">{formatCurrency(sale.prix_par_kg)}</TableCell>
+                        <TableCell className="text-green-700 font-bold text-lg">{formatCurrency(sale.prix_total)}</TableCell>
                         <TableCell>
                           <Button size="sm" variant="default" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => generateInvoice(sale)}>
                             <Printer className="h-4 w-4 mr-1" />
@@ -333,7 +335,7 @@ const Sales = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-black">Chiffre d'affaires:</span>
-                    <span className="font-semibold text-black">€182,200</span>
+                    <span className="font-semibold text-black">{formatCurrency(182200)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-black">Croissance:</span>
@@ -391,19 +393,19 @@ const Sales = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-black">Restaurant Le Neptune:</span>
-                    <span className="font-semibold text-black">€8,450</span>
+                    <span className="font-semibold text-black">{formatCurrency(8450)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-black">Grossiste AquaFrais:</span>
-                    <span className="font-semibold text-black">€6,240</span>
+                    <span className="font-semibold text-black">{formatCurrency(6240)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-black">Marché Central:</span>
-                    <span className="font-semibold text-black">€4,875</span>
+                    <span className="font-semibold text-black">{formatCurrency(4875)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-black">Poissonnerie du Port:</span>
-                    <span className="font-semibold text-black">€3,690</span>
+                    <span className="font-semibold text-black">{formatCurrency(3690)}</span>
                   </div>
                 </div>
               </CardContent>
@@ -427,7 +429,7 @@ const Sales = () => {
                   backgroundColor: 'rgba(255,255,255,0.9)',
                   border: 'none',
                   borderRadius: '8px'
-                }} formatter={value => [`€${value.toLocaleString()}`, 'Revenus']} />
+                }} formatter={(value) => [formatCurrency(Number(value)), 'Revenus']} />
                   <Bar dataKey="revenus" fill="url(#colorGradient)" radius={[4, 4, 0, 0]} />
                   <defs>
                     <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">

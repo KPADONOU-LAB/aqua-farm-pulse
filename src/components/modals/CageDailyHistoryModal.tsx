@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useCageMetrics } from '@/hooks/useCageMetrics';
+import { useFarm } from '@/contexts/FarmContext';
 import { toast } from 'sonner';
 
 interface CageDailyHistoryModalProps {
@@ -24,6 +25,7 @@ export const CageDailyHistoryModal = ({ cage }: CageDailyHistoryModalProps) => {
   const [open, setOpen] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const { getCageDailyHistory, loading } = useCageMetrics();
+  const { formatCurrency } = useFarm();
 
   const loadHistory = async () => {
     if (!cage?.id) return;
@@ -148,12 +150,12 @@ export const CageDailyHistoryModal = ({ cage }: CageDailyHistoryModalProps) => {
                       {activity.quantite_kg}kg
                     </Badge>
                     <Badge variant="outline">
-                      €{activity.prix_total}
+                      {formatCurrency(activity.prix_total)}
                     </Badge>
                   </div>
                   <p><strong>Client:</strong> {activity.client}</p>
                   <p><strong>Type:</strong> {activity.type_vente}</p>
-                  <p><strong>Prix/kg:</strong> €{activity.prix_par_kg}</p>
+                  <p><strong>Prix/kg:</strong> {formatCurrency(activity.prix_par_kg)}</p>
                   {activity.notes && (
                     <p><strong>Notes:</strong> {activity.notes}</p>
                   )}
@@ -167,7 +169,7 @@ export const CageDailyHistoryModal = ({ cage }: CageDailyHistoryModalProps) => {
                       {activity.type_transaction === 'income' ? 'Recette' : 'Dépense'}
                     </Badge>
                     <Badge variant="outline">
-                      €{activity.montant}
+                      {formatCurrency(activity.montant)}
                     </Badge>
                   </div>
                   <p><strong>Catégorie:</strong> {activity.categorie}</p>

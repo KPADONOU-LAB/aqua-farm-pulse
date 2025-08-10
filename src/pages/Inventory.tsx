@@ -5,6 +5,7 @@ import { Package, Plus, AlertTriangle, TrendingUp, Coffee, Pill, Wrench } from "
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import NewInventoryModal from "@/components/modals/NewInventoryModal";
 import { useInventoryData } from "@/hooks/useInventoryData";
+import { useFarm } from "@/contexts/FarmContext";
 import { Skeleton } from "@/components/ui/skeleton";
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -50,6 +51,7 @@ const Inventory = () => {
     stats,
     loading
   } = useInventoryData();
+  const { formatCurrency } = useFarm();
   if (loading) {
     return <div className="min-h-screen p-6 animate-fade-in">
         <div className="flex justify-between items-center mb-8">
@@ -123,7 +125,7 @@ const Inventory = () => {
             <TrendingUp className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">€{(stats.valeurTotale / 1000).toFixed(1)}k</div>
+            <div className="text-3xl font-bold text-foreground">{formatCurrency(stats.valeurTotale / 1000)}k</div>
             <p className="text-xs text-muted-foreground">Stock en valeur</p>
           </CardContent>
         </Card>
@@ -390,7 +392,7 @@ const Inventory = () => {
                             <span className="text-blue-300 text-sm font-bold">Prix unitaire</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-blue-300 transition-colors">
-                            €{item.prix_unitaire}
+                            {formatCurrency(item.prix_unitaire)}
                           </div>
                         </div>
                         
@@ -400,7 +402,7 @@ const Inventory = () => {
                             <span className="text-emerald-300 text-sm font-bold">Valeur stock</span>
                           </div>
                           <div className="text-white font-bold text-xl group-hover/card:text-emerald-300 transition-colors">
-                            €{(item.stock_actuel * item.prix_unitaire).toLocaleString()}
+                            {formatCurrency(item.stock_actuel * item.prix_unitaire)}
                           </div>
                         </div>
                         
