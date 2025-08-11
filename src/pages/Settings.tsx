@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useFarm } from '@/contexts/FarmContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Building2, Globe, DollarSign, Fish, Waves, Users, Settings as SettingsIcon } from 'lucide-react';
+import { PermissionWrapper } from '@/components/PermissionWrapper';
 import UserManagement from './UserManagement';
 
 const Settings = () => {
@@ -185,7 +186,8 @@ const Settings = () => {
         </TabsList>
 
         <TabsContent value="general">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <PermissionWrapper requiredPermission="edit">
+            <form onSubmit={handleSubmit} className="space-y-6">
             {/* Informations de base */}
             <Card>
               <CardHeader>
@@ -356,10 +358,13 @@ const Settings = () => {
               {loading ? 'Sauvegarde en cours...' : 'Sauvegarder les paramètres'}
             </Button>
           </form>
+          </PermissionWrapper>
         </TabsContent>
 
         <TabsContent value="users">
-          <UserManagement />
+          <PermissionWrapper requiredPermission="manageUsers">
+            <UserManagement />
+          </PermissionWrapper>
         </TabsContent>
       </Tabs>
     </div>

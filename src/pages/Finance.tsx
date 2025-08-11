@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useFinanceData } from "@/hooks/useFinanceData";
 import { NewFinancialEntryModal } from "@/components/modals/NewFinancialEntryModal";
 import { BudgetManagementModal } from "@/components/modals/BudgetManagementModal";
+import { PermissionWrapper } from "@/components/PermissionWrapper";
 import { TrendingUp, TrendingDown, DollarSign, Target, Calculator, PieChart, BarChart3, AlertTriangle } from "lucide-react";
 const Finance = () => {
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
@@ -34,9 +35,11 @@ const Finance = () => {
         </div>
       </div>;
   }
-  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
-      {/* Header Section */}
-      <div className="space-y-6">
+  return (
+    <PermissionWrapper requiredPermission="viewFinancials">
+      <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
+        {/* Header Section */}
+        <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">Gestion Financière</h1>
@@ -45,14 +48,16 @@ const Finance = () => {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => setShowBudgetModal(true)} variant="outline" size="sm">
-              <Target className="w-4 h-4 mr-2" />
-              Gérer Budget
-            </Button>
-            <Button onClick={() => setShowNewEntryModal(true)}>
-              <DollarSign className="w-4 h-4 mr-2" />
-              Nouvelle Transaction
-            </Button>
+            <PermissionWrapper requiredPermission="edit" showMessage={false}>
+              <Button onClick={() => setShowBudgetModal(true)} variant="outline" size="sm">
+                <Target className="w-4 h-4 mr-2" />
+                Gérer Budget
+              </Button>
+              <Button onClick={() => setShowNewEntryModal(true)}>
+                <DollarSign className="w-4 h-4 mr-2" />
+                Nouvelle Transaction
+              </Button>
+            </PermissionWrapper>
           </div>
         </div>
       </div>
@@ -322,6 +327,8 @@ const Finance = () => {
       <NewFinancialEntryModal open={showNewEntryModal} onOpenChange={setShowNewEntryModal} onSuccess={handleNewEntry} />
       
       <BudgetManagementModal open={showBudgetModal} onOpenChange={setShowBudgetModal} onSuccess={handleBudgetUpdate} />
-    </div>;
+      </div>
+    </PermissionWrapper>
+  );
 };
 export default Finance;

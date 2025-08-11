@@ -13,6 +13,7 @@ import { CageDailyHistoryModal } from "@/components/modals/CageDailyHistoryModal
 import { useCageMetrics } from "@/hooks/useCageMetrics";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
+import { PermissionWrapper } from "@/components/PermissionWrapper";
 import * as XLSX from 'xlsx';
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -217,7 +218,9 @@ const Cages = () => {
               <Download className="h-4 w-4 mr-2" />
               {t('export_history')}
             </Button>
-            <NewCageModal />
+            <PermissionWrapper requiredPermission="create">
+              <NewCageModal />
+            </PermissionWrapper>
           </div>
         </div>
       </div>
@@ -301,7 +304,9 @@ const Cages = () => {
               <p className="text-muted-foreground mb-4 text-center">
                 {t('create_first_cage_description')}
               </p>
-              <NewCageModal />
+              <PermissionWrapper requiredPermission="create">
+                <NewCageModal />
+              </PermissionWrapper>
             </CardContent>
           </Card> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {cages.map(cage => {
@@ -333,7 +338,9 @@ const Cages = () => {
                     </div>
                     
                     <div className="flex gap-2">
-                      <EditCageModal cage={cage} onCageUpdated={loadCages} />
+                      <PermissionWrapper requiredPermission="edit" showMessage={false} fallback={<span />}>
+                        <EditCageModal cage={cage} onCageUpdated={loadCages} />
+                      </PermissionWrapper>
                       <CageHistoryModal cage={cage} />
                       <CageDailyHistoryModal cage={cage} />
                     </div>

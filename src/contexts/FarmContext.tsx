@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface FarmSettings {
   id: string;
+  user_id: string;
   farm_name: string;
   language: 'fr' | 'en' | 'ar';
   currency: 'fcfa' | 'eur' | 'usd' | 'mad' | 'dza' | 'tnd';
@@ -19,6 +20,7 @@ interface FarmContextType {
   isConfigured: boolean;
   formatCurrency: (amount: number) => string;
   translate: (key: string) => string;
+  isOwner: () => boolean;
 }
 
 const FarmContext = createContext<FarmContextType | undefined>(undefined);
@@ -406,6 +408,10 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
 
   const isConfigured = farmSettings?.is_configured || false;
 
+  const isOwner = () => {
+    return farmSettings?.user_id === user?.id;
+  };
+
   return (
     <FarmContext.Provider value={{
       farmSettings,
@@ -413,7 +419,8 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
       updateFarmSettings,
       isConfigured,
       formatCurrency,
-      translate
+      translate,
+      isOwner
     }}>
       {children}
     </FarmContext.Provider>
