@@ -17,18 +17,22 @@ const Reports = () => {
     from: new Date(new Date().getFullYear(), new Date().getMonth() - 5, 1),
     to: new Date()
   });
-  
-  const { toast } = useToast();
-  const { formatCurrency, translate } = useFarm();
-  
+  const {
+    toast
+  } = useToast();
+  const {
+    formatCurrency,
+    translate
+  } = useFarm();
+
   // Utiliser le hook pour récupérer les vraies données
-  const { 
-    cagePerformanceData, 
-    monthlyFinancialData, 
-    costBreakdownData, 
-    loading, 
-    error, 
-    kpis 
+  const {
+    cagePerformanceData,
+    monthlyFinancialData,
+    costBreakdownData,
+    loading,
+    error,
+    kpis
   } = useReportsData();
   // Fonction d'export PDF mise à jour avec les vraies données
   const handleExportPDF = () => {
@@ -137,31 +141,26 @@ const Reports = () => {
       });
     }
   };
-  
+
   // Afficher un état de chargement
   if (loading) {
-    return (
-      <div className="min-h-screen p-6 flex items-center justify-center">
+    return <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin" />
           <p className="text-lg">Chargement des données des rapports...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Afficher une erreur si nécessaire
   if (error) {
-    return (
-      <div className="min-h-screen p-6 flex items-center justify-center">
+    return <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-2">Erreur</h2>
           <p className="text-muted-foreground">{error}</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   return <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
@@ -258,7 +257,7 @@ const Reports = () => {
               Évolution profit mensuel
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="bg-slate-300">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={monthlyFinancialData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -284,30 +283,20 @@ const Reports = () => {
               Répartition des coûts (%)
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="bg-slate-300">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie 
-                  data={costBreakdownData} 
-                  dataKey="value" 
-                  nameKey="name" 
-                  cx="50%" 
-                  cy="50%" 
-                  outerRadius={100} 
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {costBreakdownData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                <Pie data={costBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({
+                name,
+                percent
+              }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                  {costBreakdownData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{
-                    backgroundColor: 'rgba(255,255,255,0.9)',
-                    border: 'none',
-                    borderRadius: '8px'
-                  }} 
-                  formatter={value => [`${value}%`, 'Pourcentage']} 
-                />
+                <Tooltip contentStyle={{
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                border: 'none',
+                borderRadius: '8px'
+              }} formatter={value => [`${value}%`, 'Pourcentage']} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -324,13 +313,9 @@ const Reports = () => {
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
-            {cagePerformanceData.length === 0 ? (
-              <div className="text-center py-8">
+            {cagePerformanceData.length === 0 ? <div className="text-center py-8">
                 <p className="text-muted-foreground">Aucune cage active trouvée</p>
-              </div>
-            ) : (
-              cagePerformanceData.filter(cage => cage.fcr > 0).map((cage, index) => (
-                <div key={cage.cage} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+              </div> : cagePerformanceData.filter(cage => cage.fcr > 0).map((cage, index) => <div key={cage.cage} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-gray-800 font-bold text-lg">{cage.cage}</h4>
                     <Badge className={`${cage.fcr <= 2 ? 'bg-green-100 text-green-800 border-green-200' : cage.fcr <= 2.5 ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-amber-100 text-amber-800 border-amber-200'} font-medium`}>
@@ -359,9 +344,7 @@ const Reports = () => {
                       <div className="text-gray-900 font-bold text-2xl">{formatCurrency(cage.revenus)}</div>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
+                </div>)}
           </div>
         </CardContent>
       </Card>
