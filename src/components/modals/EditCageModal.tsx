@@ -81,10 +81,11 @@ const EditCageModal = ({ cage, onCageUpdated }: EditCageModalProps) => {
         <Button 
           variant="default" 
           size="sm" 
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-xs"
+          className="w-full sm:w-auto justify-center gap-1"
         >
-          <Edit className="h-3 w-3 mr-1" />
-          Modifier
+          <Edit className="h-4 w-4 sm:mr-1" />
+          <span className="hidden sm:inline">Modifier</span>
+          <span className="sr-only sm:hidden">Modifier</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

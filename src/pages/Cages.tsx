@@ -213,7 +213,7 @@ const Cages = () => {
               {t('cage_management_description')}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button onClick={exportAllHistory} variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               {t('export_history')}
@@ -307,8 +307,8 @@ const Cages = () => {
               <PermissionWrapper requiredPermission="create">
                 <NewCageModal />
               </PermissionWrapper>
-            </CardContent>
-          </Card> : <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+           </CardContent>
+         </Card> : <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {cages.map(cage => {
           const performance = getPerformanceColor(Number(cage.fcr) || 0, cage.croissance || '0%', Number(cage.taux_mortalite) || 0, t);
           const survivalRate = 100 - (Number(cage.taux_mortalite) || 0);
@@ -337,7 +337,7 @@ const Cages = () => {
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2 md:flex-nowrap">
                       <PermissionWrapper requiredPermission="edit" showMessage={false} fallback={<span />}>
                         <EditCageModal cage={cage} onCageUpdated={loadCages} />
                       </PermissionWrapper>
