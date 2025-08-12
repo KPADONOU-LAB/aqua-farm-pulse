@@ -8,6 +8,7 @@ import { useFeedingData } from "@/hooks/useFeedingData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
+import { FeedingStatistics } from "@/components/FeedingStatistics";
 const getAppetitColor = (appetit: string) => {
   switch (appetit) {
     case 'excellent':
@@ -228,6 +229,9 @@ const Feeding = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Statistiques détaillées d'alimentation */}
+      <FeedingStatistics />
 
       {/* Sessions d'alimentation récentes */}
       <Card className="glass-effect border-2 border-cyan-400/30 shadow-2xl backdrop-blur-lg relative overflow-hidden">
