@@ -109,7 +109,7 @@ All colors MUST be HSL.
   }
 
   .stat-card {
-    @apply bg-card backdrop-blur-sm border border-border shadow-lg rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:scale-105;
+    @apply bg-card backdrop-blur-sm border border-border shadow-lg rounded-xl p-4 sm:p-6 transition-all duration-300 md:hover:shadow-xl md:hover:scale-105;
   }
 
   .glass-effect {
@@ -184,4 +184,10 @@ All colors MUST be HSL.
   transition: none;
   z-index: 3;
   opacity: 0.8;
+}
+
+@layer utilities {
+  /* Masquer proprement les barres de défilement en mobile */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

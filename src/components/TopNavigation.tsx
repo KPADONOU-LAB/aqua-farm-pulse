@@ -81,7 +81,7 @@ export function TopNavigation() {
         </nav>
 
         {/* Menu mobile */}
-        <nav className="md:hidden flex items-center space-x-1 overflow-x-auto">
+        <nav className="md:hidden flex items-center space-x-1 overflow-x-auto no-scrollbar px-1 -mx-1">
           {menuItems.slice(0, 4).map((item) => (
             <NavLink
               key={item.title}

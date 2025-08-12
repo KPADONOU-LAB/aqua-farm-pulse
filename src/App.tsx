@@ -53,7 +53,7 @@ export default function App() {
                 <Route path="/*" element={<ProtectedRoute>
                     <FarmSetupWrapper>
                       <SidebarProvider>
-                      <div className="flex h-screen bg-background">
+                      <div className="flex min-h-svh bg-background">
                         <AppSidebarOptimized />
                         <div className="flex-1 flex flex-col overflow-hidden">
                           <TopNavigationOptimized />

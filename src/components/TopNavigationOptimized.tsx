@@ -226,7 +226,7 @@ export function TopNavigationOptimized() {
         </nav>
 
         {/* Navigation mobile améliorée */}
-        <nav className="lg:hidden flex items-center space-x-1">
+        <nav className="lg:hidden flex items-center space-x-1 overflow-x-auto no-scrollbar px-1 -mx-1">
           {primaryMenuItems.slice(0, 3).map(item => <NavLink key={item.title} to={item.url} className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 min-w-[60px] ${getNavClass(item.url)}`}>
               <item.icon className="h-4 w-4" />
               <span className="text-xs font-medium">{item.title.split(' ')[0]}</span>
