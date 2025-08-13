@@ -187,7 +187,7 @@ export function FeedingStatistics() {
             </div>
           ) : (
             data.slice(0, 10).map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-card rounded-lg border">
+              <div key={index} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-card rounded-lg border">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -202,7 +202,7 @@ export function FeedingStatistics() {
                   )}
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto sm:justify-end">
                   <div className="text-right">
                     <div className="font-bold text-lg">
                       {item.quantite_totale?.toFixed(2) || '0.00'} kg
@@ -232,14 +232,14 @@ export function FeedingStatistics() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <CardTitle className="flex items-center gap-2">
             <BarChart className="h-5 w-5" />
             Statistiques d'Alimentation Détaillées
           </CardTitle>
           
           <Select value={selectedCage} onValueChange={setSelectedCage}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Sélectionner une cage" />
             </SelectTrigger>
             <SelectContent>

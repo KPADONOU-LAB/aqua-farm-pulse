@@ -161,21 +161,21 @@ const Reports = () => {
         </div>
       </div>;
   }
-  return <div className="min-h-screen p-6 animate-fade-in">
+  return <div className="min-h-screen p-4 sm:p-6 animate-fade-in">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-4xl font-bold mb-2 text-black">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-black">
             {translate('reports')}
           </h1>
-          <p className="text-lg text-black">
+          <p className="text-base sm:text-lg text-black">
             {translate('reports_description') || 'Analyses et indicateurs de performance de votre ferme'}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 text-black">
+              <Button variant="outline" className="w-full sm:w-auto bg-white/10 border-white/20 hover:bg-white/20 text-black">
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {dateRange?.from && dateRange?.to ? <>
                     {format(dateRange.from, "dd/MM/yy", {
@@ -190,7 +190,7 @@ const Reports = () => {
               <Calendar initialFocus mode="range" defaultMonth={dateRange.from} selected={dateRange} onSelect={setDateRange} numberOfMonths={2} className="pointer-events-auto" locale={fr} />
             </PopoverContent>
           </Popover>
-          <Button className="bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg" onClick={handleExportPDF}>
+          <Button className="w-full sm:w-auto bg-aqua-gradient hover:bg-aqua-600 text-white shadow-lg" onClick={handleExportPDF}>
             <Download className="mr-2 h-4 w-4" />
             Exporter PDF
           </Button>
@@ -198,7 +198,7 @@ const Reports = () => {
       </div>
 
       {/* KPIs principaux */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <Card className="stat-card ocean-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-ocean-700">Profit total (6 mois)</CardTitle>
@@ -249,7 +249,7 @@ const Reports = () => {
       </div>
 
       {/* Graphiques principaux */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <Card className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl">
           <CardHeader className="bg-gradient-to-r from-ocean-500 to-aqua-500 text-white">
             <CardTitle className="flex items-center gap-2">
@@ -323,7 +323,7 @@ const Reports = () => {
                     </Badge>
                   </div>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="text-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                       <div className="text-gray-600 text-sm font-medium mb-1">FCR</div>
                       <div className="text-gray-900 font-bold text-2xl">{cage.fcr}</div>

@@ -37,7 +37,7 @@ const Finance = () => {
   }
   return (
     <PermissionWrapper requiredPermission="viewFinancials">
-      <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
+      <div className="container mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fade-in bg-neutral-50">
         {/* Header Section */}
         <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -47,13 +47,13 @@ const Finance = () => {
               Optimisez la rentabilité de votre ferme aquacole
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
             <PermissionWrapper requiredPermission="edit" showMessage={false}>
-              <Button onClick={() => setShowBudgetModal(true)} variant="outline" size="sm">
+              <Button onClick={() => setShowBudgetModal(true)} variant="outline" size="sm" className="w-full sm:w-auto">
                 <Target className="w-4 h-4 mr-2" />
                 Gérer Budget
               </Button>
-              <Button onClick={() => setShowNewEntryModal(true)}>
+              <Button onClick={() => setShowNewEntryModal(true)} className="w-full sm:w-auto">
                 <DollarSign className="w-4 h-4 mr-2" />
                 Nouvelle Transaction
               </Button>
@@ -136,11 +136,11 @@ const Finance = () => {
 
       {/* Tabs Content */}
       <Tabs defaultValue="transactions" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          <TabsTrigger value="budgets">Budgets</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="alertes">Alertes</TabsTrigger>
+        <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 overflow-x-auto no-scrollbar">
+          <TabsTrigger value="transactions" className="w-full">Transactions</TabsTrigger>
+          <TabsTrigger value="budgets" className="w-full">Budgets</TabsTrigger>
+          <TabsTrigger value="analytics" className="w-full">Analytics</TabsTrigger>
+          <TabsTrigger value="alertes" className="w-full">Alertes</TabsTrigger>
         </TabsList>
 
         <TabsContent value="transactions" className="space-y-4">
@@ -153,7 +153,7 @@ const Finance = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {financialData.slice(0, 10).map(transaction => <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
+                {financialData.slice(0, 10).map(transaction => <div key={transaction.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className={`w-3 h-3 rounded-full ${transaction.type_transaction === 'income' ? 'bg-green-500' : 'bg-red-500'}`}></div>
                       <div>
@@ -163,7 +163,7 @@ const Finance = () => {
                         </p>
                       </div>
                     </div>
-                    <div className={`font-bold ${transaction.type_transaction === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`font-bold ${transaction.type_transaction === 'income' ? 'text-green-600' : 'text-red-600'} w-full sm:w-auto text-left sm:text-right`}>
                       {transaction.type_transaction === 'income' ? '+' : '-'}
                       {transaction.montant.toLocaleString('fr-FR')} €
                     </div>

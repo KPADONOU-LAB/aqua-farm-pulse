@@ -43,7 +43,7 @@ const Feeding = () => {
     loading
   } = useFeedingData();
   if (loading) {
-    return <div className="min-h-screen p-6 animate-fade-in">
+    return <div className="min-h-screen p-4 sm:p-6 animate-fade-in">
         <div className="flex justify-between items-center mb-8">
           <div>
             <Skeleton className="h-10 w-64 mb-2" />
@@ -58,17 +58,17 @@ const Feeding = () => {
         </div>
       </div>;
   }
-  return <div className="container mx-auto p-6 space-y-8 animate-fade-in bg-neutral-50">
+  return <div className="container mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fade-in bg-neutral-50">
       {/* Header Section */}
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">{t('feeding_tracking')}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('feeding_tracking')}</h1>
             <p className="text-muted-foreground">
               {t('feeding_tracking_description')}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             <NewFeedingModal />
           </div>
         </div>
@@ -120,7 +120,7 @@ const Feeding = () => {
       </div>
 
       {/* Graphique consommation hebdomadaire */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 bg-gray-200">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8 bg-transparent lg:bg-gray-200">
         <Card className="glass-effect border-2 border-white/20 shadow-2xl backdrop-blur-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
@@ -279,7 +279,7 @@ const Feeding = () => {
                   </div>
                   
                   <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                       <div className="flex items-center gap-5">
                         <div className="relative">
                           <div className="p-4 bg-gradient-to-br from-ocean-500 to-cyan-600 rounded-2xl shadow-xl group-hover:scale-110 transition-transform duration-300">
@@ -296,7 +296,7 @@ const Feeding = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-wrap items-center gap-3 md:gap-4 justify-start md:justify-end">
                         <div className="bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/30 shadow-lg">
                           <div className="flex items-center gap-3 text-white">
                             <Clock className="h-5 w-5 text-cyan-400" />
@@ -304,11 +304,11 @@ const Feeding = () => {
                           </div>
                         </div>
                         
-                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-bold text-xl shadow-xl border-2 border-emerald-400/30">
+                        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold text-base sm:text-xl shadow-xl border-2 border-emerald-400/30">
                           {feeding.quantite}kg
                         </div>
                         
-                        <Badge className={`${getAppetitColor(feeding.appetit)} px-5 py-3 text-sm font-bold rounded-xl border-2 border-white/20 shadow-lg`}>
+                        <Badge className={`${getAppetitColor(feeding.appetit)} px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm font-bold rounded-xl border-2 border-white/20 shadow-lg`}>
                           {feeding.appetit}
                         </Badge>
                       </div>
