@@ -40,7 +40,7 @@ export const useCageHistory = () => {
     cageId: string, 
     periodType: 'day' | 'week' | 'month' = 'week'
   ) => {
-    if (!user) return;
+    // Allow fetching without user for RPC-based feeding history
 
     setLoading(true);
     try {
@@ -90,7 +90,7 @@ export const useCageHistory = () => {
 
   // Calculer automatiquement le FCR pour une période donnée
   const calculateAutomaticFCR = async (cageId: string) => {
-    if (!user) return null;
+    // No user required: RPC calculate_cage_fcr is safe without auth context
 
     try {
       const { data, error } = await supabase.rpc('calculate_cage_fcr', {

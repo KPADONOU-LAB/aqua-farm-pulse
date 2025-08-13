@@ -14,13 +14,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 export function FeedingStatistics() {
   const { toast } = useToast();
   const { cages } = useOptimizedCages();
-  const { getFeedingHistory, loading } = useCageHistory();
+  const { getFeedingHistory } = useCageHistory();
   const { formatCurrency } = useFarm();
   
   const [selectedCage, setSelectedCage] = useState<string>('all');
   const [dailyData, setDailyData] = useState<any[]>([]);
   const [weeklyData, setWeeklyData] = useState<any[]>([]);
   const [monthlyData, setMonthlyData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const activeCages = cages.filter(c => c.statut === 'actif');
 
@@ -33,6 +34,7 @@ export function FeedingStatistics() {
   }, [selectedCage, activeCages]);
 
   const loadFeedingData = async (cageId: string) => {
+    setIsLoading(true);
     try {
       const [daily, weekly, monthly] = await Promise.all([
         getFeedingHistory(cageId, 'day'),
@@ -50,22 +52,27 @@ export function FeedingStatistics() {
         description: 'Impossible de charger les statistiques d\'alimentation',
         variant: 'destructive'
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const loadAllCagesData = async () => {
+    setIsLoading(true);
     try {
+      const results = await Promise.all(
+        activeCages.map((cage) => Promise.all([
+          getFeedingHistory(cage.id, 'day'),
+          getFeedingHistory(cage.id, 'week'),
+          getFeedingHistory(cage.id, 'month')
+        ]))
+      );
+
       const allDaily: any[] = [];
       const allWeekly: any[] = [];
       const allMonthly: any[] = [];
 
-      for (const cage of activeCages) {
-        const [daily, weekly, monthly] = await Promise.all([
-          getFeedingHistory(cage.id, 'day'),
-          getFeedingHistory(cage.id, 'week'),
-          getFeedingHistory(cage.id, 'month')
-        ]);
-
+      for (const [daily, weekly, monthly] of results) {
         if (daily) allDaily.push(...daily);
         if (weekly) allWeekly.push(...weekly);
         if (monthly) allMonthly.push(...monthly);
@@ -81,6 +88,8 @@ export function FeedingStatistics() {
       setMonthlyData(groupedMonthly);
     } catch (error) {
       console.error('Erreur lors du chargement des données globales:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -127,7 +136,7 @@ export function FeedingStatistics() {
   const renderPeriodData = (data: any[], type: 'day' | 'week' | 'month') => {
     const totals = calculateTotals(data);
 
-    if (loading) {
+    if (isLoading) {
       return (
         <div className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
