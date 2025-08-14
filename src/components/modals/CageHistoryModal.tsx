@@ -30,7 +30,12 @@ const fieldLabels: { [key: string]: string } = {
   date_introduction: "Date d'introduction",
   fcr: "FCR",
   croissance: "Croissance",
-  creation: "Création"
+  creation: "Création",
+  vente: "Vente/Récolte",
+  fin_cycle: "Fin de cycle",
+  metrics_finales: "Métriques finales",
+  rentabilite: "Rentabilité calculée",
+  cycle_complet: "Cycle terminé"
 };
 
 const CageHistoryModal = ({ cage }: CageHistoryModalProps) => {
@@ -77,7 +82,10 @@ const CageHistoryModal = ({ cage }: CageHistoryModalProps) => {
       'Champ modifié': fieldLabels[record.field_name] || record.field_name,
       'Ancienne valeur': record.old_value || 'N/A',
       'Nouvelle valeur': record.new_value || 'N/A',
-      'Type de modification': record.change_type === 'create' ? 'Création' : 'Modification'
+      'Type de modification': record.change_type === 'create' ? 'Création' : 
+                         record.change_type === 'sale' ? 'Vente/Récolte' :
+                         record.change_type === 'end_cycle' ? 'Fin de cycle' :
+                         'Modification'
     }));
 
     const ws = XLSX.utils.json_to_sheet(exportData);
@@ -168,9 +176,16 @@ const CageHistoryModal = ({ cage }: CageHistoryModalProps) => {
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         record.change_type === 'create' 
                           ? 'bg-blue-100 text-blue-800' 
+                          : record.change_type === 'sale'
+                          ? 'bg-green-100 text-green-800'
+                          : record.change_type === 'end_cycle'
+                          ? 'bg-purple-100 text-purple-800'
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {record.change_type === 'create' ? 'Création' : 'Modification'}
+                        {record.change_type === 'create' ? 'Création' : 
+                         record.change_type === 'sale' ? 'Vente/Récolte' :
+                         record.change_type === 'end_cycle' ? 'Fin de cycle' :
+                         'Modification'}
                       </span>
                     </TableCell>
                   </TableRow>
