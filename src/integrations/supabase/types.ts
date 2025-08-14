@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -1588,45 +1588,45 @@ export type Database = {
       get_cage_daily_history: {
         Args: { cage_id_param: string; date_debut?: string; date_fin?: string }
         Returns: {
-          date_activite: string
           alimentation: Json
+          date_activite: string
+          finance: Json
           qualite_eau: Json
           sante: Json
           ventes: Json
-          finance: Json
         }[]
       }
       get_cage_feeding_history: {
         Args: { cage_id_param: string; period_type?: string }
         Returns: {
-          periode: string
           date_debut: string
           date_fin: string
-          quantite_totale: number
-          nombre_sessions: number
-          quantite_moyenne: number
           fcr_calcule: number
+          gain_poids: number
+          nombre_sessions: number
+          periode: string
           poids_debut: number
           poids_fin: number
-          gain_poids: number
+          quantite_moyenne: number
+          quantite_totale: number
         }[]
       }
       get_sales_history_by_period: {
         Args: {
-          user_id_param: string
-          period_type?: string
           cage_id_param?: string
+          period_type?: string
+          user_id_param: string
         }
         Returns: {
-          periode: string
+          cage_nom: string
+          chiffre_affaires: number
+          clients_distincts: number
           date_debut: string
           date_fin: string
           nombre_ventes: number
-          quantite_totale_kg: number
-          chiffre_affaires: number
+          periode: string
           prix_moyen_kg: number
-          clients_distincts: number
-          cage_nom: string
+          quantite_totale_kg: number
         }[]
       }
       update_all_cage_metrics: {
