@@ -26,12 +26,14 @@ export function FeedingStatistics() {
   const activeCages = cages.filter(c => c.statut === 'actif');
 
   useEffect(() => {
+    if (activeCages.length === 0) return;
+    
     if (selectedCage && selectedCage !== 'all') {
       loadFeedingData(selectedCage);
-    } else if (activeCages.length > 0) {
+    } else {
       loadAllCagesData();
     }
-  }, [selectedCage, activeCages]);
+  }, [selectedCage, activeCages.length]);
 
   const loadFeedingData = async (cageId: string) => {
     setIsLoading(true);
@@ -58,25 +60,40 @@ export function FeedingStatistics() {
   };
 
   const loadAllCagesData = async () => {
+    if (activeCages.length === 0) {
+      setDailyData([]);
+      setWeeklyData([]);
+      setMonthlyData([]);
+      return;
+    }
+
     setIsLoading(true);
     try {
       const results = await Promise.all(
-        activeCages.map((cage) => Promise.all([
-          getFeedingHistory(cage.id, 'day'),
-          getFeedingHistory(cage.id, 'week'),
-          getFeedingHistory(cage.id, 'month')
-        ]))
+        activeCages.map(async (cage) => {
+          try {
+            const [daily, weekly, monthly] = await Promise.all([
+              getFeedingHistory(cage.id, 'day'),
+              getFeedingHistory(cage.id, 'week'),
+              getFeedingHistory(cage.id, 'month')
+            ]);
+            return { daily: daily || [], weekly: weekly || [], monthly: monthly || [] };
+          } catch (error) {
+            console.error(`Erreur pour la cage ${cage.nom}:`, error);
+            return { daily: [], weekly: [], monthly: [] };
+          }
+        })
       );
 
       const allDaily: any[] = [];
       const allWeekly: any[] = [];
       const allMonthly: any[] = [];
 
-      for (const [daily, weekly, monthly] of results) {
-        if (daily) allDaily.push(...daily);
-        if (weekly) allWeekly.push(...weekly);
-        if (monthly) allMonthly.push(...monthly);
-      }
+      results.forEach(({ daily, weekly, monthly }) => {
+        allDaily.push(...daily);
+        allWeekly.push(...weekly);
+        allMonthly.push(...monthly);
+      });
 
       // Grouper et sommer les données
       const groupedDaily = groupAndSum(allDaily, 'periode');
@@ -88,13 +105,22 @@ export function FeedingStatistics() {
       setMonthlyData(groupedMonthly);
     } catch (error) {
       console.error('Erreur lors du chargement des données globales:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de charger les données d\'alimentation',
+        variant: 'destructive'
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   const groupAndSum = (data: any[], groupKey: string) => {
+    if (!data || data.length === 0) return [];
+    
     const grouped = data.reduce((acc, item) => {
+      if (!item || !item[groupKey]) return acc;
+      
       const key = item[groupKey];
       if (!acc[key]) {
         acc[key] = {
@@ -103,14 +129,16 @@ export function FeedingStatistics() {
           nombre_sessions: 0
         };
       }
-      acc[key].quantite_totale += item.quantite_totale || 0;
-      acc[key].nombre_sessions += item.nombre_sessions || 0;
+      acc[key].quantite_totale += Number(item.quantite_totale) || 0;
+      acc[key].nombre_sessions += Number(item.nombre_sessions) || 0;
       return acc;
     }, {});
 
-    return Object.values(grouped).sort((a: any, b: any) => 
-      new Date(b.date_debut).getTime() - new Date(a.date_debut).getTime()
-    );
+    return Object.values(grouped).sort((a: any, b: any) => {
+      const dateA = new Date(a.date_debut || a.periode).getTime();
+      const dateB = new Date(b.date_debut || b.periode).getTime();
+      return dateB - dateA;
+    });
   };
 
   const calculateTotals = (data: any[]) => {
