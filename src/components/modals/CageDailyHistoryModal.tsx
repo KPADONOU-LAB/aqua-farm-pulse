@@ -164,7 +164,7 @@ export const CageDailyHistoryModal = ({
   };
   return <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="w-full sm:w-auto justify-center gap-1 py-0 px-px">
+        <Button variant="outline" size="sm" className="w-full sm:w-auto justify-center gap-1 py-0 px-0">
           <Calendar className="h-4 w-4 sm:mr-1" />
           <span className="hidden sm:inline">Historique journalier</span>
           <span className="sr-only sm:hidden">Historique journalier</span>
