@@ -16,7 +16,9 @@ import {
   TrendingUp,
   Bell,
   FileText,
-  LayoutDashboard
+  LayoutDashboard,
+  Bot,
+  Zap
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -57,6 +59,11 @@ const getAnalyticsItems = (translate: (key: string) => string) => [
   { title: translate('alerts'), url: "/alerts", icon: Bell },
 ];
 
+const getAutomationItems = (translate: (key: string) => string) => [
+  { title: "Automatisation IA", url: "/intelligent-automation", icon: Bot },
+  { title: "Analyse Rentabilité", url: "/profitability-analysis", icon: TrendingUp },
+];
+
 const getDashboardItems = (translate: (key: string) => string) => [
   { title: translate('dashboard'), url: "/custom-dashboards", icon: LayoutDashboard },
 ];
@@ -72,6 +79,7 @@ export function AppSidebar() {
   const menuItems = getMenuItems(translate);
   const analyticsItems = getAnalyticsItems(translate);
   const dashboardItems = getDashboardItems(translate);
+  const automationItems = getAutomationItems(translate);
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = (path: string) =>
@@ -163,6 +171,32 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {dashboardItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild className="h-12">
+                    <NavLink
+                      to={item.url}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 ${getNavClass(item.url)}`}
+                    >
+                      <item.icon className={`h-5 w-5 ${collapsed ? "mx-auto" : ""}`} />
+                      {!collapsed && (
+                        <span className="font-medium">{item.title}</span>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Section Automatisation IA */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-white/80 font-medium px-2 mb-2 mt-4">
+            {!collapsed && "Automatisation"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {automationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="h-12">
                     <NavLink

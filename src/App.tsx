@@ -33,6 +33,8 @@ import CustomDashboards from "./pages/CustomDashboards";
 import CageHistory from "./pages/CageHistory";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import IntelligentAutomation from "./pages/IntelligentAutomation";
+import ProfitabilityAnalysis from "./pages/ProfitabilityAnalysis";
 const queryClient = new QueryClient();
 function NotificationProvider({
   children
@@ -79,6 +81,8 @@ export default function App() {
                               <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                               <Route path="/custom-dashboards" element={<CustomDashboards />} />
                               <Route path="/cage-history" element={<CageHistory />} />
+                              <Route path="/intelligent-automation" element={<IntelligentAutomation />} />
+                              <Route path="/profitability-analysis" element={<ProfitabilityAnalysis />} />
                               <Route path="/settings" element={<Settings />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
