@@ -1,1 +1,62 @@
 project_id = "doxulitlitagojznrwux"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+[db]
+port = 54322
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+[functions.ai-predictions]
+verify_jwt = true
+
+[functions.automated-reports]
+verify_jwt = true
+
+[functions.benchmarking]
+verify_jwt = true
+
+[functions.external-integrations]
+verify_jwt = true
+
+[functions.iot-integration]
+verify_jwt = true
+
+[functions.predictive-alerts]
+verify_jwt = true
+
+[functions.price-predictions]
+verify_jwt = true
+
+[functions.roi-optimizer]
+verify_jwt = true
+
+[functions.smart-recommendations]
+verify_jwt = true
+
+[functions.weather-integration]
+verify_jwt = true

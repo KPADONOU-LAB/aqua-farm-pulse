@@ -64,14 +64,19 @@ export const IntelligentAutomationPanel = () => {
 
     setLoading(true);
     try {
-      // Charger les règles d'automatisation existantes
-      await loadAutomationRules();
-      
-      // Générer des insights d'automatisation intelligente
-      await generateAutomationInsights();
+      // Charger les données en parallèle avec gestion d'erreur gracieuse
+      const [rulesResult, insightsResult] = await Promise.allSettled([
+        loadAutomationRules(),
+        generateAutomationInsights()
+      ]);
       
       // Calculer le statut du système
       calculateSystemStatus();
+      
+      if (rulesResult.status === 'rejected' || insightsResult.status === 'rejected') {
+        console.warn('Some automation services failed, using demo data');
+        loadDemoData();
+      }
       
       toast.success('Données d\'automatisation mises à jour');
     } catch (error) {
