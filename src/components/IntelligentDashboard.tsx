@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Home, Fish, Coffee, Heart, ShoppingCart, Zap, TrendingUp, AlertTriangle, Clock, Target, Brain, BarChart3 } from "lucide-react";
 import { useOptimizedCages } from "@/hooks/useOptimizedData";
 import { useOptimizedSmartAlerts } from "@/hooks/useOptimizedData";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 interface QuickAction {
@@ -18,15 +19,10 @@ interface QuickAction {
   badgeVariant?: 'destructive' | 'default' | 'secondary' | 'outline';
 }
 export function IntelligentDashboard() {
-  const {
-    user
-  } = useAuth();
-  const {
-    cages
-  } = useOptimizedCages();
-  const {
-    alerts
-  } = useOptimizedSmartAlerts();
+  const { user } = useAuth();
+  const { cages } = useOptimizedCages();
+  const { alerts } = useOptimizedSmartAlerts();
+  const { t } = useLanguage();
   const [recommendedActions, setRecommendedActions] = useState<QuickAction[]>([]);
   const generateIntelligentRecommendations = useCallback(() => {
     const actions: QuickAction[] = [];
@@ -157,20 +153,20 @@ export function IntelligentDashboard() {
   }, [cages.length, alerts.length]);
   const getTimeBasedGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Bonjour";
-    if (hour < 18) return "Bon après-midi";
-    return "Bonsoir";
+    if (hour < 12) return t('good_morning');
+    if (hour < 18) return t('good_afternoon');
+    return t('good_evening');
   };
   const getCategoryTitle = (category: string) => {
     switch (category) {
       case 'urgent':
-        return 'Actions Urgentes';
+        return t('urgent_actions');
       case 'routine':
-        return 'Tâches Quotidiennes';
+        return t('daily_tasks');
       case 'analytics':
-        return 'Analyse & Performance';
+        return t('analytics_performance');
       case 'advanced':
-        return 'Outils Avancés';
+        return t('advanced_tools');
       default:
         return 'Autres';
     }
@@ -203,7 +199,7 @@ export function IntelligentDashboard() {
           {getTimeBasedGreeting()}, {user?.email?.split('@')[0]}
         </h1>
         <p className="text-muted-foreground">
-          Voici vos actions recommandées pour aujourd'hui
+          {t('recommended_actions_today')}
         </p>
       </div>
 
@@ -214,7 +210,7 @@ export function IntelligentDashboard() {
             <div className="flex items-center gap-2">
               <Fish className="h-5 w-5 text-blue-500" />
               <div>
-                <p className="text-sm font-medium">Cages Actives</p>
+                <p className="text-sm font-medium">{t('active_cages')}</p>
                 <p className="text-2xl font-bold">{cages.filter(c => c.statut === 'actif').length}</p>
               </div>
             </div>
@@ -226,7 +222,7 @@ export function IntelligentDashboard() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-orange-500" />
               <div>
-                <p className="text-sm font-medium">Alertes Actives</p>
+                <p className="text-sm font-medium">{t('active_alerts')}</p>
                 <p className="text-2xl font-bold">{alerts.filter(a => a.statut === 'active').length}</p>
               </div>
             </div>
@@ -238,7 +234,7 @@ export function IntelligentDashboard() {
             <div className="flex items-center gap-2">
               <ShoppingCart className="h-5 w-5 text-green-500" />
               <div>
-                <p className="text-sm font-medium">Prêt Récolte</p>
+                <p className="text-sm font-medium">{t('ready_harvest')}</p>
                 <p className="text-2xl font-bold">
                   {cages.filter(c => c.poids_moyen && c.poids_moyen >= 0.8).length}
                 </p>
@@ -252,7 +248,7 @@ export function IntelligentDashboard() {
             <div className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-purple-500" />
               <div>
-                <p className="text-sm font-medium">Actions Recommandées</p>
+                <p className="text-sm font-medium">{t('recommended_actions')}</p>
                 <p className="text-2xl font-bold">{recommendedActions.length}</p>
               </div>
             </div>
@@ -305,7 +301,7 @@ export function IntelligentDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Home className="h-5 w-5" />
-            Accès Rapide
+            {t('quick_access')}
           </CardTitle>
         </CardHeader>
         <CardContent>

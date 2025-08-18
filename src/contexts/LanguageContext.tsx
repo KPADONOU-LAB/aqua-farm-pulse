@@ -499,7 +499,50 @@ const authTranslations = {
     'fish_count': 'Fish count',
     'average_weight_kg': 'Average weight (kg)',
     'average_weight': 'Average weight',
-    'growth': 'Growth'
+    'growth': 'Growth',
+    'mortality': 'Mortality',
+    'remaining_fish': 'Remaining fish',
+    'total_cost': 'Total cost',
+    'cost_per_kg': 'Cost per kg',
+    
+    // Intelligent Dashboard
+    'recommended_actions_today': 'Here are your recommended actions for today',
+    'urgent_actions': 'Urgent Actions',
+    'analytics_performance': 'Analytics & Performance',
+    'critical_alerts': 'Critical Alerts',
+    'harvest_recommended': 'Harvest Recommended',
+    'optimize_performance': 'Optimize Performance',
+    'cage_management_short': 'Cage Management',
+    'analytics_reports': 'Analytics Reports',
+    
+    // Finance
+    'revenue_title': 'Revenue',
+    'total_costs': 'Total Costs',
+    'profit_margin': 'Profit Margin',
+    'monthly_roi': 'Monthly ROI',
+    
+    // Health
+    'mortality_today': 'Mortality today',
+    'survival_rate': 'Survival rate',
+    'cages_alert': 'Cages on alert',
+    'under_surveillance': 'Under surveillance',
+    'weekly_mortality': 'Weekly mortality',
+    'survival_rate_evolution': 'Survival rate evolution (%)',
+    'recent_health_observations': 'Recent health observations',
+    
+    // Sales
+    'revenue_today': 'Revenue today',
+    'quantity_sold': 'Quantity sold',
+    'clients_served': 'Clients served',
+    'average_price_kg': 'Average price/kg',
+    'monthly_revenue_evolution': 'Monthly revenue evolution',
+    'weekly_quantities_sold': 'Weekly quantities sold (kg)', 
+    'today_sales_history': 'Today\'s sales history',
+    'sales_details_invoices': 'Sales details - Invoices',
+    'monthly_performance': 'Monthly performance',
+    'top_species_sold': 'Top species sold',
+    'top_clients': 'Top clients',
+    'detailed_revenue_analysis': 'Detailed revenue analysis'
   }
 };
 

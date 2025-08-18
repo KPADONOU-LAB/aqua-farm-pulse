@@ -8,10 +8,14 @@ import { useFinanceData } from "@/hooks/useFinanceData";
 import { NewFinancialEntryModal } from "@/components/modals/NewFinancialEntryModal";
 import { BudgetManagementModal } from "@/components/modals/BudgetManagementModal";
 import { PermissionWrapper } from "@/components/PermissionWrapper";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useFarm } from "@/contexts/FarmContext";
 import { TrendingUp, TrendingDown, DollarSign, Target, Calculator, PieChart, BarChart3, AlertTriangle } from "lucide-react";
 const Finance = () => {
   const [showNewEntryModal, setShowNewEntryModal] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const { t } = useLanguage();
+  const { formatCurrency } = useFarm();
   const {
     financialData,
     budgets,
@@ -42,7 +46,7 @@ const Finance = () => {
         <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Gestion Financière</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('finance_title')}</h1>
             <p className="text-muted-foreground">
               Optimisez la rentabilité de votre ferme aquacole
             </p>
@@ -71,7 +75,7 @@ const Finance = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-center">
-              {kpis.totalRevenue.toLocaleString('fr-FR')} €
+              {formatCurrency(kpis.totalRevenue)}
             </div>
             <div className="flex items-center justify-center mt-2">
               {kpis.revenueGrowth >= 0 ? <TrendingUp className="w-4 h-4 text-green-600 mr-1" /> : <TrendingDown className="w-4 h-4 text-red-600 mr-1" />}
@@ -89,7 +93,7 @@ const Finance = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-center">
-              {kpis.totalCosts.toLocaleString('fr-FR')} €
+              {formatCurrency(kpis.totalCosts)}
             </div>
             <div className="flex items-center justify-center mt-2">
               {kpis.costGrowth <= 0 ? <TrendingDown className="w-4 h-4 text-green-600 mr-1" /> : <TrendingUp className="w-4 h-4 text-red-600 mr-1" />}
@@ -165,7 +169,7 @@ const Finance = () => {
                     </div>
                     <div className={`font-bold ${transaction.type_transaction === 'income' ? 'text-green-600' : 'text-red-600'} w-full sm:w-auto text-left sm:text-right`}>
                       {transaction.type_transaction === 'income' ? '+' : '-'}
-                      {transaction.montant.toLocaleString('fr-FR')} €
+                      {formatCurrency(transaction.montant)}
                     </div>
                   </div>)}
               </div>

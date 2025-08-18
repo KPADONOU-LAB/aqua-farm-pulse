@@ -5,6 +5,7 @@ import { Heart, Plus, AlertTriangle, TrendingDown, Activity, Pill } from "lucide
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import NewHealthObservationModal from "@/components/modals/NewHealthObservationModal";
 import { useOptimizedHealthData } from "@/hooks/useOptimizedHealthData";
+import { useLanguage } from "@/contexts/LanguageContext";
 const mockHealthRecords = [{
   id: 1,
   cage: "Cage #001",
@@ -88,6 +89,7 @@ const getStatutColor = (statut: string) => {
 };
 const Health = () => {
   const { healthObservations } = useOptimizedHealthData();
+  const { t } = useLanguage();
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const yesterdayStr = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -110,9 +112,9 @@ const Health = () => {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Santé des poissons</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('health_title')}</h1>
             <p className="text-muted-foreground">
-              Surveillance sanitaire et interventions vétérinaires
+              {t('health_title')} - Surveillance sanitaire et interventions vétérinaires
             </p>
           </div>
           <div className="flex gap-3">

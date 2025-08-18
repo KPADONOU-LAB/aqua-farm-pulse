@@ -8,6 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import NewSaleModal from "@/components/modals/NewSaleModal";
 import { useSalesData } from "@/hooks/useSalesData";
 import { useFarm } from "@/contexts/FarmContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 const monthlyRevenue = [{
@@ -72,6 +73,7 @@ const Sales = () => {
     generateInvoice
   } = useSalesData();
   const { formatCurrency } = useFarm();
+  const { t } = useLanguage();
 
   // Calculer les données du jour
   const today = new Date().toISOString().split('T')[0];
@@ -85,7 +87,7 @@ const Sales = () => {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Gestion des ventes</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('sales_title')}</h1>
             <p className="text-muted-foreground">
               Suivi commercial et performance des ventes
             </p>
