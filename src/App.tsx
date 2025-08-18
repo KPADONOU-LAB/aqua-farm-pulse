@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebarOptimized } from "@/components/AppSidebarOptimized";
@@ -35,7 +34,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import IntelligentAutomation from "./pages/IntelligentAutomation";
 import ProfitabilityAnalysis from "./pages/ProfitabilityAnalysis";
-const queryClient = new QueryClient();
+
 function NotificationProvider({
   children
 }: {
@@ -44,57 +43,60 @@ function NotificationProvider({
   useRealtimeNotifications();
   return <>{children}</>;
 }
+
 export default function App() {
-  return <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <NotificationProvider>
-          <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/*" element={<ProtectedRoute>
-                    <FarmSetupWrapper>
-                      <SidebarProvider>
-                      <div className="flex min-h-svh bg-background">
-                        <AppSidebarOptimized />
-                        <div className="flex-1 flex flex-col overflow-hidden">
-                          <TopNavigationOptimized />
-                          <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 bg-neutral-50">
-                            <Routes>
-                              <Route path="/" element={<IntelligentDashboard />} />
-                              <Route path="/cages" element={<Cages />} />
-                              <Route path="/feeding" element={<Feeding />} />
-                              <Route path="/water-quality" element={<WaterQuality />} />
-                              <Route path="/health" element={<Health />} />
-                              <Route path="/inventory" element={<Inventory />} />
-                              <Route path="/sales" element={<Sales />} />
-                              <Route path="/finance" element={<Finance />} />
-                              <Route path="/crm" element={<CRM />} />
-                              <Route path="/reports" element={<Reports />} />
-                              <Route path="/alerts" element={<Alerts />} />
-                              <Route path="/predictions" element={<Predictions />} />
-                              <Route path="/smart-alerts" element={<SmartAlerts />} />
-                              <Route path="/performance" element={<PerformanceAnalysis />} />
-                              <Route path="/smart-notifications" element={<SmartNotifications />} />
-                              <Route path="/smart-recommendations" element={<SmartRecommendations />} />
-                              <Route path="/advanced-reports" element={<AdvancedReports />} />
-                              <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
-                              <Route path="/custom-dashboards" element={<CustomDashboards />} />
-                              <Route path="/cage-history" element={<CageHistory />} />
-                              <Route path="/intelligent-automation" element={<IntelligentAutomation />} />
-                              <Route path="/profitability-analysis" element={<ProfitabilityAnalysis />} />
-                              <Route path="/settings" element={<Settings />} />
-                              <Route path="*" element={<NotFound />} />
-                            </Routes>
-                          </main>
-                        </div>
-                      </div>
-                      <HelpSystem />
-                      </SidebarProvider>
-                    </FarmSetupWrapper>
-                  </ProtectedRoute>} />
-          </Routes>
-        </NotificationProvider>
-      </TooltipProvider>
-    </QueryClientProvider>;
+  return (
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <NotificationProvider>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/*" element={
+            <ProtectedRoute>
+              <FarmSetupWrapper>
+                <SidebarProvider>
+                  <div className="flex min-h-svh bg-background">
+                    <AppSidebarOptimized />
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                      <TopNavigationOptimized />
+                      <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 bg-neutral-50">
+                        <Routes>
+                          <Route path="/" element={<IntelligentDashboard />} />
+                          <Route path="/cages" element={<Cages />} />
+                          <Route path="/feeding" element={<Feeding />} />
+                          <Route path="/water-quality" element={<WaterQuality />} />
+                          <Route path="/health" element={<Health />} />
+                          <Route path="/inventory" element={<Inventory />} />
+                          <Route path="/sales" element={<Sales />} />
+                          <Route path="/finance" element={<Finance />} />
+                          <Route path="/crm" element={<CRM />} />
+                          <Route path="/reports" element={<Reports />} />
+                          <Route path="/alerts" element={<Alerts />} />
+                          <Route path="/predictions" element={<Predictions />} />
+                          <Route path="/smart-alerts" element={<SmartAlerts />} />
+                          <Route path="/performance" element={<PerformanceAnalysis />} />
+                          <Route path="/smart-notifications" element={<SmartNotifications />} />
+                          <Route path="/smart-recommendations" element={<SmartRecommendations />} />
+                          <Route path="/advanced-reports" element={<AdvancedReports />} />
+                          <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
+                          <Route path="/custom-dashboards" element={<CustomDashboards />} />
+                          <Route path="/cage-history" element={<CageHistory />} />
+                          <Route path="/intelligent-automation" element={<IntelligentAutomation />} />
+                          <Route path="/profitability-analysis" element={<ProfitabilityAnalysis />} />
+                          <Route path="/settings" element={<Settings />} />
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </main>
+                    </div>
+                  </div>
+                  <HelpSystem />
+                </SidebarProvider>
+              </FarmSetupWrapper>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </NotificationProvider>
+    </TooltipProvider>
+  );
 }
