@@ -14,6 +14,7 @@ import { useCageMetrics } from "@/hooks/useCageMetrics";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSyncedLanguage } from "@/hooks/useSyncedLanguage";
 import { PermissionWrapper } from "@/components/PermissionWrapper";
+import { useFarm } from "@/contexts/FarmContext";
 import * as XLSX from 'xlsx';
 const getStatutColor = (statut: string) => {
   switch (statut) {
@@ -75,6 +76,7 @@ const Cages = () => {
   const {
     t
   } = useLanguage();
+  const { formatCurrency } = useFarm();
   useSyncedLanguage(); // Ensure language synchronization
 
   useEffect(() => {
@@ -358,16 +360,16 @@ const Cages = () => {
                              <p className="text-sm text-muted-foreground">{t('survival')}</p>
                              <p className="text-lg font-semibold">{survivalRate.toFixed(1)}%</p>
                            </div>
-                           <div className="space-y-1">
-                             <p className="text-sm text-muted-foreground">{t('average_weight')}</p>
-                             <p className="text-lg font-semibold">{cage.poids_moyen}kg</p>
-                           </div>
-                           <div className="space-y-1">
-                             <p className="text-sm text-muted-foreground">{t('estimated_revenue')}</p>
-                             <p className="text-lg font-semibold">
-                               €{(cage.production_cost ? cage.production_cost * 1.4 : 8750).toLocaleString()}
-                             </p>
-                           </div>
+                            <div className="space-y-1">
+                              <p className="text-sm text-muted-foreground">{t('average_weight')}</p>
+                              <p className="text-lg font-semibold">{(cage.poids_moyen || 0).toFixed(1)}kg</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-sm text-muted-foreground">{t('estimated_revenue')}</p>
+                              <p className="text-lg font-semibold">
+                                {formatCurrency(cage.production_cost ? cage.production_cost * 1.4 : 8750)}
+                              </p>
+                            </div>
                          </div>
                         
                          <div className="rounded-lg bg-card/50 backdrop-blur-sm border border-border/20 p-4 space-y-2">

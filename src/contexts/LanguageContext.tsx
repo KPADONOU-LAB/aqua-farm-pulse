@@ -253,6 +253,8 @@ const authTranslations = {
     'modification': 'Modification',
     'fish_count': 'Nombre de poissons',
     'average_weight_kg': 'Poids moyen (kg)',
+    'average_weight': 'Poids moyen',
+    'growth': 'Croissance',
   },
   en: {
     // Auth page
@@ -496,6 +498,8 @@ const authTranslations = {
     'modification': 'Modification',
     'fish_count': 'Fish count',
     'average_weight_kg': 'Average weight (kg)',
+    'average_weight': 'Average weight',
+    'growth': 'Growth'
   }
 };
 
