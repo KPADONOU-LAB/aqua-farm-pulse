@@ -83,6 +83,8 @@ const FarmSetup = () => {
 
     setLoading(true);
     try {
+      console.log('Submitting farm setup with data:', formData);
+      
       await updateFarmSettings({
         farm_name: formData.farm_name,
         language: formData.language,
@@ -96,10 +98,15 @@ const FarmSetup = () => {
         title: translate('config_saved'),
         description: translate('farm_configured_success'),
       });
+      
+      // Navigate to dashboard after successful configuration
+      navigate('/');
+      
     } catch (error) {
+      console.error('Error during farm setup:', error);
       toast({
         title: translate('error'),
-        description: translate('config_save_error'),
+        description: error instanceof Error ? error.message : translate('config_save_error'),
         variant: "destructive"
       });
     } finally {
