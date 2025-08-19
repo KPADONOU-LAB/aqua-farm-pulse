@@ -501,7 +501,6 @@ const authTranslations = {
     'average_weight': 'Average weight',
     'growth': 'Growth',
     'mortality': 'Mortality',
-    'remaining_fish': 'Remaining fish',
     'total_cost': 'Total cost',
     'cost_per_kg': 'Cost per kg',
     
