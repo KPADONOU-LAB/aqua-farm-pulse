@@ -333,7 +333,7 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         .from('farm_settings')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       let data, error;
 
