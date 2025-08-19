@@ -329,11 +329,16 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       // Check if farm settings exist first
-      const { data: existingSettings } = await supabase
+      const { data: existingSettings, error: fetchError } = await supabase
         .from('farm_settings')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
+
+      if (fetchError) {
+        console.error('Error checking existing settings:', fetchError);
+        throw fetchError;
+      }
 
       let data, error;
 
@@ -342,7 +347,12 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         const result = await supabase
           .from('farm_settings')
           .update({
-            ...settings,
+            farm_name: settings.farm_name,
+            language: settings.language,
+            currency: settings.currency,
+            basin_types: settings.basin_types,
+            fish_species: settings.fish_species,
+            is_configured: settings.is_configured,
             updated_at: new Date().toISOString()
           })
           .eq('user_id', user.id)
@@ -357,11 +367,10 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
           user_id: user.id,
           farm_name: settings.farm_name || 'Nouvelle ferme',
           language: settings.language || 'fr',
-          currency: settings.currency || 'eur',
+          currency: settings.currency || 'fcfa',
           basin_types: settings.basin_types || [],
           fish_species: settings.fish_species || [],
-          is_configured: settings.is_configured || false,
-          updated_at: new Date().toISOString()
+          is_configured: settings.is_configured || false
         };
         
         const result = await supabase
@@ -374,13 +383,14 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         error = result.error;
       }
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       console.log('Farm settings updated successfully:', data);
       setFarmSettings(data as FarmSettings);
       
-      // Reload to ensure we have the latest data
-      await loadFarmSettings();
     } catch (error) {
       console.error('Error updating farm settings:', error);
       throw error;
