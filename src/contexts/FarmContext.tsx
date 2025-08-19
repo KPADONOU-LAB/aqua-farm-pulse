@@ -322,70 +322,39 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateFarmSettings = async (settings: Partial<FarmSettings>) => {
-    if (!user) return;
+  const updateFarmSettings = async (settings: Partial<FarmSettings>): Promise<void> => {
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
 
     console.log('FarmContext updateFarmSettings called with:', settings);
 
     try {
-      // Check if farm settings exist first
-      const { data: existingSettings, error: fetchError } = await supabase
+      // Use upsert to handle both insert and update cases
+      const upsertData = {
+        user_id: user.id,
+        farm_name: settings.farm_name || farmSettings?.farm_name || 'Nouvelle ferme',
+        language: settings.language || farmSettings?.language || 'fr',
+        currency: settings.currency || farmSettings?.currency || 'fcfa',
+        basin_types: settings.basin_types || farmSettings?.basin_types || [],
+        fish_species: settings.fish_species || farmSettings?.fish_species || [],
+        is_configured: settings.is_configured !== undefined ? settings.is_configured : (farmSettings?.is_configured || false)
+      };
+      
+      console.log('Upserting farm settings:', upsertData);
+      
+      const { data, error } = await supabase
         .from('farm_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (fetchError) {
-        console.error('Error checking existing settings:', fetchError);
-        throw fetchError;
-      }
-
-      let data, error;
-
-      if (existingSettings) {
-        // Update existing settings
-        const result = await supabase
-          .from('farm_settings')
-          .update({
-            farm_name: settings.farm_name,
-            language: settings.language,
-            currency: settings.currency,
-            basin_types: settings.basin_types,
-            fish_species: settings.fish_species,
-            is_configured: settings.is_configured,
-            updated_at: new Date().toISOString()
-          })
-          .eq('user_id', user.id)
-          .select()
-          .single();
-        
-        data = result.data;
-        error = result.error;
-      } else {
-        // Insert new settings
-        const insertData = {
-          user_id: user.id,
-          farm_name: settings.farm_name || 'Nouvelle ferme',
-          language: settings.language || 'fr',
-          currency: settings.currency || 'fcfa',
-          basin_types: settings.basin_types || [],
-          fish_species: settings.fish_species || [],
-          is_configured: settings.is_configured || false
-        };
-        
-        const result = await supabase
-          .from('farm_settings')
-          .insert(insertData)
-          .select()
-          .single();
-        
-        data = result.data;
-        error = result.error;
-      }
+        .upsert(upsertData, { 
+          onConflict: 'user_id',
+          ignoreDuplicates: false 
+        })
+        .select()
+        .single();
 
       if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+        console.error('Supabase upsert error:', error);
+        throw new Error(`Database error: ${error.message}`);
       }
 
       console.log('Farm settings updated successfully:', data);
