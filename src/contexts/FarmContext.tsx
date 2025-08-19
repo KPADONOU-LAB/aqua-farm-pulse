@@ -99,6 +99,9 @@ const translations = {
     'regional_settings': 'Paramètres régionaux',
     
     // Basin types
+    'floating': 'Flottante',
+    'fixed': 'Fixe',
+    'above_ground': 'Hors-sol',
     'floating_cage': 'Cage flottante',
     'fixed_cage': 'Cage fixe',
     'concrete_basin': 'Bassin béton',
@@ -226,6 +229,9 @@ const translations = {
     'regional_settings': 'Regional Settings',
     
     // Basin types
+    'floating': 'Floating',
+    'fixed': 'Fixed',
+    'above_ground': 'Above ground',
     'floating_cage': 'Floating Cage',
     'fixed_cage': 'Fixed Cage',
     'concrete_basin': 'Concrete Basin',

@@ -23,7 +23,7 @@ const FarmSetup = () => {
   const [formData, setFormData] = useState({
     farm_name: '',
     language: language,
-    currency: 'usd' as 'fcfa' | 'eur' | 'usd',
+    currency: 'fcfa' as 'fcfa' | 'eur' | 'usd',
     basin_types: [] as string[],
     fish_species: [] as string[],
     custom_species: ''

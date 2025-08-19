@@ -34,6 +34,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import IntelligentAutomation from "./pages/IntelligentAutomation";
 import ProfitabilityAnalysis from "./pages/ProfitabilityAnalysis";
+import UserManagement from "./pages/UserManagement";
 
 function NotificationProvider({
   children
@@ -84,6 +85,7 @@ export default function App() {
                           <Route path="/cage-history" element={<CageHistory />} />
                           <Route path="/intelligent-automation" element={<IntelligentAutomation />} />
                           <Route path="/profitability-analysis" element={<ProfitabilityAnalysis />} />
+                          <Route path="/user-management" element={<UserManagement />} />
                           <Route path="/settings" element={<Settings />} />
                           <Route path="*" element={<NotFound />} />
                         </Routes>
