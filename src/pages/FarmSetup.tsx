@@ -85,12 +85,16 @@ const FarmSetup = () => {
     try {
       console.log('Submitting farm setup with data:', formData);
       
+      // Ensure arrays are never empty and have valid values
+      const basinTypes = formData.basin_types.length > 0 ? formData.basin_types : ['flottante'];
+      const fishSpecies = formData.fish_species.length > 0 ? formData.fish_species : ['tilapia'];
+      
       await updateFarmSettings({
         farm_name: formData.farm_name,
         language: formData.language,
         currency: formData.currency,
-        basin_types: formData.basin_types,
-        fish_species: formData.fish_species,
+        basin_types: basinTypes,
+        fish_species: fishSpecies,
         is_configured: true
       });
 
