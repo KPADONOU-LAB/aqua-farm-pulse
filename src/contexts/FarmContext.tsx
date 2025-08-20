@@ -336,8 +336,12 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         farm_name: settings.farm_name || farmSettings?.farm_name || 'Nouvelle ferme',
         language: settings.language || farmSettings?.language || 'fr',
         currency: settings.currency || farmSettings?.currency || 'fcfa',
-        basin_types: settings.basin_types || farmSettings?.basin_types || [],
-        fish_species: settings.fish_species || farmSettings?.fish_species || [],
+        basin_types: (settings.basin_types && settings.basin_types.length > 0) 
+          ? settings.basin_types 
+          : (farmSettings?.basin_types || ['cage_flottante']),
+        fish_species: (settings.fish_species && settings.fish_species.length > 0) 
+          ? settings.fish_species 
+          : (farmSettings?.fish_species || ['tilapia']),
         is_configured: settings.is_configured !== undefined ? settings.is_configured : (farmSettings?.is_configured || false)
       };
       
