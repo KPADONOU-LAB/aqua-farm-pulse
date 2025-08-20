@@ -328,20 +328,27 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     console.log('FarmContext updateFarmSettings called with:', settings);
+    console.log('Current farmSettings:', farmSettings);
 
     try {
-      // Ensure arrays are never empty or undefined
-      const basinTypes = settings.basin_types && settings.basin_types.length > 0 
-        ? settings.basin_types 
-        : (farmSettings?.basin_types && farmSettings.basin_types.length > 0 
-          ? farmSettings.basin_types 
-          : ['cage_flottante']);
-          
-      const fishSpecies = settings.fish_species && settings.fish_species.length > 0 
-        ? settings.fish_species 
-        : (farmSettings?.fish_species && farmSettings.fish_species.length > 0 
-          ? farmSettings.fish_species 
-          : ['tilapia']);
+      // Ensure arrays are never empty or undefined and are proper string arrays
+      let basinTypes: string[] = ['cage_flottante']; // Default fallback
+      if (settings.basin_types && Array.isArray(settings.basin_types) && settings.basin_types.length > 0) {
+        basinTypes = settings.basin_types.filter(item => typeof item === 'string' && item.length > 0);
+      } else if (farmSettings?.basin_types && Array.isArray(farmSettings.basin_types) && farmSettings.basin_types.length > 0) {
+        basinTypes = farmSettings.basin_types.filter(item => typeof item === 'string' && item.length > 0);
+      }
+      
+      let fishSpecies: string[] = ['tilapia']; // Default fallback
+      if (settings.fish_species && Array.isArray(settings.fish_species) && settings.fish_species.length > 0) {
+        fishSpecies = settings.fish_species.filter(item => typeof item === 'string' && item.length > 0);
+      } else if (farmSettings?.fish_species && Array.isArray(farmSettings.fish_species) && farmSettings.fish_species.length > 0) {
+        fishSpecies = farmSettings.fish_species.filter(item => typeof item === 'string' && item.length > 0);
+      }
+
+      // Ensure we have at least one item in each array
+      if (basinTypes.length === 0) basinTypes = ['cage_flottante'];
+      if (fishSpecies.length === 0) fishSpecies = ['tilapia'];
 
       // Use upsert to handle both insert and update cases
       const upsertData = {
@@ -354,7 +361,12 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
         is_configured: settings.is_configured !== undefined ? settings.is_configured : (farmSettings?.is_configured || false)
       };
       
-      console.log('Upserting farm settings:', upsertData);
+      console.log('Final upsertData before sending to Supabase:', JSON.stringify(upsertData, null, 2));
+      console.log('Array types check:');
+      console.log('- basin_types is array:', Array.isArray(upsertData.basin_types));
+      console.log('- fish_species is array:', Array.isArray(upsertData.fish_species));
+      console.log('- basin_types contents:', upsertData.basin_types);
+      console.log('- fish_species contents:', upsertData.fish_species);
       
       const { data, error } = await supabase
         .from('farm_settings')
