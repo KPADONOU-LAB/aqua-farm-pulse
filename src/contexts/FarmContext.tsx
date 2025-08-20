@@ -330,18 +330,27 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
     console.log('FarmContext updateFarmSettings called with:', settings);
 
     try {
+      // Ensure arrays are never empty or undefined
+      const basinTypes = settings.basin_types && settings.basin_types.length > 0 
+        ? settings.basin_types 
+        : (farmSettings?.basin_types && farmSettings.basin_types.length > 0 
+          ? farmSettings.basin_types 
+          : ['cage_flottante']);
+          
+      const fishSpecies = settings.fish_species && settings.fish_species.length > 0 
+        ? settings.fish_species 
+        : (farmSettings?.fish_species && farmSettings.fish_species.length > 0 
+          ? farmSettings.fish_species 
+          : ['tilapia']);
+
       // Use upsert to handle both insert and update cases
       const upsertData = {
         user_id: user.id,
         farm_name: settings.farm_name || farmSettings?.farm_name || 'Nouvelle ferme',
         language: settings.language || farmSettings?.language || 'fr',
         currency: settings.currency || farmSettings?.currency || 'fcfa',
-        basin_types: (settings.basin_types && settings.basin_types.length > 0) 
-          ? settings.basin_types 
-          : (farmSettings?.basin_types || ['cage_flottante']),
-        fish_species: (settings.fish_species && settings.fish_species.length > 0) 
-          ? settings.fish_species 
-          : (farmSettings?.fish_species || ['tilapia']),
+        basin_types: basinTypes,
+        fish_species: fishSpecies,
         is_configured: settings.is_configured !== undefined ? settings.is_configured : (farmSettings?.is_configured || false)
       };
       
