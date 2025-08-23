@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { prepareJsonForSupabase } from '@/lib/jsonValidator';
 
 export interface DashboardWidget {
   id: string;
@@ -111,7 +112,7 @@ export const useCustomDashboard = () => {
         .insert({
           user_id: user.data.user.id,
           nom_dashboard: dashboard.nom_dashboard || 'Nouveau dashboard',
-          configuration: JSON.stringify(dashboard.configuration || []),
+          configuration: prepareJsonForSupabase(dashboard.configuration || []),
           description: dashboard.description,
           icone: dashboard.icone || 'layout-dashboard',
           couleur: dashboard.couleur || '#3b82f6',
@@ -150,7 +151,7 @@ export const useCustomDashboard = () => {
       
       // Convertir la configuration en JSON si elle existe
       if (updates.configuration) {
-        updateData.configuration = JSON.stringify(updates.configuration);
+        updateData.configuration = prepareJsonForSupabase(updates.configuration);
       }
       
       const { data, error } = await supabase
@@ -220,7 +221,7 @@ export const useCustomDashboard = () => {
         .insert({
           nom_widget: widget.nom_widget,
           type_widget: widget.type_widget,
-          configuration: JSON.stringify(widget.configuration),
+          configuration: prepareJsonForSupabase(widget.configuration),
           description: widget.description,
           icone: widget.icone,
           taille_defaut: widget.taille_defaut || 'medium',
