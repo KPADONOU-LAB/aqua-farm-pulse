@@ -1321,7 +1321,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          data_payload: Json
+          data_payload?: Json
           device_id?: string | null
           error_message?: string | null
           id?: string

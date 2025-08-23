@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
+import { validateAndSanitizeJson } from '@/lib/jsonValidator';
 
 export interface SmartAlert {
   id: string;
@@ -207,7 +208,53 @@ export const useSmartNotifications = () => {
   const loadPreferences = () => {
     const saved = localStorage.getItem('notification_preferences');
     if (saved) {
-      setPreferences(JSON.parse(saved));
+      try {
+        const parsed = JSON.parse(saved);
+        setPreferences(validateAndSanitizeJson(parsed, { 
+          defaultValue: {
+            pushEnabled: true,
+            emailEnabled: true,
+            smsEnabled: false,
+            soundEnabled: true,
+            vibrationEnabled: true,
+            quietHours: {
+              enabled: false,
+              start: '22:00',
+              end: '07:00'
+            },
+            criticalOnly: false,
+            categories: {
+              health: true,
+              performance: true,
+              financial: true,
+              predictive: true,
+              system: true
+            }
+          } 
+        }));
+      } catch (error) {
+        console.error('Erreur lors du parsing des préférences:', error);
+        setPreferences({
+          pushEnabled: true,
+          emailEnabled: true,
+          smsEnabled: false,
+          soundEnabled: true,
+          vibrationEnabled: true,
+          quietHours: {
+            enabled: false,
+            start: '22:00',
+            end: '07:00'
+          },
+          criticalOnly: false,
+          categories: {
+            health: true,
+            performance: true,
+            financial: true,
+            predictive: true,
+            system: true
+          }
+        });
+      }
     }
   };
 
@@ -326,11 +373,9 @@ export const useSmartNotifications = () => {
   const showToastNotification = (alert: SmartAlert) => {
     const duration = alert.severity === 'critical' ? 0 : 5000; // Critiques restent ouvertes
 
-    toast({
-      title: alert.title,
-      description: alert.message,
-      variant: alert.severity === 'critical' || alert.severity === 'high' ? 'destructive' : 'default',
-      duration
+    toast(alert.title + ': ' + alert.message, {
+      duration: duration,
+      description: alert.severity === 'critical' || alert.severity === 'high' ? 'Action requise' : undefined
     });
   };
 
@@ -402,10 +447,7 @@ export const useSmartNotifications = () => {
           : alert
       ));
 
-      toast({
-        title: "Alerte accusée",
-        description: "L'alerte a été marquée comme vue.",
-      });
+      toast.success("Alerte accusée - L'alerte a été marquée comme vue.");
     } catch (error) {
       console.error('Erreur lors de l\'accusé de réception:', error);
     }
@@ -429,10 +471,7 @@ export const useSmartNotifications = () => {
           : alert
       ));
 
-      toast({
-        title: "Alerte résolue",
-        description: "L'alerte a été marquée comme résolue.",
-      });
+      toast.success("Alerte résolue - L'alerte a été marquée comme résolue.");
     } catch (error) {
       console.error('Erreur lors de la résolution:', error);
     }
@@ -448,10 +487,7 @@ export const useSmartNotifications = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Analyse prédictive",
-        description: `${data?.predictions_generated || 0} nouvelles prédictions générées.`,
-      });
+      toast.success(`Analyse prédictive - ${data?.predictions_generated || 0} nouvelles prédictions générées.`);
     } catch (error) {
       console.error('Erreur lors de la génération des alertes prédictives:', error);
     }

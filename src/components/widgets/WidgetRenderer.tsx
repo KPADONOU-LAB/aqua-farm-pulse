@@ -8,6 +8,7 @@ import { TrendingUp, TrendingDown, Fish, AlertTriangle, DollarSign, Activity } f
 import { DashboardWidget } from '@/hooks/useCustomDashboard';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { validateAndSanitizeJson } from '@/lib/jsonValidator';
 
 interface WidgetRendererProps {
   widget: DashboardWidget & { layout?: any };
@@ -28,9 +29,19 @@ const getIconComponent = (iconName: string) => {
 };
 
 export const WidgetRenderer: React.FC<WidgetRendererProps> = ({ widget, onRemove, editMode }) => {
-  const config = typeof widget.configuration === 'string' 
-    ? JSON.parse(widget.configuration) 
-    : widget.configuration;
+  // Validation et parsing sécurisé de la configuration
+  const config = React.useMemo(() => {
+    if (typeof widget.configuration === 'string') {
+      try {
+        const parsed = JSON.parse(widget.configuration);
+        return validateAndSanitizeJson(parsed, { defaultValue: {}, strict: false });
+      } catch (error) {
+        console.error('Erreur lors du parsing de la configuration widget:', error);
+        return {};
+      }
+    }
+    return validateAndSanitizeJson(widget.configuration, { defaultValue: {}, strict: false });
+  }, [widget.configuration]);
 
   // Récupérer les données pour le widget
   const { data: widgetData, isLoading } = useQuery({

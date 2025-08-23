@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import { toast } from "sonner";
+import { prepareJsonForSupabase } from '@/lib/jsonValidator';
 
 interface SmartAlert {
   id: string;
@@ -95,7 +96,8 @@ export const useSmartAlerts = () => {
         .update({ 
           statut: 'resolved',
           date_resolution: new Date().toISOString(),
-          actions_effectuees: actions
+          actions_effectuees: actions,
+          donnees_contexte: prepareJsonForSupabase(alerts.find(a => a.id === alertId)?.donnees_contexte || {})
         })
         .eq('id', alertId)
         .eq('user_id', user?.id);
