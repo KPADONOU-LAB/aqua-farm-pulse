@@ -33,22 +33,7 @@ export const FarmSetupWrapper = ({ children }: FarmSetupWrapperProps) => {
     );
   }
 
-  // Force check if user has farm settings with is_configured: true
-  const forceIsConfigured = farmSettings?.is_configured === true;
-  
-  console.log('Configuration check:', {
-    isConfigured,
-    forceIsConfigured,
-    farmSettings_is_configured: farmSettings?.is_configured
-  });
-
-  // Si l'utilisateur est connecté mais la ferme n'est pas configurée, afficher FarmSetup
-  if (user && !forceIsConfigured) {
-    console.log('Showing FarmSetup because user exists but not configured');
-    return <FarmSetup />;
-  }
-
-  // Si tout est configuré, afficher l'application normale
-  console.log('Showing main application - farm is configured');
+  // Skip farm setup - always show main application
+  console.log('Showing main application - farm setup bypassed');
   return <>{children}</>;
 };
