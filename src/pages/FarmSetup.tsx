@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { useFarm } from '@/contexts/FarmContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { Building2, Globe, DollarSign, Fish, Waves, UserPlus } from 'lucide-react';
 
 const FarmSetup = () => {
@@ -18,7 +19,15 @@ const FarmSetup = () => {
   const { updateLanguage } = useSyncedLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+    }
+  }, [user, navigate]);
   
   const [formData, setFormData] = useState({
     farm_name: '',
@@ -30,9 +39,10 @@ const FarmSetup = () => {
   });
 
   const basinOptions = [
-    { value: 'flottante', labelKey: 'floating' },
-    { value: 'fixe', labelKey: 'fixed' },
-    { value: 'hors_sol', labelKey: 'above_ground' }
+    { value: 'cage_flottante', labelKey: 'floating' },
+    { value: 'cage_fixe', labelKey: 'fixed' },
+    { value: 'bassin_beton', labelKey: 'above_ground' },
+    { value: 'etang', labelKey: 'earth_pond' }
   ];
 
   const speciesOptions = [
@@ -72,6 +82,17 @@ const FarmSetup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Check if user is authenticated
+    if (!user) {
+      toast({
+        title: translate('error'),
+        description: 'Vous devez être connecté pour configurer votre ferme',
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+    
     if (!formData.farm_name || formData.basin_types.length === 0 || formData.fish_species.length === 0) {
       toast({
         title: translate('error'),
@@ -84,9 +105,10 @@ const FarmSetup = () => {
     setLoading(true);
     try {
       console.log('Submitting farm setup with data:', formData);
+      console.log('Current user:', user?.id);
       
       // Ensure arrays are never empty and have valid values
-      const basinTypes = formData.basin_types.length > 0 ? formData.basin_types : ['flottante'];
+      const basinTypes = formData.basin_types.length > 0 ? formData.basin_types : ['cage_flottante'];
       const fishSpecies = formData.fish_species.length > 0 ? formData.fish_species : ['tilapia'];
       
       await updateFarmSettings({
