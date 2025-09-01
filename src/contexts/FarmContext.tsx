@@ -303,18 +303,28 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loadFarmSettings = async () => {
     try {
+      console.log('Loading farm settings for user:', user?.id);
+      
       const { data, error } = await supabase
         .from('farm_settings')
         .select('*')
         .eq('user_id', user?.id)
         .single();
 
+      console.log('Farm settings query result:', { data, error });
+
       if (error && error.code !== 'PGRST116') {
         console.error('Error loading farm settings:', error);
         return;
       }
 
-      setFarmSettings(data as FarmSettings);
+      if (data) {
+        console.log('Setting farm settings:', data);
+        setFarmSettings(data as FarmSettings);
+      } else {
+        console.log('No farm settings found, setting to null');
+        setFarmSettings(null);
+      }
     } catch (error) {
       console.error('Error loading farm settings:', error);
     } finally {
@@ -417,6 +427,12 @@ export const FarmProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const isConfigured = farmSettings?.is_configured || false;
+  
+  console.log('FarmContext isConfigured calculation:', {
+    farmSettings,
+    is_configured: farmSettings?.is_configured,
+    isConfigured
+  });
 
   const isOwner = () => {
     return farmSettings?.user_id === user?.id;
