@@ -49,6 +49,6 @@ export const FarmSetupWrapper = ({ children }: FarmSetupWrapperProps) => {
   }
 
   // Si tout est configuré, afficher l'application normale
-  console.log('Showing main application');
+  console.log('Showing main application - farm is configured');
   return <>{children}</>;
 };

@@ -286,13 +286,22 @@ const FarmSetup = () => {
               )}
             </div>
 
-            <div className="flex gap-4">
-              <Button type="submit" disabled={loading} className="flex-1 text-lg py-6">
-                {loading ? translate('configuring') : translate('validate_config')}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                type="submit" 
+                disabled={loading} 
+                className="flex-1 text-lg py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+              >
+                {loading ? translate('configuring') : 'Configurer ma ferme'}
               </Button>
-              <Button type="button" onClick={goToUserManagement} variant="outline" className="flex-1 text-lg py-6 flex items-center gap-2">
+              <Button 
+                type="button" 
+                onClick={goToUserManagement} 
+                variant="outline" 
+                className="flex-1 text-lg py-6 flex items-center justify-center gap-2 border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+              >
                 <UserPlus className="h-5 w-5" />
-                {translate('go_to_user_management')}
+                Passer à l'ajout des utilisateurs
               </Button>
             </div>
           </form>
